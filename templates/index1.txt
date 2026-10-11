@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEAM AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #4da3ff;
+            font-size: 48px;
+            margin: 0 0 10px;
+        }
+
+        .subtitle {
+            color: #bbbbbb;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            width: min(900px, 92%);
+            margin: 0 auto;
+            padding: 40px 0 130px;
+            text-align: center;
+        }
+
+        /* PANTALLA DE REGISTRO */
+
+        #welcome-screen {
+    *       width: min(700px, 92%);
+   *        margin: 40px auto;
+       *}
+
+        .welcome-card {
+       *    background: #1f1f1f;
+         *  border: 1px solid #303030;
+     *      border-radius: 16px;
+       *    padding: 30px;
+            tex*-align: left;
+        }
+
+        .*elcome-card h1 {
+            text-*lign: center;
+            font-siz*: 38px;
+        }
+
+        .welcom*-description {
+            color: *bbbbbb;
+            line-height: 1*6;
+            margin: 0 0 25px;
+ *          text-align: center;
+    *   }
+
+        .form-group {
+      *     margin-bottom: 18px;
+        *
+
+        .form-group label {
+    *       display: block;
+           *color: #dddddd;
+            margin*bottom: 8px;
+            font-weig*t: bold;
+        }
+
+        .form-*roup input,
+        .form-group se*ect,
+        .form-group textarea *
+            width: 100%;
+        *   padding: 13px;
+            back*round: #ffffff;
+            color:*#161616;
+            border: 1px s*lid #444444;
+            border-ra*ius: 8px;
+            font-family:*Arial, sans-serif;
+            fon*-size: 16px;
+            outline: *one;
+        }
+
+        .form-grou* textarea {
+            min-height* 100px;
+            resize: vertic*l;
+        }
+
+        .privacy-tex* {
+            color: #999999;
+   *        font-size: 13px;
+         *  line-height: 1.5;
+            ma*gin-top: 8px;
+        }
+
+        .*heckbox-grid {
+            display* grid;
+            grid-template-c*lumns: repeat(2, minmax(0, 1fr));
+*           gap: 10px;
+        }
+
+ *      .checkbox-option {
+         *  display: flex;
+            align*items: center;
+            gap: 9p*;
+            background: #292929;*            border: 1px solid #363*36;
+            border-radius: 8px*
+            padding: 12px;
+      *     cursor: pointer;
+        }
+
+ *      .checkbox-option input {
+   *        width: auto;
+            m*rgin: 0;
+        }
+
+        .check*ox-option label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        #profile-error {
+            min-height: 22px;
+            margin: 12px 0;
+            color: #ff7777;
+        }
+
+        .age-status {
+            display: none;
+            background: #292929;
+            border-left: 3px solid #4da3ff;
+            border-radius: 6px;
+            color: #cccccc;
+            padding: 12px;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* APLICACIÓN PRINCIPAL */
+
+        #main-app {
+           *display: none;
+        }
+
+        *shortcuts-header {
+            dis*lay: flex;
+            align-items* center;
+            justify-conte*t: space-between;
+            marg*n-top: 30px;
+            margin-bo*tom: 14px;
+        }
+
+        .sho*tcuts-header h2 {
+            font*size: 18px;
+            margin: 0;*        }
+
+        #shortcuts {
+  *         display: flex;
+          * flex-wrap: wrap;
+            gap:*10px;
+        }
+
+        .shortcut*wrapper {
+            display: fle*;
+            align-items: center;*            background: #1e1e1e;
+ *          border: 1px solid #30303*;
+            border-radius: 10px;*            overflow: hidden;
+    *   }
+
+        .shortcut-button {
+ *          background: transparent;*            color: #ffffff;
+      *     border: none;
+            pad*ing: 11px 14px;
+            cursor* pointer;
+            font-size: 1*px;
+        }
+
+        .shortcut-b*tton:hover {
+            backgroun*: #333333;
+        }
+
+        .edi*-button,
+        .delete-button {
+*           background: transparent*
+            border: none;
+       *    color: #999999;
+            cu*sor: pointer;
+            padding:*10px 12px;
+            font-size: *4px;
+        }
+
+        .edit-butt*n:hover {
+            color: #4da3*f;
+        }
+
+        .delete-butt*n:hover {
+            color: #ff77*7;
+        }
+
+        .primary-but*on {
+            padding: 14px 24p*;
+            font-size: 16px;
+   *        background: #4da3ff;
+     *      color: #ffffff;
+            *order: none;
+            border-ra*ius: 9px;
+            cursor: poin*er;
+        }
+
+        .primary-bu*ton:hover {
+            background* #2388f5;
+        }
+
+        .add-*utton {
+            background: #2*2929;
+            border: 1px soli* #4da3ff;
+            color: #ffff*f;
+            padding: 10px 16px;*            border-radius: 9px;
+  *         cursor: pointer;
+        *
+
+        .add-button:hover {
+    *       background: #4da3ff;
+      * }
+
+        #chat {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .user-message,
+        .bot-message {
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 14px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .user-message {
+            background: #4da3ff;
+        }
+
+        .bot-message {
+            background: #1f1f1f;
+            border: 1px solid #292929;
+        }
+
+        /* CAJA DE CHAT FIJA */
+
+        .input-row {
+          * position: fixed;
+            bott*m: 0;
+            left: 50%;
+     *      transform: translateX(-50%);*            width: 100%;
+            max-width: 940px;
+            display: flex;
+            gap: 10px;
+            background: rgba(18, 18, 18, 0.97);
+            border-top: 1px solid #292929;
+            padding: 14px 20px 20px;
+            z-index: 20;
+        }
+
+        #message {
+            flex: 1;
+            min-width: 0;
+            padding: 15px;
+            font-size: 17px;
+            border: 1px solid #333333;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        /*

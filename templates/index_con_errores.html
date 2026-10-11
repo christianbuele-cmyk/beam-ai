@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEAM AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #4da3ff;
+            font-size: 48px;
+            margin: 0 0 10px;
+        }
+
+        .subtitle {
+            color: #bbbbbb;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            width: min(900px, 92%);
+            margin: 0 auto;
+            padding: 40px 0 130px;
+            text-align: center;
+        }
+
+        /* PANTALLA DE REGISTRO */
+
+        #welcome-screen {
+            width: min(700px, 92%);
+            margin: 40px auto;
+        }
+
+        .welcome-card {
+            background: #1f1f1f;
+            border: 1px solid #303030;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: left;
+        }
+
+        .welcome-card h1 {
+            text-align: center;
+            font-size: 38px;
+        }
+
+        .welcome-description {
+            color: #bbbbbb;
+            line-height: 1.6;
+            margin: 0 0 25px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #dddddd;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px;
+            background: #ffffff;
+            color: #161616;
+            border: 1px solid #444444;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .privacy-text {
+            color: #999999;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 8px;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: #292929;
+            border: 1px solid #363636;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .checkbox-option input {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-option label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        #profile-error {
+            min-height: 22px;
+            margin: 12px 0;
+            color: #ff7777;
+        }
+
+        .age-status {
+            display: none;
+            background: #292929;
+            border-left: 3px solid #4da3ff;
+            border-radius: 6px;
+            color: #cccccc;
+            padding: 12px;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* APLICACIÓN PRINCIPAL */
+
+        #main-app {
+            display: none;
+        }
+
+        .shortcuts-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 30px;
+            margin-bottom: 14px;
+        }
+
+        .shortcuts-header h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        #shortcuts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .shortcut-wrapper {
+            display: flex;
+            align-items: center;
+            background: #1e1e1e;
+            border: 1px solid #303030;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .shortcut-button {
+            background: transparent;
+            color: #ffffff;
+            border: none;
+            padding: 11px 14px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .shortcut-button:hover {
+            background: #333333;
+        }
+
+        .edit-button,
+        .delete-button {
+            background: transparent;
+            border: none;
+            color: #999999;
+            cursor: pointer;
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        .edit-button:hover {
+            color: #4da3ff;
+        }
+
+        .delete-button:hover {
+            color: #ff7777;
+        }
+
+        .primary-button {
+            padding: 14px 24px;
+            font-size: 16px;
+            background: #4da3ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .primary-button:hover {
+            background: #2388f5;
+        }
+
+        .add-button {
+            background: #292929;
+            border: 1px solid #4da3ff;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background: #4da3ff;
+        }
+
+        #chat {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .user-message,
+        .bot-message {
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 14px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .user-message {
+            background: #4da3ff;
+        }
+
+        .bot-message {
+            background: #1f1f1f;
+            border: 1px solid #292929;
+        }
+
+        /* CAJA DE CHAT FIJA */
+
+        .input-row {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 940px;
+            display: flex;
+            gap: 10px;
+            background: rgba(18, 18, 18, 0.97);
+            border-top: 1px solid #292929;
+            padding: 14px 20px 20px;
+            z-index: 20;
+        }
+
+        #message {
+            flex: 1;
+            min-width: 0;
+            padding: 15px;
+            font-size: 17px;
+            border: 1px solid #333333;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        /* VENTANA DE ACCESOS RÁPIDOS */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 50;
+        }
+
+        .modal-content {
+            background: #1f1f1f;
+            width: min(500px, 100%);
+            padding: 25px;
+            border: 1px solid #333333;
+            border-radius: 16px;
+            text-align: left;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .modal-content label {
+            display: block;
+            margin: 15px 0 7px;
+            color: #cccccc;
+        }
+
+        .modal-content input,
+        .modal-content textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+
+        .modal-content textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-button {
+            background: #444444;
+            color: #ffffff;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: #ff7777;
+            min-height: 20px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 650px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .container {
+                width: 94%;
+                padding-top: 25px;
+                padding-bottom: 180px;
+            }
+
+            .welcome-card {
+                padding: 22px;
+            }
+
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .shortcuts-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .input-row {
+                flex-direction: column;
+                padding: 10px 14px 14px;
+            }
+
+            .input-row .primary-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- REGISTRO DE PRIMER ACCESO -->
+
+    <div id="welcome-screen">
+
+        <div class="welcome-card">
+
+            <h1>BEAM AI</h1>
+
+            <p class="welcome-description">
+                Queremos conocerte un poco mejor para personalizar
+                tus planes, escapadas, viajes y experiencias.
+                Este registro solo se mostrará la primera vez.
+            </p>
+
+            <div class="form-group">
+                <label for="user-name">Nombre</label>
+
+                <input
+                    id="user-name"
+                    type="text"
+                    placeholder="Tu nombre"
+                    autocomplete="name"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="user-city">Ciudad</label>
+
+                <input
+                    id="user-city"
+                    type="text"
+                    placeholder="Tu ciudad"
+                    autocomplete="address-level2"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="user-birthdate">
+                    Fecha de nacimiento
+                </label>
+
+                <input
+                    id="user-birthdate"
+                    type="date"
+                    autocomplete="bday"
+                    onchange="showAgeStatus()"
+                >
+
+                <div class="privacy-text">
+                    La fecha de nacimiento se utiliza para calcular la edad,
+                    adaptar las recomendaciones y aplicar restricciones para
+                    menores. No se muestra públicamente en la aplicación.
+                </div>
+
+                <div id="age-status" class="age-status"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="user-companions">
+                    ¿Con quién haces más planes?
+                </label>
+
+                <select id="user-companions">
+                    <option value="">Selecciona una opción</option>
+                    <option value="Solo">Solo</option>
+                    <option value="Pareja">Pareja</option>
+                    <option value="Familia">Familia</option>
+                    <option value="Amigos">Amigos</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+
+                <label>¿Qué te interesa más?</label>
+
+                <div class="checkbox-grid">
+
+                    <div class="checkbox-option">
+                        <input
+                            id="interest-escapadas"
+                            type="checkbox"
+                            name="interests"
+                            value="Escapadas"
+                        >
+                        <label for="interest-escapadas">Escapadas</label>
+                    </div>
+
+                    <div class="checkbox-option">
+                        <input
+                            id="interest-viajes"
+                            type="checkbox"
+                            name="interests"
+                            value="Viajes"
+                        >
+                        <label for="interest-viajes">Viajes</label>
+                    </div>
+
+                    <div class="checkbox-option">
+                        <input
+                            id="interest-restaurantes"
+                            type="checkbox"
+                            name="interests"
+                            value="Restaurantes"
+                        >
+                        <label for="interest-restaurantes">
+                            Restaurantes
+                        </label>
+                    </div>
+
+                    <div class="checkbox-option">
+                        <input
+                            id="interest-naturaleza"
+                            type="checkbox"
+                            name="interests"
+                            value="Naturaleza"
+                        >
+                        <label for="interest-naturaleza">Naturaleza</label>
+                    </div>
+
+                    <div class="checkbox-option">
+                        <input
+                            id="interest-cultura"
+                            type="checkbox"
+                            name="interests"
+                            value="Cultura"
+                        >
+                        <label for="interest-cultura">Cultura</label>
+                    </div>
+
+                    <div class="checkbox-option">
+                        <input
+                            id="interest-deportes"
+                            type="checkbox"
+                            name="interests"
+                            value="Deportes"
+                        >
+                        <label for="interest-deportes">Deportes</label>
+                    </div>
+
+                    <div class="checkbox-option">
+                        <input
+                            id="interest-aventura"
+                            type="checkbox"
+                            name="interests"
+                            value="Aventura"
+                        >
+                        <label for="interest-aventura">Aventura</label>
+                    </div>
+
+                    <div class="checkbox-option">
+                        <input
+                            id="interest-relax"
+                            type="checkbox"
+                            name="interests"
+                            value="Relax"
+                        >
+                        <label for="interest-relax">Relax</label>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="user-budget">
+                    Presupuesto habitual
+                </label>
+
+                <select id="user-budget">
+                    <option value="">Selecciona una opción</option>
+                    <option value="Económico">Económico</option>
+                    <option value="Intermedio">Intermedio</option>
+                    <option value="Flexible">Flexible</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="about-user">
+                    Cuéntanos algo más sobre ti
+                </label>
+
+                <textarea
+                    id="about-user"
+                    placeholder="Por ejemplo: Prefiero lugares tranquilos, escapadas rurales y restaurantes poco masificados."
+                ></textarea>
+            </div>
+
+            <div id="profile-error"></div>
+
+            <button
+                class="primary-button"
+                type="button"
+                onclick="saveUserProfile()"
+            >
+                Comenzar
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- APLICACIÓN PRINCIPAL -->
+
+    <div
+        class="container"
+        id="main-app"
+    >
+
+        <h1 id="welcome-user">
+    BEAM AI
+</h1>
+
+<div
+    class="subtitle"
+    id="welcome-subtitle">
+
+    Tu asistente para planes, escapadas, viajes y experiencias
+
+</div>
+
+        <div class="shortcuts-header">
+
+            <h2>Accesos rápidos</h2>
+
+            <button
+                class="add-button"
+                type="button"
+                onclick="openCreateModal()"
+            >
+                Crear acceso rápido
+            </button>
+
+        </div>
+
+        <div id="shortcuts"></div>
+
+        <div id="chat"></div>
+
+        <div class="input-row">
+
+            <input
+                id="message"
+                type="text"
+                placeholder="¿Qué te apetece hacer hoy?"
+                autocomplete="off"
+            >
+
+            <button
+                class="primary-button"
+                type="button"
+                onclick="sendMessage()"
+            >
+                Enviar
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL PARA LOS ACCESOS RÁPIDOS -->
+
+    <div id="shortcut-modal" class="modal">
+
+        <div class="modal-content">
+
+            <h2 id="modal-title">Crear acceso rápido</h2>
+
+            <label for="shortcut-name">Nombre</label>
+
+            <input
+                id="shortcut-name"
+                type="text"
+                placeholder="Por ejemplo: Escapada"
+            >
+
+            <label for="shortcut-instruction">Instrucción</label>
+
+            <textarea
+                id="shortcut-instruction"
+                placeholder="Por ejemplo: Propón una escapada de fin de semana cerca de mi ubicación"
+            ></textarea>
+
+            <div id="form-error" class="error"></div>
+
+            <div class="modal-actions">
+
+                <button
+                    class="cancel-button"
+                    type="button"
+                    onclick="closeModal()"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    class="primary-button"
+                    type="button"
+                    onclick="saveShortcut()"
+                >
+                    Guardar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let shortcuts = [];
+        let editingShortcutId = null;
+
+        function calculateAge(birthdate) {
+            if (!birthdate) {
+                return null;
+            }
+
+            const today = new Date();
+            const birth = new Date(`${birthdate}T00:00:00`);
+
+            if (Number.isNaN(birth.getTime()) || birth > today) {
+                return null;
+            }
+
+            let age = today.getFullYear() - birth.getFullYear();
+
+            const monthDifference =
+                today.getMonth() - birth.getMonth();
+
+            if (
+                monthDifference < 0 ||
+                (
+                    monthDifference === 0 &&
+                    today.getDate() < birth.getDate()
+                )
+            ) {
+                age--;
+            }
+
+            return age;
+        }
+
+        function showAgeStatus() {
+            const birthdate =
+                document.getElementById("user-birthdate").value;
+
+            const age = calculateAge(birthdate);
+
+            const statusBox =
+                document.getElementById("age-status");
+
+            if (age === null) {
+                statusBox.style.display = "none";
+                statusBox.textContent = "";
+                return;
+            }
+
+            statusBox.style.display = "block";
+
+            if (age < 18) {
+                statusBox.textContent =
+                    `Edad calculada: ${age} años. ` +
+                    "BEAM AI adaptará los planes y recomendaciones " +
+                    "para que sean adecuados para menores de edad.";
+            } else {
+                statusBox.textContent =
+                    `Edad calculada: ${age} años.`;
+            }
+        }
+
+  async function checkUser() {
+
+    
+            const welcomeScreen =
+                document.getElementById("welcome-screen");
+
+            const mainApp =
+                document.getElementById("main-app");
+
+            try {
+                const response = await fetch("/user");
+
+                if (!response.ok) {
+                    throw new Error("No se pudo comprobar el perfil.");
+                }
+
+                const data = await response.json();
+
+                if(data.exists){
+
+    welcomeScreen.style.display = "none";
+
+    mainApp.style.display = "block";
+
+    updateWelcomeUser(
+        data.user
+    );
+
+    await loadShortcuts();
+
+                } else {
+                    welcomeScreen.style.display = "block";
+                    mainApp.style.display = "none";
+                }
+            } catch (error) {
+                console.error(error);
+
+                const errorBox =
+                    document.getElementById("profile-error");
+
+                errorBox.textContent =
+                    "No se pudo comprobar el perfil de usuario.";
+            }
+        }
+
+        async function saveUserProfile() {
+            const errorBox =
+                document.getElementById("profile-error");
+
+            errorBox.textContent = "";
+
+            const name =
+                document.getElementById("user-name")
+                    .value.trim();
+
+            const city =
+                document.getElementById("user-city")
+                    .value.trim();
+
+            const birthdate =
+                document.getElementById("user-birthdate")
+                    .value;
+
+            const companions =
+                document.getElementById("user-companions")
+                    .value;
+
+            const budget =
+                document.getElementById("user-budget")
+                    .value;
+
+            const about =
+                document.getElementById("about-user")
+                    .value.trim();
+
+            const interests = Array.from(
+                document.querySelectorAll(
+                    'input[name="interests"]:checked'
+                )
+            ).map(input => input.value);
+
+            const age = calculateAge(birthdate);
+
+            if (!name) {
+                errorBox.textContent =
+                    "Escribe tu nombre.";
+                return;
+            }
+
+            if (!city) {
+                errorBox.textContent =
+                    "Escribe tu ciudad.";
+                return;
+            }
+
+            if (!birthdate || age === null) {
+                errorBox.textContent =
+                    "Introduce una fecha de nacimiento válida.";
+                return;
+            }
+
+            if (age < 0 || age > 120) {
+                errorBox.textContent =
+                    "La fecha de nacimiento no es válida.";
+                return;
+            }
+
+            if (!companions) {
+                errorBox.textContent =
+                    "Selecciona con quién haces más planes.";
+                return;
+            }
+
+            if (interests.length === 0) {
+                errorBox.textContent =
+                    "Selecciona al menos un interés.";
+                return;
+            }
+
+            if (!budget) {
+                errorBox.textContent =
+                    "Selecciona un presupuesto habitual.";
+                return;
+            }
+
+            const profile = {
+                name: name,
+                city: city,
+                birthdate: birthdate,
+                age: age,
+                is_minor: age < 18,
+                companions: companions,
+                interests: interests,
+                budget: budget,
+                about: about
+            };
+
+            try {
+                const response = await fetch("/user", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(profile)
+                });
+
+                if (!response.ok) {
+                    throw new Error("No se pudo guardar el perfil.");
+                }
+
+                document.getElementById(
+                    "welcome-screen"
+                ).style.display = "none";
+
+                document.getElementById(
+                    "main-app"
+                ).style.display = "block";
+
+                await loadShortcuts();
+            } catch (error) {
+                console.error(error);
+
+                errorBox.textContent =
+                    "No se pudo guardar el perfil. " +
+                    "Comprueba que BEAM AI está funcionando.";
+            } 
+
+        async function loadShortcuts() {
+            try {
+                const response = await fetch("/shortcuts");
+
+                if (!response.ok) {
+                    throw new Error(
+                        "No se pudieron cargar los accesos rápidos."
+                    );
+                }
+
+                shortcuts = await response.json();
+
+                renderShortcuts();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function renderShortcuts() {
+            const container =
+                document.getElementById("shortcuts");
+
+            container.innerHTML = "";
+
+            shortcuts.forEach(shortcut => {
+                const wrapper =
+                    document.createElement("div");
+
+                wrapper.className = "shortcut-wrapper";
+
+                const shortcutButton =
+                    document.createElement("button");
+
+                shortcutButton.className = "shortcut-button";
+                shortcutButton.type = "button";
+                shortcutButton.textContent = shortcut.name;
+
+                shortcutButton.onclick = function () {
+                    useShortcut(shortcut);
+                };
+
+                const editButton =
+                    document.createElement("button");
+
+                editButton.className = "edit-button";
+                editButton.type = "button";
+                editButton.textContent = "Editar";
+
+                editButton.onclick = function () {
+                    openEditModal(shortcut);
+                };
+
+                const deleteButton =
+                    document.createElement("button");
+
+                deleteButton.className = "delete-button";
+                deleteButton.type = "button";
+                deleteButton.textContent = "Eliminar";
+
+                deleteButton.onclick = function () {
+                    deleteShortcut(shortcut.id);
+                };
+
+                wrapper.appendChild(shortcutButton);
+                wrapper.appendChild(editButton);
+                wrapper.appendChild(deleteButton);
+
+                container.appendChild(wrapper);
+            });
+        }
+
+        function useShortcut(shortcut) {
+            const messageInput =
+                document.getElementById("message");
+
+            messageInput.value = shortcut.instruction;
+            messageInput.focus();
+        }
+
+        function openCreateModal() {
+            editingShortcutId = null;
+
+            document.getElementById("modal-title")
+                .textContent = "Crear acceso rápido";
+
+            document.getElementById("shortcut-name")
+                .value = "";
+
+            document.getElementById("shortcut-instruction")
+                .value = "";
+
+            document.getElementById("form-error")
+                .textContent = "";
+
+            document.getElementById("shortcut-modal")
+                .style.display = "flex";
+
+            document.getElementById("shortcut-name")
+                .focus();
+        }
+
+        function openEditModal(shortcut) {
+            editingShortcutId = shortcut.id;
+
+            document.getElementById("modal-title")
+                .textContent = "Editar acceso rápido";
+
+            document.getElementById("shortcut-name")
+                .value = shortcut.name;
+
+            document.getElementById("shortcut-instruction")
+                .value = shortcut.instruction;
+
+            document.getElementById("form-error")
+                .textContent = "";
+
+            document.getElementById("shortcut-modal")
+                .style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("shortcut-modal")
+                .style.display = "none";
+
+            editingShortcutId = null;
+        }
+
+        async function saveShortcut() {
+            const name =
+                document.getElementById("shortcut-name")
+                    .value.trim();
+
+            const instruction =
+                document.getElementById("shortcut-instruction")
+                    .value.trim();
+
+            const errorBox =
+                document.getElementById("form-error");
+
+            errorBox.textContent = "";
+
+            if (!name || !instruction) {
+                errorBox.textContent =
+                    "Escribe un nombre y una instrucción.";
+                return;
+            }
+
+            const body = {
+                name: name,
+                emoji: "",
+                instruction: instruction
+            };
+
+            const editing =
+                editingShortcutId !== null;
+
+            const url = editing
+                ? `/shortcuts/${editingShortcutId}`
+                : "/shortcuts";
+
+            const method = editing ? "PUT" : "POST";
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                if (!response.ok) {
+                    const errorData =
+                        await response.json();
+
+                    errorBox.textContent =
+                        errorData.detail ||
+                        "No se pudo guardar.";
+
+                    return;
+                }
+
+                closeModal();
+                await loadShortcuts();
+           } catch (error) {
+    console.error(error);
+
+    errorBox.textContent =
+        "No se pudo guardar el perfil. " +
+        "Comprueba que BEAM AI está funcionando.";
+}
+
+
+async function loadShortcuts() {
+            const confirmed = confirm(
+                "¿Quieres eliminar este acceso rápido?"
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `/shortcuts/${shortcutId}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "No se pudo eliminar el acceso rápido."
+                    );
+                }
+
+                await loadShortcuts();
+            } catch (error) {
+                console.error(error);
+
+                alert(
+                    "No se pudo eliminar el acceso rápido."
+                );
+            }
+        }
+
+        function addChatMessage(role, text, className) {
+            const chat =
+                document.getElementById("chat");
+
+            const message =
+                document.createElement("div");
+
+            message.className = className;
+
+            const heading =
+                document.createElement("strong");
+
+            heading.textContent = role;
+
+            const content =
+                document.createElement("div");
+
+            content.style.marginTop = "10px";
+            content.textContent = text;
+
+            message.appendChild(heading);
+            message.appendChild(content);
+            chat.appendChild(message);
+
+            return content;
+        }
+
+        async function sendMessage() {
+            const messageInput =
+                document.getElementById("message");
+
+            const msg = messageInput.value.trim();
+
+            if (!msg) {
+                return;
+            }
+
+            addChatMessage(
+                "Tú",
+                msg,
+                "user-message"
+            );
+
+            const botContent = addChatMessage(
+                "BEAM AI",
+                "Pensando...",
+                "bot-message"
+            );
+
+            messageInput.value = "";
+
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth"
+            });
+
+            try {
+                const response = await fetch(
+                    `/chat?message=${encodeURIComponent(msg)}`
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "No se pudo procesar la consulta."
+                    );
+                }
+
+                const data = await response.json();
+
+                botContent.textContent = data.assistant;
+            } catch (error) {
+                console.error(error);
+
+                botContent.textContent =
+                    "No he podido procesar la consulta. " +
+                    "Comprueba que Ollama esté funcionando.";
+            }
+
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth"
+            });
+
+            messageInput.focus();
+        }
+
+        document.getElementById("message")
+            .addEventListener(
+                "keydown",
+                function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        sendMessage();
+                    }
+                }
+            );
+
+        document.getElementById("shortcut-modal")
+            .addEventListener(
+                "click",
+                function (event) {
+                    if (
+                        event.target.id === "shortcut-modal"
+                    ) {
+                        closeModal();
+                    }
+                }
+            );
+
+        checkUser();
+    </script>
+
+</body>
+</html>

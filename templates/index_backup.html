@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BEAM AI</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    background:#121212;
+    color:white;
+    font-family:Arial,sans-serif;
+    margin:0;
+    min-height:100vh;
+}
+
+.container{
+    width:min(900px, 92%);
+    margin:0 auto;
+    padding:40px 0;
+    text-align:center;
+}
+
+h1{
+    color:#4da3ff;
+    font-size:48px;
+    margin:0 0 10px;
+}
+
+.subtitle{
+    color:#bbbbbb;
+    margin-bottom:30px;
+}
+
+.input-row{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    width:80%;
+    max-width:900px;
+
+    display:flex;
+    gap:10px;
+
+    background:#121212;
+    padding:10px;
+}
+
+#message{
+    flex:1;
+    padding:15px;
+    font-size:18px;
+    border:none;
+    border-radius:10px;
+    outline:none;
+}
+
+.primary-button{
+    padding:15px 25px;
+    font-size:17px;
+    background:#4da3ff;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.primary-button:hover{
+    background:#2388f5;
+}
+
+.shortcuts-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:30px;
+    margin-bottom:12px;
+}
+
+.shortcuts-header h2{
+    font-size:18px;
+    margin:0;
+}
+
+.add-button{
+    background:#292929;
+    border:1px solid #4da3ff;
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.add-button:hover{
+    background:#4da3ff;
+}
+
+#shortcuts{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.shortcut-wrapper{
+    display:flex;
+    align-items:center;
+    background:#1e1e1e;
+    border:1px solid #303030;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.shortcut-button{
+    background:transparent;
+    color:white;
+    border:none;
+    padding:11px 14px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.shortcut-button:hover{
+    background:#333333;
+}
+
+.edit-button,
+.delete-button{
+    background:transparent;
+    border:none;
+    color:#999999;
+    cursor:pointer;
+    padding:10px 12px;
+    font-size:14px;
+}
+
+.edit-button:hover{
+    color:#4da3ff;
+}
+
+.delete-button:hover{
+    color:#ff6b6b;
+}
+
+#chat{
+    margin-top:30px;
+    margin-bottom:120px;
+    text-align:left;
+}
+
+.user-message,
+.bot-message{
+    padding:16px;
+    border-radius:15px;
+    margin-bottom:14px;
+    white-space:pre-wrap;
+    line-height:1.6;
+    overflow-wrap:anywhere;
+}
+
+.user-message{
+    background:#4da3ff;
+}
+
+.bot-message{
+    background:#1f1f1f;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.75);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-content{
+    background:#1f1f1f;
+    width:min(500px, 100%);
+    padding:25px;
+    border-radius:16px;
+    text-align:left;
+}
+
+.modal-content h2{
+    margin-top:0;
+}
+
+.modal-content label{
+    display:block;
+    margin:15px 0 7px;
+    color:#cccccc;
+}
+
+.modal-content input,
+.modal-content textarea{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+}
+
+.modal-content textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:20px;
+}
+
+.cancel-button{
+    background:#444444;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.error{
+    color:#ff7777;
+    min-height:20px;
+    margin-top:10px;
+}
+
+@media(max-width:650px){
+
+    h1{
+        font-size:36px;
+    }
+
+    .input-row{
+        flex-direction:column;
+    }
+
+    .primary-button{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>BEAM AI</h1>
+
+    <div class="subtitle">
+        Tu asistente para planes, escapadas, viajes y experiencias
+    </div>
+
+    <div class="input-row">
+        <input
+            id="message"
+            placeholder="¿Qué te apetece hacer hoy?"
+            autocomplete="off"
+        >
+
+        <button
+            class="primary-button"
+            onclick="sendMessage()"
+        >
+            Enviar
+        </button>
+    </div>
+
+    <div class="shortcuts-header">
+        <h2>Accesos rápidos</h2>
+
+        <button
+            class="add-button"
+            onclick="openCreateModal()"
+        >
+            Crear acceso rápido
+        </button>
+    </div>
+
+    <div id="shortcuts"></div>
+
+    <div id="chat"></div>
+
+</div>
+
+<div id="shortcut-modal" class="modal">
+
+    <div class="modal-content">
+
+        <h2 id="modal-title">Crear acceso rápido</h2>
+
+        <label for="shortcut-name">
+            Nombre
+        </label>
+
+        <input
+            id="shortcut-name"
+            placeholder="Por ejemplo: Escapada"
+        >
+
+        <label for="shortcut-instruction">
+            Instrucción
+        </label>
+
+        <textarea
+            id="shortcut-instruction"
+            placeholder="Por ejemplo: Propón una escapada de fin de semana cerca de mi ubicación"
+        ></textarea>
+
+        <div id="form-error" class="error"></div>
+
+        <div class="modal-actions">
+
+            <button
+                class="cancel-button"
+                onclick="closeModal()"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="primary-button"
+                onclick="saveShortcut()"
+            >
+                Guardar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let shortcuts = [];
+let editingShortcutId = null;
+
+async function loadShortcuts(){
+
+    try{
+
+        const response = await fetch("/shortcuts");
+        shortcuts = await response.json();
+
+        renderShortcuts();
+
+    }catch(error){
+
+        console.error("No se pudieron cargar los botones", error);
+
+    }
+
+}
+
+function renderShortcuts(){
+
+    const container =
+        document.getElementById("shortcuts");
+
+    container.innerHTML = "";
+
+    shortcuts.forEach(shortcut => {
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className = "shortcut-wrapper";
+
+        const shortcutButton =
+            document.createElement("button");
+
+        shortcutButton.className = "shortcut-button";
+        shortcutButton.textContent =
+    shortcut.name;
+
+        shortcutButton.onclick = function(){
+            useShortcut(shortcut);
+        };
+
+        const editButton =
+            document.createElement("button");
+
+        editButton.className = "edit-button";
+        editButton.textContent = "Editar";
+        editButton.title = "Editar";
+
+        editButton.onclick = function(){
+            openEditModal(shortcut);
+        };
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className = "delete-button";
+        deleteButton.textContent = "Eliminar";
+        deleteButton.title = "Eliminar";
+
+        deleteButton.onclick = function(){
+            deleteShortcut(shortcut.id);
+        };
+
+        wrapper.appendChild(shortcutButton);
+        wrapper.appendChild(editButton);
+        wrapper.appendChild(deleteButton);
+
+        container.appendChild(wrapper);
+
+    });
+
+}
+
+function useShortcut(shortcut){
+
+    const messageInput =
+        document.getElementById("message");
+
+    messageInput.value = shortcut.instruction;
+    messageInput.focus();
+
+}
+
+function openCreateModal(){
+
+    editingShortcutId = null;
+
+    document.getElementById("modal-title")
+        .textContent = "Crear acceso rápido";
+
+    document.getElementById("form-error").textContent = "";
+
+    document.getElementById("shortcut-modal")
+        .style.display = "flex";
+
+    document.getElementById("shortcut-name").focus();
+
+}
+
+function openEditModal(shortcut){
+
+    editingShortcutId = shortcut.id;
+
+    document.getElementById("modal-title")
+        .textContent = "Editar acceso rápido";
+
+    document.getElementById("shortcut-name").value =
+        shortcut.name;
+
+    document.getElementById("shortcut-instruction").value =
+        shortcut.instruction;
+
+    document.getElementById("form-error").textContent = "";
+
+    document.getElementById("shortcut-modal")
+        .style.display = "flex";
+
+}
+
+function closeModal(){
+
+    document.getElementById("shortcut-modal")
+        .style.display = "none";
+
+    editingShortcutId = null;
+
+}
+
+async function saveShortcut(){
+
+    const name =
+        document.getElementById("shortcut-name")
+        .value.trim();
+
+    const instruction =
+        document.getElementById("shortcut-instruction")
+        .value.trim();
+
+    const errorBox =
+        document.getElementById("form-error");
+
+    if(!name || !instruction){
+
+        errorBox.textContent =
+            "Escribe un nombre y una instrucción.";
+
+        return;
+    }
+
+    const body = {
+        name: name,
+        emoji: "",
+        instruction: instruction
+    };
+
+    const editing =
+        editingShortcutId !== null;
+
+    const url = editing
+        ? `/shortcuts/${editingShortcutId}`
+        : "/shortcuts";
+
+    const method =
+        editing ? "PUT" : "POST";
+
+    try{
+
+        const response =
+            await fetch(url,{
+                method: method,
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify(body)
+            });
+
+        if(!response.ok){
+
+            const errorData =
+                await response.json();
+
+            errorBox.textContent =
+                errorData.detail ||
+                "No se pudo guardar.";
+
+            return;
+        }
+
+        closeModal();
+
+        await loadShortcuts();
+
+    }catch(error){
+
+        errorBox.textContent =
+            "No se pudo conectar con BEAM AI.";
+
+    }
+
+}
+function addChatMessage(role, text, className){
+
+    const chat =
+        document.getElementById("chat");
+
+    const message =
+        document.createElement("div");
+
+    message.className = className;
+
+    const heading =
+        document.createElement("strong");
+
+    heading.textContent = role;
+
+    const content =
+        document.createElement("div");
+
+    content.style.marginTop = "10px";
+    content.textContent = text;
+
+    message.appendChild(heading);
+    message.appendChild(content);
+
+    chat.appendChild(message);
+
+    return content;
+
+}
+
+async function sendMessage(){
+
+    const messageInput =
+        document.getElementById("message");
+
+    const msg = messageInput.value.trim();
+
+    if(!msg){
+        return;
+    }
+
+    addChatMessage(
+        "Tú",
+        msg,
+        "user-message"
+    );
+
+    const botContent = addChatMessage(
+        "BEAM AI",
+        "Pensando...",
+        "bot-message"
+    );
+
+    messageInput.value = "";
+
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
+
+    try{
+
+        const response = await fetch(
+            `/chat?message=${encodeURIComponent(msg)}`
+        );
+
+        if(!response.ok){
+            throw new Error("Error de respuesta");
+        }
+
+        const data = await response.json();
+
+        botContent.textContent = data.assistant;
+
+    }catch(error){
+
+        botContent.textContent =
+            "No he podido procesar la consulta. Comprueba que Ollama esté funcionando.";
+
+    }
+
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
+
+}
+
+document.getElementById("message")
+.addEventListener("keydown", function(event){
+
+    if(event.key === "Enter"){
+
+        event.preventDefault();
+        sendMessage();
+
+    }
+
+});
+
+document.getElementById("shortcut-modal")
+.addEventListener("click", function(event){
+
+    if(event.target.id === "shortcut-modal"){
+        closeModal();
+    }
+
+});
+
+loadShortcuts();
+
+</script>
+
+</body>
+</html>

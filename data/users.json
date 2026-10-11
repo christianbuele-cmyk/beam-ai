@@ -1,0 +1,16 @@
+{
+    "name": "Christian",
+    "city": "Barcelona",
+    "birthdate": "1990-02-02",
+    "age": 36,
+    "is_minor": false,
+    "companions": "Pareja",
+    "interests": [
+        "Escapadas",
+        "Viajes",
+        "Naturaleza",
+        "Deportes"
+    ],
+    "budget": "Intermedio",
+    "about": "me encantan los deportes y las salidas a la montaña"
+}

@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+*.pyc
+
+memory/sessions/
+data/profil*s/
+
+*.zip
+
+.env
+.env.local
+
+backup**/
