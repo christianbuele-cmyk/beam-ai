@@ -211,9 +211,39 @@ async def save_user(request: Request):
         user = await request.json()
     except (json.JSONDecodeError, UnicodeDecodeError):
         raise HTTPException(status_code=400, detail="El perfil debe ser JSON válido.")
+
     if not isinstance(user, dict) or not user:
         raise HTTPException(status_code=400, detail="El perfil no es válido.")
 
+    name = str(user.get("name", "")).strip()
+    city = str(user.get("city", "")).strip()
+    about = str(user.get("about", "")).strip()
+    interests = user.get("interests", [])
+
+    if len(name) < 2:
+        raise HTTPException(status_code=400, detail="El nombre debe tener al menos 2 caracteres.")
+
+    if len(name) > 50:
+        raise HTTPException(status_code=400, detail="El nombre es demasiado largo.")
+
+    if len(city) > 50:
+        raise HTTPException(status_code=400, detail="La ciudad es demasiado larga.")
+
+    if len(about) > 500:
+        raise HTTPException(status_code=400, detail="La descripción es demasiado larga.")
+
+    if not isinstance(interests, list):
+        raise HTTPException(status_code=400, detail="Los intereses no son válidos.")
+
+    if len(interests) > 10:
+        raise HTTPException(status_code=400, detail="Máximo 10 intereses.")
+
+    user["name"] = name
+    user["city"] = city
+    user["about"] = about
+    user["interests"] = interests[:10]
+
     key = session_key(request)
     write_json(session_file(PROFILE_DIR, key), user)
+
     return {"saved": True}
