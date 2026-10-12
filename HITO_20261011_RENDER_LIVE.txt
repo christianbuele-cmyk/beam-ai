@@ -1,0 +1,23 @@
+BEAM AI - HITO HISTÓRICO
+
+Fecha: 11/10/2026
+Hora: 21:56
+
+Primer despliegue público de BEAM AI.
+
+URL pública:
+https://beam-ai-fygm.onrender.com
+
+Commit:
+87c9fae
+
+Estado:
+- Aplicación desplegada en Render
+- Accesible desde Internet
+- Independiente del portátil local
+- GitHub integrado
+- Despliegue automático operativo
+- Onboarding funcional
+
+Notas:
+Primera versión pública accesible para pruebas por familiares, amigos y usuarios externos.

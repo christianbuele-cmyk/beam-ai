@@ -1,4 +1,9 @@
-import requests
+import os
+import google.generativeai as genai
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+model = genai.GenerativeModel("gemini-3.8-flash")
 
 def ask_llm(prompt):
 
@@ -12,13 +17,6 @@ Pregunta:
 {prompt}
 """
 
-    response = requests.post(
-        "http://localhost:11434/api/generate",
-        json={
-            "model": "llama3.2",
-            "prompt": system_prompt,
-            "stream": False
-        }
-    )
+    response = model.generate_content(system_prompt)
 
-    return response.json()["response"]
+    return response.text
