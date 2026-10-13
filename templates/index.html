@@ -529,6 +529,19 @@
 
         <div id="chat"></div>
 
+     <div style="margin-top:20px;">
+
+    <button
+        class="add-button"
+        type="button"
+        onclick="getLocation()">
+
+        📍 Obtener ubicación
+
+    </button>
+
+</div>
+
         <div class="input-row">
 
             <input
@@ -876,6 +889,9 @@
         async function sendMessage() {
             const messageInput = document.getElementById("message");
             const msg = messageInput.value.trim();
+            const locationData = JSON.parse(
+            localStorage.getItem("beam_location") || "null"
+);
             if (!msg) return;
             addChatMessage(t("you"), msg, "user-message");
             const botContent = addChatMessage("BEAM AI", location.protocol === "file:" ? t("localChatError") : t("chatThinking"), "bot-message");
@@ -887,7 +903,27 @@
                     : currentLanguage === "fr"
                         ? "Répondez en français. "
                         : "";
-                const response = await fetch(`/chat?message=${encodeURIComponent(languageInstruction + msg)}&language=${encodeURIComponent(currentLanguage)}`);
+                let finalMessage = msg;
+
+if (locationData) {
+
+    finalMessage =
+`
+Ubicación actual:
+
+Latitud: ${locationData.lat}
+
+Longitud: ${locationData.lon}
+
+Pregunta:
+
+${msg}
+`;
+}
+
+const response = await fetch(
+`/chat?message=${encodeURIComponent(languageInstruction + finalMessage)}&language=${encodeURIComponent(currentLanguage)}`
+);
                 if (!response.ok) throw new Error("Chat request failed");
                 const data = await response.json();
                 botContent.textContent = data.assistant;
@@ -897,6 +933,58 @@
             }
             messageInput.focus();
         }
+function getLocation() {
+
+    if (!navigator.geolocation) {
+
+        alert(
+            "La geolocalización no está disponible."
+        );
+
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            localStorage.setItem(
+                "beam_location",
+                JSON.stringify({
+                    lat,
+                    lon
+                })
+            );
+
+            alert(
+                `Ubicación guardada:
+
+Latitud: ${lat}
+
+Longitud: ${lon}`
+            );
+
+            console.log(
+                "Ubicación:",
+                lat,
+                lon
+            );
+        },
+
+        function(error) {
+
+            alert(
+                "No se pudo obtener la ubicación."
+            );
+
+            console.error(error);
+        }
+
+    );
+}
 
         document.getElementById("user-language").addEventListener("change", event => applyLanguage(event.target.value));
         document.getElementById("message").addEventListener("keydown", event => {
