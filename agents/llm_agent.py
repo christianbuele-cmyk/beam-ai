@@ -1,22 +1,43 @@
 import os
+from datetime import datetime
+
 import google.generativeai as genai
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+genai.configure(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
-model = genai.GenerativeModel("gemini-3.8-flash")
+model = genai.GenerativeModel(
+    "gemini-3.8-flash"
+)
 
 def ask_llm(prompt):
+
+    now = datetime.now()
+
+    fecha_actual = now.strftime("%d/%m/%Y")
+    hora_actual = now.strftime("%H:%M")
 
     system_prompt = f"""
 Eres BEAM AI.
 
-Responde de manera profesional.
+Fecha actual: {fecha_actual}
+Hora actual: {hora_actual}
+Zona horaria: Europa/Madrid
+
+Responde de forma natural.
+
+Si te preguntan por la fecha o la hora actual,
+utiliza la información anterior.
+
 Máximo 150 palabras.
 
 Pregunta:
 {prompt}
 """
 
-    response = model.generate_content(system_prompt)
+    response = model.generate_content(
+        system_prompt
+    )
 
     return response.text
