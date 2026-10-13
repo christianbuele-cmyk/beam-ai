@@ -13,6 +13,46 @@ model = genai.GenerativeModel(
 
 def ask_llm(prompt):
 
+    try:
+
+        system_prompt = f"""
+Eres BEAM AI.
+
+Responde de manera profesional.
+Máximo 150 palabras.
+
+Pregunta:
+{prompt}
+"""
+
+        response = model.generate_content(
+            system_prompt
+        )
+
+        return response.text
+
+    except Exception as e:
+
+        error_text = str(e)
+
+        if "429" in error_text or "ResourceExhausted" in error_text:
+
+            return """
+ BEAM AI ha alcanzado temporalmente el límite de consultas disponible.
+
+Estamos utilizando una versión gratuita del servicio de IA y actualmente se ha agotado la cuota disponible.
+
+Por favor, vuelve a intentarlo más tarde.
+"""
+
+        return f"""
+ Se ha producido un error temporal.
+
+Detalle técnico:
+
+{error_text}
+"""
+
     now = datetime.now()
 
     fecha_actual = now.strftime("%d/%m/%Y")
@@ -36,8 +76,26 @@ Pregunta:
 {prompt}
 """
 
+   try:
+
     response = model.generate_content(
         system_prompt
     )
 
     return response.text
+
+except Exception as e:
+
+    if "429" in str(e):
+
+        return """
+BEAM AI ha alcanzado temporalmente el límite de consultas disponible.
+
+Por favor, vuelve a intentarlo más tarde.
+"""
+
+    return """
+Lo sentimos.
+
+Se ha producido un error temporal procesando tu solicitud.
+"""
