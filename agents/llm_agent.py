@@ -52,7 +52,7 @@ Pregunta:
         if "429" in error_text or "ResourceExhausted" in error_text:
 
             return """
-BEAM AI ha alcanzado temporalmente el límite de consultas disponible.
+ BEAM AI ha alcanzado temporalmente el límite de consultas disponible.
 
 Estamos utilizando una versión gratuita del servicio de IA y actualmente se ha agotado la cuota disponible.
 
@@ -60,7 +60,7 @@ Por favor, vuelve a intentarlo más tarde.
 """
 
         return f"""
-Se ha producido un error temporal.
+ Se ha producido un error temporal.
 
 Detalle técnico:
 
