@@ -463,11 +463,14 @@
                 </label>
 
                 <input
-                    id="user-birthdate"
-                    type="date"
-                    autocomplete="bday"
-                    onchange="showAgeStatus()"
-                >
+    id="user-birthdate"
+    type="text"
+    inputmode="numeric"
+    autocomplete="bday"
+    placeholder="DD/MM/AAAA"
+    maxlength="10"
+    onchange="showAgeStatus()"
+/>
 
                 <div class="privacy-text" data-i18n="privacyText">
                     La fecha de nacimiento se utiliza para calcular la edad,
@@ -536,7 +539,7 @@
         type="button"
         onclick="getLocation()">
 
-        📍 Obtener ubicación
+         Obtener ubicación
 
     </button>
 
@@ -654,15 +657,75 @@
             renderShortcuts();
         }
 
-        function calculateAge(birthdate) {
-            if (!birthdate) return null;
-            const birth = new Date(`${birthdate}T00:00:00`);
-            if (Number.isNaN(birth.getTime()) || birth > new Date()) return null;
-            const today = new Date();
-            let age = today.getFullYear() - birth.getFullYear();
-            if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) age--;
-            return age;
-        }
+        function parseBirthdate(birthdate) {
+    if (!birthdate) return null;
+
+    const value = birthdate.trim();
+    let day;
+    let month;
+    let year;
+
+    const displayMatch = value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    const storedMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+    if (displayMatch) {
+        day = Number(displayMatch[1]);
+        month = Number(displayMatch[2]);
+        year = Number(displayMatch[3]);
+    } else if (storedMatch) {
+        year = Number(storedMatch[1]);
+        month = Number(storedMatch[2]);
+        day = Number(storedMatch[3]);
+    } else {
+        return null;
+    }
+
+    const birth = new Date(year, month - 1, day);
+
+    if (
+        birth.getFullYear() !== year ||
+        birth.getMonth() !== month - 1 ||
+        birth.getDate() !== day
+    ) {
+        return null;
+    }
+
+    return birth;
+}
+
+function birthdateToISO(birthdate) {
+    const birth = parseBirthdate(birthdate);
+    if (!birth) return null;
+
+    const year = birth.getFullYear();
+    const month = String(birth.getMonth() + 1).padStart(2, "0");
+    const day = String(birth.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+function calculateAge(birthdate) {
+    const birth = parseBirthdate(birthdate);
+
+    if (!birth) return null;
+
+    const today = new Date();
+    if (birth > today) return null;
+
+    let age = today.getFullYear() - birth.getFullYear();
+
+    if (
+        today.getMonth() < birth.getMonth() ||
+        (
+            today.getMonth() === birth.getMonth() &&
+            today.getDate() < birth.getDate()
+        )
+    ) {
+        age--;
+    }
+
+    return age;
+}
 
         function showAgeStatus() {
             const statusBox = document.getElementById("age-status");
@@ -672,10 +735,27 @@
                 statusBox.textContent = "";
                 return;
             }
+
             statusBox.style.display = "block";
             statusBox.textContent = age < 18 ? t("ageMinor", {age}) : t("age", {age});
         }
+const birthdateInput = document.getElementById("user-birthdate");
 
+if (birthdateInput) {
+    birthdateInput.addEventListener("input", function () {
+        const digits = this.value.replace(/\D/g, "").slice(0, 8);
+
+        if (digits.length <= 2) {
+            this.value = digits;
+        } else if (digits.length <= 4) {
+            this.value = `${digits.slice(0, 2)}/${digits.slice(2)}`;
+        } else {
+            this.value = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+        }
+
+        showAgeStatus();
+    });
+}
         function updateWelcomeUser(profile) {
             document.getElementById("welcome-user").textContent = "BEAM AI";
             const language = profile && profile.language;
@@ -718,7 +798,7 @@
           const profile = {
            name: document.getElementById("user-name").value.trim(),
            email: document.getElementById("user-email").value.trim(),
-           birthdate: document.getElementById("user-birthdate").value,
+           birthdate: document.getElementById("user-birthdate").value.trim(),
           };
             applyLanguage(document.getElementById("user-language").value);
             const age = calculateAge(profile.birthdate);
@@ -726,6 +806,7 @@
 	    if (!profile.email) return errorBox.textContent = "Introduce un email.";
             if (age === null) return errorBox.textContent = t("birthdateRequired");
             if (age < 0 || age > 120) return errorBox.textContent = t("birthdateInvalid");
+	    profile.birthdate = birthdateToISO(profile.birthdate);
                         profile.age = age;
             profile.is_minor = age < 18;
 
