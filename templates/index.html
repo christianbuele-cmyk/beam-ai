@@ -36,11 +36,12 @@
         }
 
         .container {
-            width: min(900px, 92%);
-            margin: 0 auto;
-            padding: 40px 0 130px;
-            text-align: center;
-        }
+    width: min(900px, 92%);
+    margin: 0 auto;
+    padding: 40px 0 130px;
+    text-align: center;
+    transition: margin-right 0.3s ease;
+}
 
         /* PANTALLA DE REGISTRO */
 
@@ -247,7 +248,66 @@
             margin-top: 30px;
             text-align: left;
         }
+.settings-toggle {
+    position: fixed;
+    top: 35px;
+    right: 35px;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 1001;
+    font-size: 15px;
+    transition: right 0.3s ease;
+}
 
+.settings-toggle.open {
+    right: 535px;
+}
+.settings-panel {
+    position: fixed;
+    top: 0;
+    right: -520px;
+    width: 500px;
+    height: 100vh;
+    background: #1a1d25;
+    border-left: 1px solid #303030;
+    padding: 30px;
+    transition: 0.3s;
+    z-index: 999;
+    overflow-y: auto;
+}
+
+.settings-panel.open {
+    right: 0;
+}
+.container.settings-open {
+    margin-right: 500px;
+}
+.settings-panel.open {
+    right: 0;
+}
+.settings-title {
+    font-size: 34px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 0;
+    border-bottom: 1px solid #2c2f36;
+    cursor: pointer;
+    color: #dddddd;
+}
+
+.settings-item:hover {
+    color: #4da3ff;
+}
+
+.settings-arrow {
+    color: #888;
+}
         .user-message,
         .bot-message {
             padding: 16px;
@@ -566,7 +626,63 @@
         </div>
 
     </div>
+<div class="settings-toggle" onclick="toggleSettings()">
+    ⚙ Ajustes
+</div>
 
+<div id="settings-panel" class="settings-panel">
+
+    <div class="settings-title">
+        AJUSTES
+    </div>
+
+    <div class="settings-item">
+        <span>Mi cuenta</span>
+        <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+        <span>Mi agente</span>
+        <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+        <span>Mis preferencias</span>
+        <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+        <span>Memoria</span>
+        <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+        <span>Notificaciones</span>
+        <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+        <span>Privacidad y seguridad</span>
+        <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+        <span>Idioma y apariencia</span>
+        <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+        <span>Plan y suscripción</span>
+        <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+        <span>Ayuda y soporte</span>
+        <span class="settings-arrow">›</span>
+    </div>
+
+</div>
+``
     <!-- MODAL PARA LOS ACCESOS RÁPIDOS -->
 
     <div id="shortcut-modal" class="modal">
@@ -1074,7 +1190,35 @@ Longitud: ${lon}`
         document.getElementById("shortcut-modal").addEventListener("click", event => {
             if (event.target.id === "shortcut-modal") closeModal();
         });
-        applyLanguage(currentLanguage);
+function toggleSettings() {
+
+    const panel =
+        document.getElementById(
+            "settings-panel"
+        );
+
+    const app =
+        document.getElementById(
+            "main-app"
+        );
+
+    const button =
+        document.querySelector(
+            ".settings-toggle"
+        );
+
+    panel.classList.toggle(
+        "open"
+    );
+
+    app.classList.toggle(
+        "settings-open"
+    );
+
+    button.classList.toggle(
+        "open"
+    );
+}        applyLanguage(currentLanguage);
         checkUser();
     </script>
 
