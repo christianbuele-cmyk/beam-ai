@@ -267,7 +267,7 @@
     position: fixed;
     top: 0;
     right: -520px;
-    width: 500px;
+    width: min(500px, 90vw);
     height: 100vh;
     background: #1a1d25;
     border-left: 1px solid #303030;
@@ -282,9 +282,6 @@
 }
 .container.settings-open {
     margin-right: 500px;
-}
-.settings-panel.open {
-    right: 0;
 }
 .settings-title {
     font-size: 34px;
@@ -458,7 +455,48 @@
                 width: 100%;
             }
         }
-    </style>
+
+@media (max-width: 768px) {
+
+    .settings-panel {
+        width: 100vw !important;
+        height: 100vh;
+        right: -100vw;
+        left: 0;
+        padding: 20px;
+        border-left: none;
+        z-index: 2000;
+    }
+
+   
+    #main-app.settings-open {
+        transform: none !important;
+        margin-right: 0 !important;
+    }
+
+    .settings-title {
+        font-size: 28px;
+    }
+
+    .settings-item {
+        font-size: 16px;
+        padding: 18px 0;
+    }
+}  
+.settings-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 26px;
+    cursor: pointer;
+}  
+</style>
 </head>
 
 <body>
@@ -624,9 +662,19 @@
 
 <div id="settings-panel" class="settings-panel">
 
+    <div class="settings-title-bar">
+
     <div class="settings-title">
         AJUSTES
     </div>
+
+    <button
+        class="settings-close"
+        onclick="toggleSettings()">
+        ✕
+    </button>
+
+</div>
 
     <div class="settings-item">
         <span>Mi cuenta</span>
