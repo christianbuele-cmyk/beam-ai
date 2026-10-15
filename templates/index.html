@@ -251,17 +251,29 @@
         }
 .settings-toggle {
     position: fixed;
-    top: 35px;
-    right: 35px;
+
+    top: 125px;
+    right: 300px;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #1f1f1f;
+    border: 1px solid #4da3ff;
+    border-radius: 10px;
+
     color: #ffffff;
+    font-size: 28px;
     cursor: pointer;
     z-index: 1001;
-    font-size: 15px;
-    transition: right 0.3s ease;
 }
 
 .settings-toggle.open {
-    right: 535px;
+    right: 530px;
 }
 .settings-panel {
     position: fixed;
@@ -472,7 +484,11 @@
 .settings-panel.open {
     right: 0;
 }
-
+.settings-toggle {
+    top: 18px;
+    right: 20px;
+    font-size: 28px;
+}
    .settings-panel.open {
     right: 0;
    }
@@ -664,7 +680,7 @@
     onclick="toggleSettings()"
     style="display:none;"
 >
-    ⚙ Ajustes
+    ☰
 </div>
 
 <div id="settings-panel" class="settings-panel">
