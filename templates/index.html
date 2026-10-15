@@ -46,9 +46,9 @@
         /* PANTALLA DE REGISTRO */
 
         #welcome-screen {
-            width: min(700px, 92%);
-            margin: 40px auto;
-        }
+    width: min(700px, 92%);
+    margin: 150px auto;
+}
 
         .welcome-card {
             background: #1f1f1f;
@@ -613,8 +613,12 @@
 
         </div>
 
-    </div>
-<div class="settings-toggle" onclick="toggleSettings()">
+    <div
+    id="settings-toggle"
+    class="settings-toggle"
+    onclick="toggleSettings()"
+    style="display:none;"
+>
     ⚙ Ajustes
 </div>
 
@@ -875,6 +879,9 @@ if (birthdateInput) {
         function showMain(profile) {
             document.getElementById("welcome-screen").style.display = "none";
             document.getElementById("main-app").style.display = "block";
+            document.getElementById(
+    "settings-toggle"
+).style.display = "block";
             updateWelcomeUser(profile);
             loadShortcuts();
         }
@@ -895,7 +902,10 @@ if (birthdateInput) {
                 else {
                     document.getElementById("welcome-screen").style.display = "block";
                     document.getElementById("main-app").style.display = "none";
-                }
+            document.getElementById(
+    "settings-toggle"
+).style.display = "none";    
+	    }
             } catch (error) {
                 console.error(error);
                 document.getElementById("profile-error").textContent = t("profileCheckError");
