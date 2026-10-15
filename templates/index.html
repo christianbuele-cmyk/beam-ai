@@ -468,7 +468,9 @@
         z-index: 2000;
     }
 
-   
+   .settings-panel.open {
+    right: 0;
+   }
     #main-app.settings-open {
         transform: none !important;
         margin-right: 0 !important;
@@ -925,14 +927,31 @@ if (birthdateInput) {
         }
 
         function showMain(profile) {
-            document.getElementById("welcome-screen").style.display = "none";
-            document.getElementById("main-app").style.display = "block";
-            document.getElementById(
-    "settings-toggle"
-).style.display = "block";
-            updateWelcomeUser(profile);
-            loadShortcuts();
-        }
+
+    document.getElementById("welcome-screen").style.display = "none";
+
+    document.getElementById("main-app").style.display = "block";
+
+    document.getElementById(
+        "settings-toggle"
+    ).style.display = "block";
+
+    document.getElementById(
+        "settings-panel"
+    ).classList.remove(
+        "open"
+    );
+
+    document.getElementById(
+        "main-app"
+    ).classList.remove(
+        "settings-open"
+    );
+
+    updateWelcomeUser(profile);
+
+    loadShortcuts();
+}
 
         async function checkUser() {
             applyLanguage(currentLanguage);
@@ -1268,10 +1287,12 @@ function toggleSettings() {
     );
 
     button.classList.toggle(
-        "open"
-    );
-}        applyLanguage(currentLanguage);
-        checkUser();
+    "open"
+);
+}
+
+applyLanguage(currentLanguage);
+checkUser();
     </script>
 
 </body>
