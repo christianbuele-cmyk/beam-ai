@@ -780,13 +780,7 @@
     </summary>
 
     <div class="settings-content">
-
-        <p class="settings-description"
-           data-i18n="accountDescription">
-            La identidad del usuario dentro de la plataforma.
-        </p>
-
-       
+             
        <div class="settings-option">
     <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start; text-align:left;">
         <span data-i18n="accountName">
@@ -864,7 +858,7 @@
         Editar
     </button>
 
-    <input
+      <input
         id="account-avatar-input"
         type="file"
         accept="image/png,image/jpeg,image/webp"
@@ -873,15 +867,38 @@
     >
 </div>
 
-        <div class="settings-option">
-            <span data-i18n="accountAccess">Cambiar contraseña o método de acceso</span>
-            <button class="settings-edit" data-i18n="edit">Editar</button>
-        </div>
+<div class="settings-option">
+    <span data-i18n="accountAccess">Cambiar contraseña o método de acceso</span>
+    <button
+        class="settings-edit"
+        type="button"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+</div>
 
-        <div class="settings-option">
-            <span data-i18n="accountDelete">Cerrar sesión y eliminar cuenta</span>
-            <button class="settings-edit" data-i18n="edit">Editar</button>
-        </div>
+<div class="settings-option">
+    <span data-i18n="accountLogout">Cerrar sesión</span>
+    <button
+        class="settings-edit"
+        type="button"
+        data-i18n="logout"
+    >
+        Cerrar sesión
+    </button>
+</div>
+
+<div class="settings-option">
+    <span data-i18n="accountDelete">Eliminar cuenta</span>
+    <button
+        class="settings-edit"
+        type="button"
+        data-i18n="deleteAccount"
+    >
+        Eliminar
+    </button>
+</div>
 
     </div>
 </details>
@@ -894,16 +911,16 @@
 
     <div class="settings-content">
 
-        <p class="settings-description"
-           data-i18n="agentDescription">
-            Personaliza cómo quieres que BEAM AI interactúe contigo.
-        </p>
-
-        <div class="settings-option">
-            <span data-i18n="agentName">Nombre del agente</span>
-            <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
-        </div>
-
+<div class="settings-option">
+    <span data-i18n="agentName">Nombre del agente</span>
+    <button
+        class="settings-edit"
+        type="button"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+</div>
         <div class="settings-option">
             <span data-i18n="agentTone">Tono</span>
             <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
@@ -932,40 +949,280 @@
     </div>
 </details>
 
-<div class="settings-item">
-    <span data-i18n="settingsPreferences">Mis preferencias</span>
-    <span class="settings-arrow">›</span>
-</div>
+<details class="settings-section" name="settings-accordion">
+    <summary>
+        <span data-i18n="settingsPreferences">Mis preferencias</span>
+    </summary>
 
-<div class="settings-item">
-    <span data-i18n="settingsMemory">Memoria</span>
-    <span class="settings-arrow">›</span>
-</div>
+    <div class="settings-content">
 
-<div class="settings-item">
-    <span data-i18n="settingsNotifications">Notificaciones</span>
-    <span class="settings-arrow">›</span>
-</div>
+        <div class="settings-option">
+            <span>Intereses y aficiones</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
 
-<div class="settings-item">
-    <span data-i18n="settingsPrivacy">Privacidad y seguridad</span>
-    <span class="settings-arrow">›</span>
-</div>
+        <div class="settings-option">
+            <span>Actividades favoritas</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
 
-<div class="settings-item">
-    <span data-i18n="settingsLanguage">Idioma y apariencia</span>
-    <span class="settings-arrow">›</span>
-</div>
+        <div class="settings-option">
+            <span>Presupuesto habitual</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
 
-<div class="settings-item">
-    <span data-i18n="settingsPlan">Plan y suscripción</span>
-    <span class="settings-arrow">›</span>
-</div>
+        <div class="settings-option">
+            <span>Horarios y disponibilidad</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
 
-<div class="settings-item">
-    <span data-i18n="settingsHelp">Ayuda y soporte</span>
-    <span class="settings-arrow">›</span>
-</div>
+        <div class="settings-option">
+            <span>Preferencias de viaje, ocio y gastronomía</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Restricciones o cosas que no le gustan</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+    </div>
+</details>
+
+<details class="settings-section" name="settings-accordion">
+    <summary>
+        <span data-i18n="settingsMemory">Memoria</span>
+    </summary>
+
+    <div class="settings-content">
+
+        <div class="settings-option">
+            <span>Qué recuerda sobre el usuario</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Consultar y editar recuerdos guardados</span>
+            <button class="settings-edit" type="button">Gestionar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Eliminar recuerdos individuales</span>
+            <button class="settings-edit" type="button">Gestionar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Activar o desactivar la memoria</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Consultar el historial de conversaciones</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Reiniciar la personalización</span>
+            <button class="settings-edit" type="button">Reiniciar</button>
+        </div>
+
+    </div>
+</details>
+
+<details class="settings-section" name="settings-accordion">
+    <summary>
+        <span data-i18n="settingsNotifications">Notificaciones</span>
+    </summary>
+
+    <div class="settings-content">
+
+        <div class="settings-option">
+            <span>Recordatorios y avisos</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Nuevas propuestas y recomendaciones</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Alertas sobre planes guardados</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Resúmenes personalizados</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Horario de silencio</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+    </div>
+</details>
+
+<details class="settings-section" name="settings-accordion">
+    <summary>
+        <span data-i18n="settingsPrivacy">Privacidad y seguridad</span>
+    </summary>
+
+    <div class="settings-content">
+
+        <div class="settings-option">
+            <span>Gestionar los permisos concedidos</span>
+            <button class="settings-edit" type="button">Gestionar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Controlar el uso de la ubicación</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Gestionar conexiones con otras aplicaciones</span>
+            <button class="settings-edit" type="button">Gestionar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Descargar los datos personales</span>
+            <button class="settings-edit" type="button">Descargar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Borrar conversaciones</span>
+            <button class="settings-edit" type="button">Borrar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Eliminar permanentemente la cuenta</span>
+            <button class="settings-edit" type="button">Eliminar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Política de privacidad y condiciones</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+    </div>
+</details>
+
+<details class="settings-section" name="settings-accordion">
+    <summary>
+        <span data-i18n="settingsLanguage">Idioma y apariencia</span>
+    </summary>
+
+    <div class="settings-content">
+
+        <div class="settings-option">
+            <span>Idioma de la interfaz</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Tema claro, oscuro o automático</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Tamaño del texto</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Contraste y accesibilidad</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Formato de fecha, hora y moneda</span>
+            <button class="settings-edit" type="button">Editar</button>
+        </div>
+
+    </div>
+</details>
+
+<details class="settings-section" name="settings-accordion">
+    <summary>
+        <span data-i18n="settingsPlan">Plan y suscripción</span>
+    </summary>
+
+    <div class="settings-content">
+
+        <div class="settings-option">
+            <span>Plan actual</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Funciones disponibles</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Límites de uso</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Consumo mensual</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Cambiar de plan</span>
+            <button class="settings-edit" type="button">Cambiar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Facturación y cancelación</span>
+            <button class="settings-edit" type="button">Gestionar</button>
+        </div>
+
+    </div>
+</details>
+
+<details class="settings-section" name="settings-accordion">
+    <summary>
+        <span data-i18n="settingsHelp">Ayuda y soporte</span>
+    </summary>
+
+    <div class="settings-content">
+
+        <div class="settings-option">
+            <span>Centro de ayuda</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Preguntas frecuentes</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Contactar con soporte</span>
+            <button class="settings-edit" type="button">Contactar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Informar de un error</span>
+            <button class="settings-edit" type="button">Informar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Enviar sugerencias</span>
+            <button class="settings-edit" type="button">Enviar</button>
+        </div>
+
+        <div class="settings-option">
+            <span>Versión de la aplicación</span>
+            <button class="settings-edit" type="button">Ver</button>
+        </div>
+
+    </div>
+</details>
 <div
     class="settings-item"
     onclick="getLocation()"
@@ -1035,14 +1292,17 @@
             es: {
 
 accountDescription:"La identidad del usuario dentro de la plataforma.",
-accountName:"Nombre y nombre de usuario",
+accountName:"Nombre de usuario",
 accountEmail:"Correo electrónico",
 accountBirthdate:"Fecha de nacimiento",
 accountAvatar:"Foto de perfil o avatar",
 avatarInvalid:"Selecciona una imagen JPG, PNG o WebP.",
 avatarTooLarge:"La imagen no puede superar los 5 MB.",
 accountAccess:"Cambiar contraseña o método de acceso",
-accountDelete:"Cerrar sesión y eliminar cuenta",
+accountLogout:"Cerrar sesión",
+logout:"Cerrar sesión",
+accountDelete:"Eliminar cuenta",
+deleteAccount:"Eliminar",
 todayPlan:"Plan para hoy",
 settingsTitle:"AJUSTES",
 settingsAccount:"Mi cuenta",
@@ -1073,7 +1333,10 @@ accountAvatar:"Profile photo or avatar",
 avatarInvalid:"Select a JPG, PNG, or WebP image.",
 avatarTooLarge:"The image cannot exceed 5 MB.",
 accountAccess:"Change password or sign-in method",
-accountDelete:"Sign out and delete account",
+accountLogout:"Sign out",
+logout:"Sign out",
+accountDelete:"Delete account",
+deleteAccount:"Delete",
 todayPlan:"Today’s Plan",
 settingsTitle:"SETTINGS",
 settingsAccount:"My account",
@@ -1104,8 +1367,10 @@ accountAvatar:"Photo de profil ou avatar",
 avatarInvalid:"Sélectionnez une image JPG, PNG ou WebP.",
 avatarTooLarge:"L’image ne peut pas dépasser 5 Mo.",
 accountAccess:"Modifier le mot de passe ou la méthode de connexion",
-accountDelete:"Se déconnecter et supprimer le compte",
-todayPlan:"Programme du jour",
+accountLogout:"Se déconnecter",
+logout:"Se déconnecter",
+accountDelete:"Supprimer le compte",
+deleteAccount:"Supprimer",todayPlan:"Programme du jour",
 settingsTitle:"PARAMÈTRES",
 settingsAccount:"Mon compte",
 settingsAgent:"Mon agent",
@@ -1570,22 +1835,15 @@ function openBirthdateDialog(currentValue = "") {
             }
         });
 
-input.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-        closeDialog(input.value);
-    }
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                closeDialog(input.value);
+            }
 
-    if (event.key === "Escape") {
-        closeDialog(null);
-    }
-});
-
-input.focus();
-
-input.setSelectionRange(
-    input.value.length,
-    input.value.length
-);
+            if (event.key === "Escape") {
+                closeDialog(null);
+            }
+        });
 
     });
 }
