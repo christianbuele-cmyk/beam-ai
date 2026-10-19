@@ -2,6 +2,7 @@ from agents.assistant import AssistantAgent
 from agents.calculator import CalculatorAgent
 from agents.web_agent import WebAgent
 
+
 class Router:
 
     def __init__(self):
@@ -10,7 +11,12 @@ class Router:
         self.calculator = CalculatorAgent()
         self.web_agent = WebAgent()
 
-    def process(self, message, session_key):
+    def process(
+        self,
+        message,
+        session_key,
+        tone="Profesional"
+    ):
 
         message_lower = message.lower()
 
@@ -20,4 +26,8 @@ class Router:
         if "busca" in message_lower:
             return self.web_agent.process(message)
 
-        return self.assistant.process(message, session_key)
+        return self.assistant.process(
+            message,
+            session_key,
+            tone
+        )

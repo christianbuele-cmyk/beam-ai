@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Plan para hoy",
+    "emoji": "🎉",
+    "instruction": "Recomiéndame planes interesantes para hacer hoy cerca de mí.",
+    "id": "4d1ea2ba-3dfc-46fe-852f-a3b3872de028"
+  },
+  {
+    "name": "Escapada",
+    "emoji": "🚗",
+    "instruction": "Propón una escapada de fin de semana cerca de mi ubicación.",
+    "id": "7d27082d-567d-42a0-ab9f-489bfe329d17"
+  },
+  {
+    "name": "Dónde comer",
+    "emoji": "🍽️",
+    "instruction": "Recomiéndame lugares interesantes para comer cerca de mí.",
+    "id": "6deba1e8-b0c8-4c05-ac68-ac5009e1490c"
+  }
+]

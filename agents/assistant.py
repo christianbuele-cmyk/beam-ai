@@ -4,7 +4,12 @@ from agents.llm_agent import ask_llm
 
 class AssistantAgent:
 
-    def process(self, message: str, session_key: str):
+    def process(
+    self,
+    message: str,
+    session_key: str,
+    tone: str = "Profesional"
+):
 
         memory = load_memory(session_key)
 
@@ -33,7 +38,10 @@ Usuario:
 {message}
 """
 
-        response = ask_llm(prompt)
+        response = ask_llm(
+    prompt,
+    tone=tone
+)
 
         history.append({
             "role": "assistant",

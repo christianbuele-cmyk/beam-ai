@@ -127,13 +127,19 @@ async def home(request: Request):
 
 
 @app.get("/chat")
-def chat(request: Request, message: str):
+def chat(
+    request: Request,
+    message: str,
+    tone: str = "Profesional"
+):
 
     print("SESSION:", session_key(request))
+    print("TONO SELECCIONADO:", tone)
 
     response = router.process(
         message,
-        session_key(request)
+        session_key(request),
+        tone
     )
 
     return {

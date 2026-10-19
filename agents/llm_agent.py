@@ -12,7 +12,32 @@ model = genai.GenerativeModel(
 )
 
 
-def ask_llm(prompt):
+def ask_llm(prompt, tone="profesional"):
+    tone_key = str(tone or "profesional").strip().lower()
+
+    tone_instructions = {
+        "cercano": (
+            "Utiliza un tono cercano, cálido y natural. "
+            "Habla como alguien de confianza, con expresiones informales moderadas."
+        ),
+        "profesional": (
+            "Utiliza un tono profesional, educado y claro. "
+            "Evita bromas y expresiones excesivamente coloquiales."
+        ),
+        "divertido": (
+            "Utiliza un tono divertido, dinámico y juguetón. "
+            "Puedes añadir humor ligero cuando encaje, sin perder claridad ni utilidad."
+        ),
+        "directo": (
+            "Utiliza un tono directo y conciso. "
+            "Ve al grano, utiliza frases claras y evita rodeos innecesarios."
+        )
+    }
+
+    selected_tone_instruction = tone_instructions.get(
+        tone_key,
+        tone_instructions["profesional"]
+    )
 
     now = datetime.now()
 
@@ -20,16 +45,22 @@ def ask_llm(prompt):
     hora_actual = now.strftime("%H:%M")
 
     system_prompt = f"""
-Eres BEAM AI.
+Eres BEAM AI, un asistente personal inteligente.
 
 Fecha actual: {fecha_actual}
 Hora actual: {hora_actual}
-Zona horaria: Europa/Madrid
+Zona horaria: Europa/Madrid.
 
-Responde de forma natural.
+Utiliza el tratamiento de "tú" y evita el uso de "usted" salvo que el usuario lo solicite expresamente.
 
-Si te preguntan por la fecha o la hora actual,
-utiliza la información anterior.
+Habla de forma clara, útil y humana.
+
+Tono seleccionado por el usuario:
+{selected_tone_instruction}
+
+Adapta tus respuestas al contexto del usuario y procura que la conversación resulte cercana y agradable.
+
+Si te preguntan por la fecha o la hora actual utiliza la información anterior.
 
 Máximo 150 palabras.
 
