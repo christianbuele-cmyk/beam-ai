@@ -993,7 +993,7 @@
                 text-align:left;
             "
         >
-            Profesional
+          
         </div>
 
     </div>
@@ -1033,7 +1033,7 @@
                 text-align:left;
             "
         >
-            Detallado
+            
         </div>
 
     </div>
@@ -1049,21 +1049,162 @@
 
 </div>
 
-    <div class="settings-option">
-        <span data-i18n="agentLanguage">Idioma de comunicación</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+<div class="settings-option">
+
+    <div
+        style="
+            display:flex;
+            flex-direction:column;
+            align-items:flex-start;
+            text-align:left;
+        "
+    >
+
+        <div data-i18n="agentLanguage">
+            Idioma de comunicación
+        </div>
+
+        <div
+            id="agentLanguageValue"
+            style="
+                font-size:13px;
+                color:#9ca3af;
+                margin-top:4px;
+                text-align:left;
+            "
+        >
+            
+        </div>
+
     </div>
 
-    <div class="settings-option">
-        <span data-i18n="agentInitiative">Iniciativa</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="editAgentLanguage()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+
+</div>
+
+<div class="settings-option">
+
+    <div
+        style="
+            display:flex;
+            flex-direction:column;
+            align-items:flex-start;
+            text-align:left;
+        "
+    >
+
+        <div data-i18n="agentInitiative">
+            Iniciativa
+        </div>
+
+        <div
+            id="agentInitiativeValue"
+            style="
+                font-size:13px;
+                color:#9ca3af;
+                margin-top:4px;
+                text-align:left;
+            "
+        >
+            
+        </div>
+
     </div>
 
-    <div class="settings-option">
-        <span data-i18n="agentRecommendation">Estilo de recomendación</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="editAgentInitiative()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+
+</div>
+
+<div class="settings-option">
+
+    <div
+        style="
+            display:flex;
+            flex-direction:column;
+            align-items:flex-start;
+            text-align:left;
+        "
+    >
+
+        <div data-i18n="agentRecommendation">
+            Estilo de recomendación
+        </div>
+
+        <div
+            id="agentRecommendationValue"
+            style="
+                font-size:13px;
+                color:#9ca3af;
+                margin-top:4px;
+                text-align:left;
+            "
+        >
+        </div>
+
     </div>
 
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="editAgentRecommendation()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+
+</div>
+<div
+    style="
+        display:flex;
+        gap:12px;
+        margin-top:20px;
+    "
+>
+
+    <button
+        type="button"
+        onclick="resetAgentSettings()"
+        data-i18n="agentReset"
+        style="
+            flex:1;
+            padding:10px;
+            border-radius:10px;
+            cursor:pointer;
+        "
+    >
+        Restablecer
+    </button>
+
+    <button
+        type="button"
+        onclick="saveAgentSettings()"
+        data-i18n="agentSaveChanges"
+        style="
+            flex:2;
+            padding:10px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+        "
+    >
+        Guardar cambios
+    </button>
+
+</div>
 </div>
 
 </details>
@@ -1417,6 +1558,12 @@ agentDescription:"Personaliza cómo quieres que BEAM AI interactúe contigo.",
 agentName:"Nombre del agente",
 agentTone:"Tono",
 agentDetail:"Nivel de detalle",
+languageModalTitle:"Idioma de comunicación",
+languageDescription:"Elige en qué idioma quieres que te hable tu agente.",
+languageAutomatic:"Automático",
+languageSpanish:"Español",
+languageEnglish:"Inglés",
+languageFrench:"Francés",
 toneModalTitle:"Selecciona el tono",
 toneFriendly:"Cercano",
 toneFriendlyDesc:"Como un amigo: informal, cálido y cercano.",
@@ -1440,7 +1587,33 @@ detailExpert:"Experto",
 detailExpertDesc:"Máxima profundidad y análisis.",
 agentLanguage:"Idioma de comunicación",
 agentInitiative:"Iniciativa",
+initiativeModalTitle:"Iniciativa",
+initiativeDescription:"Cuánto se adelanta tu agente a lo que necesitas.",
+initiativeOnlyAsked:"Solo si me lo pides",
+initiativeOnlyAskedDesc:"Respondo únicamente cuando me preguntas.",
+initiativeBalanced:"Equilibrado",
+initiativeBalancedDesc:"Sugiero ideas relacionadas si creo que te pueden interesar.",
+initiativeProactive:"Proactivo",
+initiativeProactiveDesc:"Te propongo planes y avisos sin que tengas que pedírmelos.",
 agentRecommendation:"Estilo de recomendación",
+agentReset:"Restablecer",
+agentSaveChanges:"Guardar cambios",
+recommendationModalTitle:"Estilo de recomendación",
+recommendationDescription:"Cómo te presenta planes, sitios y escapadas.",
+recommendationPriorities:"Qué priorizar (puedes elegir varias)",
+recommendationRated:"Mejor valoradas",
+recommendationNearby:"Cerca de mí",
+recommendationEconomic:"Económico",
+recommendationOriginal:"Más original",
+recommendationQuiet:"Con poca gente",
+recommendationPrecise:"Pocas y precisas",
+recommendationPreciseDesc:"De 1 a 3 opciones, las mejores para ti.",
+recommendationVaried:"Variadas",
+recommendationVariedDesc:"De 5 a 8 opciones para que compares y elijas.",
+recommendationSurprise:"Sorpréndeme",
+recommendationSurpriseDesc:"Mezcla lo habitual con descubrimientos diferentes.",
+recommendationReset:"Restablecer",
+recommendationSave:"Guardar cambios",
 settingsPreferences:"Mis preferencias",
 preferencesInterests:"Intereses y aficiones",
 preferencesActivities:"Actividades favoritas",
@@ -1528,6 +1701,12 @@ agentDescription:"Customize how you want BEAM AI to interact with you.",
 agentName:"Agent name",
 agentTone:"Tone",
 agentDetail:"Response detail",
+languageModalTitle:"Communication language",
+languageDescription:"Choose the language you want your agent to use.",
+languageAutomatic:"Automatic",
+languageSpanish:"Spanish",
+languageEnglish:"English",
+languageFrench:"French",
 toneModalTitle:"Select tone",
 toneFriendly:"Friendly",
 toneFriendlyDesc:"Like a friend: warm and informal.",
@@ -1551,7 +1730,33 @@ detailExpert:"Expert",
 detailExpertDesc:"Maximum depth and analysis.",
 agentLanguage:"Communication language",
 agentInitiative:"Initiative",
+initiativeModalTitle:"Initiative",
+initiativeDescription:"How proactive your agent is in anticipating what you need.",
+initiativeOnlyAsked:"Only when I ask",
+initiativeOnlyAskedDesc:"I respond only when you ask me something.",
+initiativeBalanced:"Balanced",
+initiativeBalancedDesc:"I suggest related ideas when I think they may interest you.",
+initiativeProactive:"Proactive",
+initiativeProactiveDesc:"I suggest plans and reminders without you having to ask.",
 agentRecommendation:"Recommendation style",
+agentReset:"Reset",
+agentSaveChanges:"Save changes",
+recommendationModalTitle:"Recommendation style",
+recommendationDescription:"How your agent presents plans, places and getaways.",
+recommendationPriorities:"What to prioritize (you can choose several)",
+recommendationRated:"Top rated",
+recommendationNearby:"Near me",
+recommendationEconomic:"Budget-friendly",
+recommendationOriginal:"More original",
+recommendationQuiet:"Less crowded",
+recommendationPrecise:"Few and precise",
+recommendationPreciseDesc:"1 to 3 options, the best matches for you.",
+recommendationVaried:"Varied",
+recommendationVariedDesc:"5 to 8 options so you can compare and choose.",
+recommendationSurprise:"Surprise me",
+recommendationSurpriseDesc:"Mix familiar choices with different discoveries.",
+recommendationReset:"Reset",
+recommendationSave:"Save changes",
 settingsPreferences:"My preferences",
 preferencesInterests:"Interests and hobbies",
 preferencesActivities:"Favorite activities",
@@ -1638,6 +1843,12 @@ agentDescription:"Personnalisez la façon dont BEAM AI interagit avec vous.",
 agentName:"Nom de l'agent",
 agentTone:"Ton",
 agentDetail:"Niveau de détail",
+languageModalTitle:"Langue de communication",
+languageDescription:"Choisissez la langue que votre agent doit utiliser.",
+languageAutomatic:"Automatique",
+languageSpanish:"Espagnol",
+languageEnglish:"Anglais",
+languageFrench:"Français",
 toneModalTitle:"Sélectionnez le ton",
 toneFriendly:"Amical",
 toneFriendlyDesc:"Comme un ami : chaleureux et informel.",
@@ -1661,7 +1872,33 @@ detailExpert:"Expert",
 detailExpertDesc:"Analyse approfondie.",
 agentLanguage:"Langue de communication",
 agentInitiative:"Initiative",
+initiativeModalTitle:"Initiative",
+initiativeDescription:"Dans quelle mesure votre agent anticipe vos besoins.",
+initiativeOnlyAsked:"Seulement si je le demande",
+initiativeOnlyAskedDesc:"Je réponds uniquement lorsque vous me posez une question.",
+initiativeBalanced:"Équilibré",
+initiativeBalancedDesc:"Je suggère des idées connexes si je pense qu'elles peuvent vous intéresser.",
+initiativeProactive:"Proactif",
+initiativeProactiveDesc:"Je propose des plans et des rappels sans que vous ayez à les demander.",
 agentRecommendation:"Style de recommandation",
+agentReset:"Réinitialiser",
+agentSaveChanges:"Enregistrer les modifications",
+recommendationModalTitle:"Style de recommandation",
+recommendationDescription:"Comment votre agent vous présente des plans, des lieux et des escapades.",
+recommendationPriorities:"Que privilégier (vous pouvez choisir plusieurs options)",
+recommendationRated:"Les mieux notées",
+recommendationNearby:"Près de moi",
+recommendationEconomic:"Économique",
+recommendationOriginal:"Plus original",
+recommendationQuiet:"Peu fréquenté",
+recommendationPrecise:"Peu nombreuses et précises",
+recommendationPreciseDesc:"1 à 3 options, les meilleures pour vous.",
+recommendationVaried:"Variées",
+recommendationVariedDesc:"5 à 8 options pour comparer et choisir.",
+recommendationSurprise:"Surprenez-moi",
+recommendationSurpriseDesc:"Mélangez les choix habituels avec des découvertes différentes.",
+recommendationReset:"Réinitialiser",
+recommendationSave:"Enregistrer les modifications",
 settingsPreferences:"Mes préférences",
 preferencesInterests:"Centres d’intérêt et loisirs",
 preferencesActivities:"Activités préférées",
@@ -1723,8 +1960,160 @@ settingsLocation:"Localisation",
             for (const [name, replacement] of Object.entries(values)) value = value.replace(`{${name}}`, replacement);
             return value;
         }
+function renderAgentPreferences() {
 
-        function applyLanguage(language) {
+    const tone = localStorage.getItem("agentTone");
+    const detail = localStorage.getItem("agentDetail");
+    const language = localStorage.getItem("agentLanguage");
+    const initiative = localStorage.getItem("agentInitiative");
+
+    const toneTranslations = {
+        es: {
+            Cercano: "Cercano",
+            Profesional: "Profesional",
+            Divertido: "Divertido",
+            Directo: "Directo"
+        },
+        en: {
+            Cercano: "Friendly",
+            Profesional: "Professional",
+            Divertido: "Funny",
+            Directo: "Direct"
+        },
+        fr: {
+            Cercano: "Amical",
+            Profesional: "Professionnel",
+            Divertido: "Drôle",
+            Directo: "Direct"
+        }
+    };
+
+    const detailTranslations = {
+        es: {
+            Breve: "Breve",
+            Equilibrado: "Equilibrado",
+            Detallado: "Detallado",
+            Experto: "Experto"
+        },
+        en: {
+            Breve: "Brief",
+            Equilibrado: "Balanced",
+            Detallado: "Detailed",
+            Experto: "Expert"
+        },
+        fr: {
+            Breve: "Bref",
+            Equilibrado: "Équilibré",
+            Detallado: "Détaillé",
+            Experto: "Expert"
+        }
+    };
+
+    const languageTranslations = {
+        es: {
+            Auto: "Automático",
+            Español: "Español",
+            English: "Inglés",
+            Français: "Francés"
+        },
+        en: {
+            Auto: "Automatic",
+            Español: "Spanish",
+            English: "English",
+            Français: "French"
+        },
+        fr: {
+            Auto: "Automatique",
+            Español: "Espagnol",
+            English: "Anglais",
+            Français: "Français"
+        }
+    };
+
+    const initiativeTranslations = {
+        es: {
+            Solo: "Solo si me lo pides",
+            Equilibrado: "Equilibrado",
+            Proactivo: "Proactivo"
+        },
+        en: {
+            Solo: "Only when asked",
+            Equilibrado: "Balanced",
+            Proactivo: "Proactive"
+        },
+        fr: {
+            Solo: "Seulement sur demande",
+            Equilibrado: "Équilibré",
+            Proactivo: "Proactif"
+        }
+    };
+
+    const toneLabel = document.getElementById("agentToneValue");
+    const detailLabel = document.getElementById("agentDetailValue");
+    const languageLabel = document.getElementById("agentLanguageValue");
+    const initiativeLabel = document.getElementById("agentInitiativeValue");
+
+    if (toneLabel) {
+        toneLabel.textContent =
+            tone ? (toneTranslations[currentLanguage]?.[tone] || tone) : "";
+    }
+
+    if (detailLabel) {
+        detailLabel.textContent =
+            detail ? (detailTranslations[currentLanguage]?.[detail] || detail) : "";
+    }
+
+    if (languageLabel) {
+        languageLabel.textContent =
+            language ? (languageTranslations[currentLanguage]?.[language] || language) : "";
+    }
+
+    if (initiativeLabel) {
+        initiativeLabel.textContent =
+            initiative ? (initiativeTranslations[currentLanguage]?.[initiative] || initiative) : "";
+    }
+
+    const recommendationLabel =
+        document.getElementById("agentRecommendationValue");
+
+    const savedPriorities = JSON.parse(
+        localStorage.getItem("agentRecommendationPriorities") || "[]"
+    );
+
+    const savedStyle =
+        localStorage.getItem("agentRecommendationStyle") || "";
+
+    const recommendationStyleTranslations = {
+        es: {
+            precise: "Pocas y precisas",
+            varied: "Variadas",
+            surprise: "Sorpréndeme"
+        },
+        en: {
+            precise: "Few and precise",
+            varied: "Varied",
+            surprise: "Surprise me"
+        },
+        fr: {
+            precise: "Peu et précises",
+            varied: "Variées",
+            surprise: "Surprenez-moi"
+        }
+    };
+
+    if (recommendationLabel) {
+        recommendationLabel.textContent =
+            savedStyle
+                ? (
+                    recommendationStyleTranslations[currentLanguage]?.[savedStyle]
+                    || savedStyle
+                )
+                : "";
+    }
+
+}
+
+function applyLanguage(language) {
             currentLanguage = translations[language] ? language : "es";
             localStorage.setItem("beam_language", currentLanguage);
             document.documentElement.lang = currentLanguage;
@@ -1738,6 +2127,7 @@ settingsLocation:"Localisation",
             if (picker) picker.value = currentLanguage;
             showAgeStatus();
             renderShortcuts();
+            renderAgentPreferences();
         }
 
         function parseBirthdate(birthdate) {
@@ -2255,8 +2645,385 @@ function setAgentTone(tone) {
     closeToneModal();
 
 }
+async function editAgentLanguage() {
 
-function openBirthdateDialog(currentValue = "") {
+    openLanguageModal();
+
+}
+
+function openLanguageModal() {
+
+    document.getElementById(
+        "languageModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+
+}
+
+function closeLanguageModal() {
+
+    document.getElementById(
+        "languageModal"
+    ).style.display = "none";
+
+}
+
+function setAgentLanguage(language) {
+
+    localStorage.setItem(
+        "agentLanguage",
+        language
+    );
+
+    const languageLabel =
+        document.getElementById(
+            "agentLanguageValue"
+        );
+
+    if (languageLabel) {
+
+        const languageTranslations = {
+            es: {
+                Auto: "Automático",
+                Español: "Español",
+                English: "Inglés",
+                Français: "Francés"
+            },
+            en: {
+                Auto: "Automatic",
+                Español: "Spanish",
+                English: "English",
+                Français: "French"
+            },
+            fr: {
+                Auto: "Automatique",
+                Español: "Espagnol",
+                English: "Anglais",
+                Français: "Français"
+            }
+        };
+
+        languageLabel.textContent =
+            languageTranslations[currentLanguage]?.[language] || language;
+
+    }
+
+    closeLanguageModal();
+
+}
+async function editAgentInitiative() {
+
+    openInitiativeModal();
+
+}
+
+function openInitiativeModal() {
+
+    document.getElementById(
+        "initiativeModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+
+}
+
+function closeInitiativeModal() {
+
+    document.getElementById(
+        "initiativeModal"
+    ).style.display = "none";
+
+}
+
+function setAgentInitiative(initiative) {
+
+    localStorage.setItem(
+        "agentInitiative",
+        initiative
+    );
+
+    const initiativeLabel =
+        document.getElementById(
+            "agentInitiativeValue"
+        );
+
+    if (initiativeLabel) {
+
+        const initiativeTranslations = {
+            es: {
+                Solo: "Solo si me lo pides",
+                Equilibrado: "Equilibrado",
+                Proactivo: "Proactivo"
+            },
+            en: {
+                Solo: "Only when asked",
+                Equilibrado: "Balanced",
+                Proactivo: "Proactive"
+            },
+            fr: {
+                Solo: "Seulement sur demande",
+                Equilibrado: "Équilibré",
+                Proactivo: "Proactif"
+            }
+        };
+
+        initiativeLabel.textContent =
+            initiativeTranslations[currentLanguage]?.[initiative] || initiative;
+
+    }
+
+    closeInitiativeModal();
+
+}
+let recommendationPrioritiesTemp = [];
+let recommendationStyleTemp = "";
+
+async function editAgentRecommendation() {
+    openRecommendationModal();
+}
+
+function openRecommendationModal() {
+
+    const savedPriorities = JSON.parse(
+        localStorage.getItem("agentRecommendationPriorities") || "[]"
+    );
+
+    const savedStyle =
+        localStorage.getItem("agentRecommendationStyle") || "";
+
+    recommendationPrioritiesTemp = [...savedPriorities];
+    recommendationStyleTemp = savedStyle;
+
+    document.querySelectorAll(".recommendation-priority").forEach(button => {
+        const selected =
+            recommendationPrioritiesTemp.includes(button.dataset.value);
+
+        button.style.borderColor = selected ? "#3b82f6" : "";
+        button.style.background = selected ? "#1e3a5f" : "";
+    });
+
+    document.querySelectorAll(".recommendation-style").forEach(card => {
+        const selected =
+            recommendationStyleTemp === card.dataset.value;
+
+        card.style.borderColor = selected ? "#3b82f6" : "";
+        card.style.background = selected ? "#1e3a5f" : "";
+    });
+
+    document.getElementById(
+        "recommendationModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeRecommendationModal() {
+
+    const recommendationLabel =
+        document.getElementById("agentRecommendationValue");
+
+    const priorityTranslations = {
+        es: {
+            rated: "Mejor valoradas",
+            nearby: "Cerca de mí",
+            economic: "Económico",
+            original: "Más original",
+            quiet: "Con poca gente"
+        },
+        en: {
+            rated: "Top rated",
+            nearby: "Near me",
+            economic: "Budget-friendly",
+            original: "More original",
+            quiet: "Less crowded"
+        },
+        fr: {
+            rated: "Les mieux notées",
+            nearby: "Près de moi",
+            economic: "Économique",
+            original: "Plus original",
+            quiet: "Peu fréquenté"
+        }
+    };
+
+    const styleTranslations = {
+        es: {
+            precise: "Pocas y precisas",
+            varied: "Variadas",
+            surprise: "Sorpréndeme"
+        },
+        en: {
+            precise: "Few and precise",
+            varied: "Varied",
+            surprise: "Surprise me"
+        },
+        fr: {
+            precise: "Peu et précises",
+            varied: "Variées",
+            surprise: "Surprenez-moi"
+        }
+    };
+
+    if (recommendationLabel) {
+
+        const selectedValues =
+            recommendationPrioritiesTemp.map(
+                value =>
+                    priorityTranslations[currentLanguage]?.[value] || value
+            );
+
+        if (recommendationStyleTemp) {
+            selectedValues.push(
+                styleTranslations[currentLanguage]?.[
+                    recommendationStyleTemp
+                ] || recommendationStyleTemp
+            );
+        }
+
+        recommendationLabel.textContent =
+            selectedValues.join(" · ");
+    }
+
+    document.getElementById(
+        "recommendationModal"
+    ).style.display = "none";
+}
+function setupRecommendationSelectors() {
+
+    document.querySelectorAll(".recommendation-priority").forEach(button => {
+
+        button.onclick = () => {
+
+            const value = button.dataset.value;
+
+            if (recommendationPrioritiesTemp.includes(value)) {
+
+                recommendationPrioritiesTemp =
+                    recommendationPrioritiesTemp.filter(
+                        item => item !== value
+                    );
+
+                button.style.borderColor = "";
+                button.style.background = "";
+
+            } else {
+
+                recommendationPrioritiesTemp.push(value);
+
+                button.style.borderColor = "#3b82f6";
+                button.style.background = "#1e3a5f";
+            }
+        };
+    });
+
+    document.querySelectorAll(".recommendation-style").forEach(card => {
+
+        card.onclick = () => {
+
+            recommendationStyleTemp = card.dataset.value;
+
+            document.querySelectorAll(".recommendation-style").forEach(item => {
+                item.style.borderColor = "";
+                item.style.background = "";
+            });
+
+            card.style.borderColor = "#3b82f6";
+            card.style.background = "#1e3a5f";
+        };
+    });
+}
+
+function resetAgentRecommendation() {
+
+    recommendationPrioritiesTemp = [];
+    recommendationStyleTemp = "";
+
+    document.querySelectorAll(".recommendation-priority").forEach(button => {
+        button.style.borderColor = "";
+        button.style.background = "";
+    });
+
+    document.querySelectorAll(".recommendation-style").forEach(card => {
+        card.style.borderColor = "";
+        card.style.background = "";
+    });
+}
+
+function saveAgentRecommendation() {
+
+    if (
+        recommendationPrioritiesTemp.length === 0 &&
+        !recommendationStyleTemp
+    ) {
+        localStorage.removeItem("agentRecommendationPriorities");
+        localStorage.removeItem("agentRecommendationStyle");
+    } else {
+        localStorage.setItem(
+            "agentRecommendationPriorities",
+            JSON.stringify(recommendationPrioritiesTemp)
+        );
+
+        localStorage.setItem(
+            "agentRecommendationStyle",
+            recommendationStyleTemp
+        );
+    }
+
+    renderAgentPreferences();
+    closeRecommendationModal();
+}
+function resetAgentSettings() {
+
+    localStorage.removeItem("agentName");
+    localStorage.removeItem("agentTone");
+    localStorage.removeItem("agentDetail");
+    localStorage.removeItem("agentLanguage");
+    localStorage.removeItem("agentInitiative");
+    localStorage.removeItem("agentRecommendationPriorities");
+    localStorage.removeItem("agentRecommendationStyle");
+
+    recommendationPrioritiesTemp = [];
+    recommendationStyleTemp = "";
+
+    const agentNameLabel =
+        document.getElementById("agentNameValue");
+
+    if (agentNameLabel) {
+        agentNameLabel.textContent = "";
+    }
+
+    renderAgentPreferences();
+}
+
+function saveAgentSettings() {
+
+    if (
+        recommendationPrioritiesTemp.length === 0 &&
+        !recommendationStyleTemp
+    ) {
+        localStorage.removeItem("agentRecommendationPriorities");
+        localStorage.removeItem("agentRecommendationStyle");
+    } else {
+
+        localStorage.setItem(
+            "agentRecommendationPriorities",
+            JSON.stringify(recommendationPrioritiesTemp)
+        );
+
+        if (recommendationStyleTemp) {
+            localStorage.setItem(
+                "agentRecommendationStyle",
+                recommendationStyleTemp
+            );
+        } else {
+            localStorage.removeItem("agentRecommendationStyle");
+        }
+    }
+
+    renderAgentPreferences();
+
+}function openBirthdateDialog(currentValue = "") {
     return new Promise((resolve) => {
         const overlay = document.createElement("div");
 
@@ -2807,11 +3574,19 @@ if (birthdateValue) {
             messageInput.value = "";
             if (location.protocol === "file:") return;
             try {
-                const languageInstruction = currentLanguage === "en"
-                    ? "Answer in English. "
-                    : currentLanguage === "fr"
-                        ? "Répondez en français. "
-                        : "";
+const selectedAgentLanguage =
+    localStorage.getItem("agentLanguage") || "Auto";
+
+const languageInstructions = {
+    Auto: "Reply entirely in the same language used by the user. Do not mix languages. ",
+    "Español": "Responde completamente en español. No mezcles idiomas. ",
+    English: "Reply entirely in English. Do not mix languages. ",
+    "Français": "Réponds entièrement en français. Ne mélange pas les langues. "
+};
+
+const languageInstruction =
+    languageInstructions[selectedAgentLanguage] ||
+    languageInstructions.Auto;
                 let finalMessage = msg;
 
 if (locationData) {
@@ -3096,7 +3871,290 @@ checkUser();
 </div>
 </div>
 
+<div id="languageModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+
+    <div style="
+        width:90%;
+        max-width:520px;
+        background:#111827;
+        border-radius:20px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="languageModalTitle">
+            Idioma de comunicación
+        </h3>
+
+        <p
+            style="color:#9ca3af;margin-bottom:20px;"
+            data-i18n="languageDescription"
+        >
+            Elige en qué idioma quieres que te hable tu agente.
+        </p>
+
+        <div class="tone-card" onclick="setAgentLanguage('Auto')">
+            <strong data-i18n="languageAutomatic">Automático</strong>
+        </div>
+
+        <div class="tone-card" onclick="setAgentLanguage('Español')">
+            <strong data-i18n="languageSpanish">Español</strong>
+        </div>
+
+        <div class="tone-card" onclick="setAgentLanguage('English')">
+            <strong data-i18n="languageEnglish">English</strong>
+        </div>
+
+        <div class="tone-card" onclick="setAgentLanguage('Français')">
+            <strong data-i18n="languageFrench">Français</strong>
+        </div>
+
+        <button
+            style="
+                margin-top:15px;
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+            onclick="closeLanguageModal()"
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+
+</div>
+<div id="initiativeModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+
+    <div style="
+        width:90%;
+        max-width:520px;
+        background:#111827;
+        border-radius:20px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="initiativeModalTitle">
+            Iniciativa
+        </h3>
+
+        <p
+            style="color:#9ca3af;margin-bottom:20px;"
+            data-i18n="initiativeDescription"
+        >
+            Cuánto se adelanta tu agente a lo que necesitas.
+        </p>
+
+        <div class="tone-card" onclick="setAgentInitiative('Solo')">
+            <strong data-i18n="initiativeOnlyAsked">
+                Solo si me lo pides
+            </strong><br>
+            <span data-i18n="initiativeOnlyAskedDesc">
+                Respondo únicamente cuando me preguntas.
+            </span>
+        </div>
+
+        <div class="tone-card" onclick="setAgentInitiative('Equilibrado')">
+            <strong data-i18n="initiativeBalanced">
+                Equilibrado
+            </strong><br>
+            <span data-i18n="initiativeBalancedDesc">
+                Sugiero ideas relacionadas si creo que te pueden interesar.
+            </span>
+        </div>
+
+        <div class="tone-card" onclick="setAgentInitiative('Proactivo')">
+            <strong data-i18n="initiativeProactive">
+                Proactivo
+            </strong><br>
+            <span data-i18n="initiativeProactiveDesc">
+                Te propongo planes y avisos sin que tengas que pedírmelos.
+            </span>
+        </div>
+
+        <button
+            style="
+                margin-top:15px;
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+            onclick="closeInitiativeModal()"
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+
+</div>
+<div id="recommendationModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+
+    <div style="
+        width:90%;
+        max-width:520px;
+        background:#111827;
+        border-radius:20px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="recommendationModalTitle">
+            Estilo de recomendación
+        </h3>
+
+        <p
+            style="color:#9ca3af;margin-bottom:20px;"
+            data-i18n="recommendationDescription"
+        >
+            Cómo te presenta planes, sitios y escapadas.
+        </p>
+
+        <div
+            style="color:#9ca3af;margin-bottom:10px;"
+            data-i18n="recommendationPriorities"
+        >
+            Qué priorizar (puedes elegir varias)
+        </div>
+
+        <div style="
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+            margin-bottom:20px;
+        ">
+
+            <button
+                type="button"
+                class="tone-card recommendation-priority"
+                data-value="rated"
+                data-i18n="recommendationRated"
+            >
+                Mejor valoradas
+            </button>
+
+            <button
+                type="button"
+                class="tone-card recommendation-priority"
+                data-value="nearby"
+                data-i18n="recommendationNearby"
+            >
+                Cerca de mí
+            </button>
+
+            <button
+                type="button"
+                class="tone-card recommendation-priority"
+                data-value="economic"
+                data-i18n="recommendationEconomic"
+            >
+                Económico
+            </button>
+
+            <button
+                type="button"
+                class="tone-card recommendation-priority"
+                data-value="original"
+                data-i18n="recommendationOriginal"
+            >
+                Más original
+            </button>
+
+            <button
+                type="button"
+                class="tone-card recommendation-priority"
+                data-value="quiet"
+                data-i18n="recommendationQuiet"
+            >
+                Con poca gente
+            </button>
+
+        </div>
+
+        <div
+            class="tone-card recommendation-style"
+            data-value="precise"
+        >
+            <strong data-i18n="recommendationPrecise">
+                Pocas y precisas
+            </strong><br>
+            <span data-i18n="recommendationPreciseDesc">
+                De 1 a 3 opciones, las mejores para ti.
+            </span>
+        </div>
+
+        <div
+            class="tone-card recommendation-style"
+            data-value="varied"
+        >
+            <strong data-i18n="recommendationVaried">
+                Variadas
+            </strong><br>
+            <span data-i18n="recommendationVariedDesc">
+                De 5 a 8 opciones para que compares y elijas.
+            </span>
+        </div>
+
+        <div
+            class="tone-card recommendation-style"
+            data-value="surprise"
+        >
+            <strong data-i18n="recommendationSurprise">
+                Sorpréndeme
+            </strong><br>
+            <span data-i18n="recommendationSurpriseDesc">
+                Mezcla lo habitual con descubrimientos diferentes.
+            </span>
+        </div>
+<button
+    type="button"
+    onclick="closeRecommendationModal()"
+    style="
+        margin-top:15px;
+        width:100%;
+        padding:10px;
+        border:none;
+        border-radius:10px;
+        cursor:pointer;
+    "
+>
+    <span data-i18n="modalClose">Cerrar</span>
+</button>
+               </div>
+
+    </div>
+
+</div>
 <script>
+setupRecommendationSelectors();
 applyLanguage(currentLanguage);
 </script>
 </body>
