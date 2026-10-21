@@ -1216,15 +1216,73 @@
 
     <div class="settings-content">
 
-        <div class="settings-option">
-           <span data-i18n="preferencesInterests">Intereses y aficiones</span>
-<button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+<div class="settings-option">
+
+<div style="
+    flex:1;
+    min-width:0;
+    text-align:left;
+">
+        <div data-i18n="preferencesInterests">
+            Intereses y aficiones
         </div>
 
-        <div class="settings-option">
-            <span data-i18n="preferencesActivities">Actividades favoritas</span>
-<button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+        <div
+            id="preferencesInterestsValue"
+            style="
+                font-size:13px;
+                color:#9ca3af;
+                margin-top:4px;
+                text-align:left;
+            "
+        >
         </div>
+    </div>
+
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openInterestsModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+
+</div>
+
+       <div class="settings-option">
+
+    <div style="
+    flex:1;
+    min-width:0;
+    text-align:left;
+">
+        <div data-i18n="preferencesActivities">
+            Actividades favoritas
+        </div>
+
+        <div
+            id="preferencesActivitiesValue"
+            style="
+                font-size:13px;
+                color:#9ca3af;
+                margin-top:4px;
+                text-align:left;
+            "
+        >
+        </div>
+    </div>
+
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openActivitiesModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+
+</div>
 
         <div class="settings-option">
             <span data-i18n="preferencesTravel">Preferencias de viaje, ocio y gastronomía</span>
@@ -1616,7 +1674,56 @@ recommendationReset:"Restablecer",
 recommendationSave:"Guardar cambios",
 settingsPreferences:"Mis preferencias",
 preferencesInterests:"Intereses y aficiones",
+interestsModalTitle:"Intereses y aficiones",
+interestsDescription:"Selecciona los temas que más te interesan. Puedes elegir varios y añadir los tuyos.",
+interestsCustomTitle:"Añade tus propios intereses",
+interestsCustomPlaceholder:"Escribe un interés",
+interestsAdd:"Añadir",
+interestsSave:"Guardar cambios",
+
+interest_nature:"Naturaleza",
+interest_sport:"Deporte",
+interest_music:"Música",
+interest_cinema:"Cine y series",
+interest_art:"Arte y cultura",
+interest_photography:"Fotografía",
+interest_cooking:"Cocina",
+interest_reading:"Lectura",
+interest_videogames:"Videojuegos",
+interest_technology:"Tecnología",
+interest_dance:"Baile",
+interest_animals:"Animales",
+interest_fashion:"Moda",
+interest_travel:"Viajar",
 preferencesActivities:"Actividades favoritas",
+activitiesModalTitle:"Actividades favoritas",
+activitiesDescription:"Elige lo que más te gusta hacer en tu tiempo libre.",
+activitiesEnjoyTitle:"Lo que más disfrutas",
+activitiesCompanionTitle:"¿Con quién sueles hacer planes?",
+activitiesTimeTitle:"Momento del día preferido",
+activitiesSave:"Guardar cambios",
+
+activity_hiking:"Senderismo",
+activity_beach:"Playa",
+activity_museums:"Museos",
+activity_concerts:"Conciertos",
+activity_markets:"Mercadillos",
+activity_spa:"Spa y bienestar",
+activity_adventure:"Deportes de aventura",
+activity_tapas:"Salir de tapas",
+activity_cinema:"Cine",
+activity_roadtrips:"Excursiones en coche",
+activity_cycling:"Rutas en bici",
+activity_parties:"Fiestas",
+
+activityCompanion_alone:"Solo/a",
+activityCompanion_partner:"En pareja",
+activityCompanion_friends:"Con amigos",
+activityCompanion_family:"En familia",
+
+activityTime_morning:"Mañana",
+activityTime_afternoon:"Tarde",
+activityTime_night:"Noche",
 preferencesAbout:"Sobre ti",
 preferencesBudget:"Presupuesto habitual",
 preferencesSchedule:"Horarios y disponibilidad",
@@ -1759,7 +1866,56 @@ recommendationReset:"Reset",
 recommendationSave:"Save changes",
 settingsPreferences:"My preferences",
 preferencesInterests:"Interests and hobbies",
+interestsModalTitle:"Interests and hobbies",
+interestsDescription:"Select the topics you are most interested in. You can choose several and add your own.",
+interestsCustomTitle:"Add your own interests",
+interestsCustomPlaceholder:"Enter an interest",
+interestsAdd:"Add",
+interestsSave:"Save changes",
+
+interest_nature:"Nature",
+interest_sport:"Sports",
+interest_music:"Music",
+interest_cinema:"Movies and series",
+interest_art:"Art and culture",
+interest_photography:"Photography",
+interest_cooking:"Cooking",
+interest_reading:"Reading",
+interest_videogames:"Video games",
+interest_technology:"Technology",
+interest_dance:"Dance",
+interest_animals:"Animals",
+interest_fashion:"Fashion",
+interest_travel:"Travel",
 preferencesActivities:"Favorite activities",
+activitiesModalTitle:"Favorite activities",
+activitiesDescription:"Choose what you enjoy doing most in your free time.",
+activitiesEnjoyTitle:"What you enjoy most",
+activitiesCompanionTitle:"Who do you usually make plans with?",
+activitiesTimeTitle:"Preferred time of day",
+activitiesSave:"Save changes",
+
+activity_hiking:"Hiking",
+activity_beach:"Beach",
+activity_museums:"Museums",
+activity_concerts:"Concerts",
+activity_markets:"Markets",
+activity_spa:"Spa and wellness",
+activity_adventure:"Adventure sports",
+activity_tapas:"Going out for tapas",
+activity_cinema:"Cinema",
+activity_roadtrips:"Road trips",
+activity_cycling:"Cycling",
+activity_parties:"Parties",
+
+activityCompanion_alone:"Alone",
+activityCompanion_partner:"With a partner",
+activityCompanion_friends:"With friends",
+activityCompanion_family:"With family",
+
+activityTime_morning:"Morning",
+activityTime_afternoon:"Afternoon",
+activityTime_night:"Night",
 preferencesAbout:"About you",
 preferencesBudget:"Usual budget",
 preferencesSchedule:"Schedule and availability",
@@ -1901,7 +2057,56 @@ recommendationReset:"Réinitialiser",
 recommendationSave:"Enregistrer les modifications",
 settingsPreferences:"Mes préférences",
 preferencesInterests:"Centres d’intérêt et loisirs",
+interestsModalTitle:"Centres d’intérêt et loisirs",
+interestsDescription:"Sélectionnez les sujets qui vous intéressent le plus. Vous pouvez en choisir plusieurs et ajouter les vôtres.",
+interestsCustomTitle:"Ajoutez vos propres centres d’intérêt",
+interestsCustomPlaceholder:"Saisissez un centre d’intérêt",
+interestsAdd:"Ajouter",
+interestsSave:"Enregistrer les modifications",
+
+interest_nature:"Nature",
+interest_sport:"Sport",
+interest_music:"Musique",
+interest_cinema:"Cinéma et séries",
+interest_art:"Art et culture",
+interest_photography:"Photographie",
+interest_cooking:"Cuisine",
+interest_reading:"Lecture",
+interest_videogames:"Jeux vidéo",
+interest_technology:"Technologie",
+interest_dance:"Danse",
+interest_animals:"Animaux",
+interest_fashion:"Mode",
+interest_travel:"Voyages",
 preferencesActivities:"Activités préférées",
+activitiesModalTitle:"Activités préférées",
+activitiesDescription:"Choisissez ce que vous aimez le plus faire pendant votre temps libre.",
+activitiesEnjoyTitle:"Ce que vous aimez le plus",
+activitiesCompanionTitle:"Avec qui faites-vous généralement des activités ?",
+activitiesTimeTitle:"Moment préféré de la journée",
+activitiesSave:"Enregistrer les modifications",
+
+activity_hiking:"Randonnée",
+activity_beach:"Plage",
+activity_museums:"Musées",
+activity_concerts:"Concerts",
+activity_markets:"Marchés",
+activity_spa:"Spa et bien-être",
+activity_adventure:"Sports d’aventure",
+activity_tapas:"Sortir pour des tapas",
+activity_cinema:"Cinéma",
+activity_roadtrips:"Excursions en voiture",
+activity_cycling:"Balades à vélo",
+activity_parties:"Fêtes",
+
+activityCompanion_alone:"Seul(e)",
+activityCompanion_partner:"En couple",
+activityCompanion_friends:"Avec des amis",
+activityCompanion_family:"En famille",
+
+activityTime_morning:"Matin",
+activityTime_afternoon:"Après-midi",
+activityTime_night:"Soir",
 preferencesAbout:"À propos de vous",
 preferencesBudget:"Budget habituel",
 preferencesSchedule:"Horaires et disponibilités",
@@ -2101,7 +2306,7 @@ function renderAgentPreferences() {
         }
     };
 
-    if (recommendationLabel) {
+        if (recommendationLabel) {
         recommendationLabel.textContent =
             savedStyle
                 ? (
@@ -2109,6 +2314,70 @@ function renderAgentPreferences() {
                     || savedStyle
                 )
                 : "";
+    }
+
+    const interestsLabel =
+        document.getElementById("preferencesInterestsValue");
+
+    const savedInterests = JSON.parse(
+        localStorage.getItem("userInterests") || "[]"
+    );
+
+    if (interestsLabel) {
+        interestsLabel.textContent = savedInterests
+            .map(value => {
+                if (value.startsWith("custom:")) {
+                    return value.substring(7);
+                }
+
+                return t("interest_" + value);
+            })
+            .join(" · ");
+    }
+
+    const activitiesLabel =
+        document.getElementById("preferencesActivitiesValue");
+
+    const savedActivities = JSON.parse(
+        localStorage.getItem("userFavoriteActivities") || "[]"
+    );
+
+    const savedActivitiesCompanion =
+        localStorage.getItem("userActivitiesCompanion") || "";
+
+    const savedActivitiesTime =
+        localStorage.getItem("userActivitiesTime") || "";
+
+    if (activitiesLabel) {
+
+        const parts = [];
+        const count = savedActivities.length;
+
+        if (count > 0) {
+            const selectedText = {
+                es: count === 1 ? "elegida" : "elegidas",
+                en: "selected",
+                fr: count === 1 ? "sélectionnée" : "sélectionnées"
+            };
+
+            parts.push(
+                count + " " + selectedText[currentLanguage]
+            );
+        }
+
+        if (savedActivitiesCompanion) {
+            parts.push(
+                t("activityCompanion_" + savedActivitiesCompanion)
+            );
+        }
+
+        if (savedActivitiesTime) {
+            parts.push(
+                t("activityTime_" + savedActivitiesTime)
+            );
+        }
+
+        activitiesLabel.textContent = parts.join(" · ");
     }
 
 }
@@ -3021,9 +3290,328 @@ function saveAgentSettings() {
         }
     }
 
+        renderAgentPreferences();
+}
+
+let interestsTemp = [];
+
+const defaultInterests = [
+    "nature",
+    "sport",
+    "music",
+    "cinema",
+    "art",
+    "photography",
+    "cooking",
+    "reading",
+    "videogames",
+    "technology",
+    "dance",
+    "animals",
+    "fashion",
+    "travel"
+];
+
+function openInterestsModal() {
+
+    interestsTemp = JSON.parse(
+        localStorage.getItem("userInterests") || "[]"
+    );
+
+    renderInterests();
+
+    document.getElementById(
+        "interestsModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeInterestsModal() {
+    document.getElementById(
+        "interestsModal"
+    ).style.display = "none";
+}
+
+function toggleInterest(value) {
+
+    if (interestsTemp.includes(value)) {
+        interestsTemp = interestsTemp.filter(
+            item => item !== value
+        );
+    } else {
+        interestsTemp.push(value);
+    }
+
+    renderInterests();
+}
+
+function addCustomInterest() {
+
+    const input =
+        document.getElementById("customInterestInput");
+
+    if (!input) return;
+
+    const value = input.value.trim();
+
+    if (!value) return;
+
+    const customValue = "custom:" + value;
+
+    if (!interestsTemp.includes(customValue)) {
+        interestsTemp.push(customValue);
+    }
+
+    input.value = "";
+
+    renderInterests();
+}
+
+function removeCustomInterest(value) {
+
+    interestsTemp = interestsTemp.filter(
+        item => item !== value
+    );
+
+    renderInterests();
+}
+
+function saveInterests() {
+
+    localStorage.setItem(
+        "userInterests",
+        JSON.stringify(interestsTemp)
+    );
+
     renderAgentPreferences();
 
-}function openBirthdateDialog(currentValue = "") {
+    closeInterestsModal();
+}
+
+function renderInterests() {
+
+    const container =
+        document.getElementById("interestsOptions");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    defaultInterests.forEach(value => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "tone-card";
+        button.dataset.value = value;
+        button.dataset.i18n = "interest_" + value;
+
+        button.onclick = () => toggleInterest(value);
+
+        if (interestsTemp.includes(value)) {
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+        }
+
+        container.appendChild(button);
+    });
+
+    interestsTemp
+        .filter(value => value.startsWith("custom:"))
+        .forEach(value => {
+
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.className = "tone-card";
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+
+            const text = value.substring(7);
+
+            button.textContent = text + " ×";
+
+            button.onclick = () =>
+                removeCustomInterest(value);
+
+            container.appendChild(button);
+        });
+
+    applyLanguage(currentLanguage);
+}
+let activitiesTemp = [];
+let activitiesCompanionTemp = "";
+let activitiesTimeTemp = "";
+
+const defaultActivities = [
+    "hiking",
+    "beach",
+    "museums",
+    "concerts",
+    "markets",
+    "spa",
+    "adventure",
+    "tapas",
+    "cinema",
+    "roadtrips",
+    "cycling",
+    "parties"
+];
+
+function openActivitiesModal() {
+
+    activitiesTemp = JSON.parse(
+        localStorage.getItem("userFavoriteActivities") || "[]"
+    );
+
+    activitiesCompanionTemp =
+        localStorage.getItem("userActivitiesCompanion") || "";
+
+    activitiesTimeTemp =
+        localStorage.getItem("userActivitiesTime") || "";
+
+    renderActivities();
+
+    document.getElementById(
+        "activitiesModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeActivitiesModal() {
+    document.getElementById(
+        "activitiesModal"
+    ).style.display = "none";
+}
+
+function toggleActivity(value) {
+
+    if (activitiesTemp.includes(value)) {
+        activitiesTemp = activitiesTemp.filter(
+            item => item !== value
+        );
+    } else {
+        activitiesTemp.push(value);
+    }
+
+    renderActivities();
+}
+
+function selectActivitiesCompanion(value) {
+    activitiesCompanionTemp = value;
+    renderActivities();
+}
+
+function selectActivitiesTime(value) {
+    activitiesTimeTemp = value;
+    renderActivities();
+}
+
+function saveActivities() {
+
+    localStorage.setItem(
+        "userFavoriteActivities",
+        JSON.stringify(activitiesTemp)
+    );
+
+    if (activitiesCompanionTemp) {
+        localStorage.setItem(
+            "userActivitiesCompanion",
+            activitiesCompanionTemp
+        );
+    } else {
+        localStorage.removeItem("userActivitiesCompanion");
+    }
+
+    if (activitiesTimeTemp) {
+        localStorage.setItem(
+            "userActivitiesTime",
+            activitiesTimeTemp
+        );
+    } else {
+        localStorage.removeItem("userActivitiesTime");
+    }
+
+    renderAgentPreferences();
+
+    closeActivitiesModal();
+}
+
+function renderActivities() {
+
+    const activitiesContainer =
+        document.getElementById("activitiesOptions");
+
+    const companionContainer =
+        document.getElementById("activitiesCompanion");
+
+    const timeContainer =
+        document.getElementById("activitiesTime");
+
+    if (!activitiesContainer || !companionContainer || !timeContainer) {
+        return;
+    }
+
+    activitiesContainer.innerHTML = "";
+    companionContainer.innerHTML = "";
+    timeContainer.innerHTML = "";
+
+    defaultActivities.forEach(value => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "tone-card";
+        button.dataset.i18n = "activity_" + value;
+        button.onclick = () => toggleActivity(value);
+
+        if (activitiesTemp.includes(value)) {
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+        }
+
+        activitiesContainer.appendChild(button);
+    });
+
+    ["alone", "partner", "friends", "family"].forEach(value => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "tone-card";
+        button.dataset.i18n = "activityCompanion_" + value;
+        button.onclick = () => selectActivitiesCompanion(value);
+
+        if (activitiesCompanionTemp === value) {
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+        }
+
+        companionContainer.appendChild(button);
+    });
+
+    ["morning", "afternoon", "night"].forEach(value => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "tone-card";
+        button.dataset.i18n = "activityTime_" + value;
+        button.onclick = () => selectActivitiesTime(value);
+
+        if (activitiesTimeTemp === value) {
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+        }
+
+        timeContainer.appendChild(button);
+    });
+
+    applyLanguage(currentLanguage);
+}
+function openBirthdateDialog(currentValue = "") {
     return new Promise((resolve) => {
         const overlay = document.createElement("div");
 
@@ -4149,6 +4737,238 @@ checkUser();
     <span data-i18n="modalClose">Cerrar</span>
 </button>
                </div>
+
+    </div>
+
+</div>
+<div id="interestsModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+
+    <div style="
+        width:90%;
+        max-width:520px;
+        background:#111827;
+        border-radius:20px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="interestsModalTitle">
+            Intereses y aficiones
+        </h3>
+
+        <p
+            style="color:#9ca3af;margin-bottom:20px;"
+            data-i18n="interestsDescription"
+        >
+            Selecciona tus intereses para personalizar mejor tus recomendaciones.
+        </p>
+
+        <div
+            id="interestsOptions"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:20px;
+            "
+        ></div>
+
+        <div
+            style="color:#9ca3af;margin-bottom:10px;"
+            data-i18n="interestsCustomTitle"
+        >
+            Añade otros intereses
+        </div>
+
+        <div style="
+            display:flex;
+            gap:8px;
+            margin-bottom:20px;
+        ">
+            <input
+                id="customInterestInput"
+                type="text"
+                data-i18n-placeholder="interestsCustomPlaceholder"
+                placeholder="Escribe un interés"
+                style="
+                    flex:1;
+                    padding:10px 12px;
+                    border-radius:10px;
+                    border:1px solid #374151;
+                    background:#1f2937;
+                    color:white;
+                    outline:none;
+                "
+            >
+
+            <button
+                type="button"
+                onclick="addCustomInterest()"
+                style="
+                    border:none;
+                    border-radius:10px;
+                    padding:10px 16px;
+                    cursor:pointer;
+                "
+                data-i18n="interestsAdd"
+            >
+                Añadir
+            </button>
+        </div>
+
+        <button
+            type="button"
+            onclick="saveInterests()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-bottom:8px;
+            "
+            data-i18n="interestsSave"
+        >
+            Guardar cambios
+        </button>
+
+        <button
+            type="button"
+            onclick="closeInterestsModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+
+</div>
+<div id="activitiesModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+
+    <div style="
+        width:90%;
+        max-width:520px;
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border-radius:20px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="activitiesModalTitle">
+            Actividades favoritas
+        </h3>
+
+        <p
+            style="color:#9ca3af;margin-bottom:20px;"
+            data-i18n="activitiesDescription"
+        >
+            Elige lo que más te gusta hacer en tu tiempo libre.
+        </p>
+
+        <div
+            style="color:#9ca3af;margin-bottom:10px;"
+            data-i18n="activitiesEnjoyTitle"
+        >
+            Lo que más disfrutas
+        </div>
+
+        <div
+            id="activitiesOptions"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:20px;
+            "
+        ></div>
+
+        <div
+            style="color:#9ca3af;margin-bottom:10px;"
+            data-i18n="activitiesCompanionTitle"
+        >
+            ¿Con quién sueles hacer planes?
+        </div>
+
+        <div
+            id="activitiesCompanion"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:20px;
+            "
+        ></div>
+
+        <div
+            style="color:#9ca3af;margin-bottom:10px;"
+            data-i18n="activitiesTimeTitle"
+        >
+            Momento del día preferido
+        </div>
+
+        <div
+            id="activitiesTime"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:20px;
+            "
+        ></div>
+
+        <button
+            type="button"
+            onclick="saveActivities()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-bottom:8px;
+            "
+            data-i18n="activitiesSave"
+        >
+            Guardar cambios
+        </button>
+
+        <button
+            type="button"
+            onclick="closeActivitiesModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
 
     </div>
 
