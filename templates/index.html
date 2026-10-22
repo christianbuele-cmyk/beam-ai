@@ -1327,14 +1327,72 @@ box-sizing: border-box;
 </div>
 
         <div class="settings-option">
-            <span data-i18n="preferencesRestrictions">Restricciones o cosas que no le gustan</span>
-<button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+
+    <div style="
+        flex:1;
+        min-width:0;
+        text-align:left;
+    ">
+        <div data-i18n="preferencesRestrictions">
+            Restricciones o cosas que no te gustan
         </div>
 
-        <div class="settings-option">
-            <span data-i18n="preferencesAbout">Sobre ti</span>
-<button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+        <div
+            id="preferencesRestrictionsValue"
+            style="
+                font-size:13px;
+                color:#9ca3af;
+                margin-top:4px;
+                text-align:left;
+            "
+        >
         </div>
+    </div>
+
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openRestrictionsModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+
+</div>
+
+        <div class="settings-option">
+
+    <div style="
+        flex:1;
+        min-width:0;
+        text-align:left;
+    ">
+        <div data-i18n="preferencesAbout">
+            Sobre ti
+        </div>
+
+        <div
+            id="preferencesAboutValue"
+            style="
+                font-size:13px;
+                color:#9ca3af;
+                margin-top:4px;
+                text-align:left;
+            "
+        >
+        </div>
+    </div>
+
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openAboutModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+
+</div>
 
     </div>
 </details>
@@ -1790,10 +1848,57 @@ travelFood_international:"Cocina internacional",
 travelFood_gourmet:"Gastronomía gourmet",
 travelFood_street:"Street food",
 preferencesAbout:"Sobre ti",
+aboutModalTitle:"Sobre ti",
+aboutModalDescription:"Un poco de contexto para personalizar mejor. Puedes dejar en blanco lo que prefieras.",
+aboutNameLabel:"¿Cómo te llamas?",
+aboutCityLabel:"Ciudad donde vives",
+aboutTextLabel:"Cuéntame algo sobre ti",
+aboutAgeRangeTitle:"Rango de edad (opcional)",
+aboutPrivacyTitle:"Privacidad",
+aboutPersonalizationLabel:"Usar esta información para personalizar mis recomendaciones",
+aboutSave:"Guardar cambios",
+aboutCityTooLong:"La ciudad no puede superar los 50 caracteres.",
+aboutTextTooLong:"La descripción no puede superar los 500 caracteres.",
+
+"aboutAgeRange_18-24":"18–24",
+"aboutAgeRange_25-34":"25–34",
+"aboutAgeRange_35-44":"35–44",
+"aboutAgeRange_45-54":"45–54",
+"aboutAgeRange_55plus":"55+",
 preferencesBudget:"Presupuesto habitual",
 preferencesSchedule:"Horarios y disponibilidad",
 preferencesTravel:"Preferencias de viaje, ocio y gastronomía",
-preferencesRestrictions:"Restricciones o cosas que no le gustan",
+preferencesRestrictions:"Restricciones o cosas que no te gustan",
+restrictionsModalTitle:"Restricciones o cosas que no te gustan",
+restrictionsDescription:"Lo tendré en cuenta para no proponerte nada que no encaje contigo.",
+restrictionsFoodTitle:"Alimentación",
+restrictionsAvoidTitle:"Prefieres evitar",
+restrictionsAccessibilityTitle:"Accesibilidad y viaje",
+restrictionsSave:"Guardar cambios",
+restrictionsSelectedCount:"{count} elegidos",
+restrictionsNoneSelected:"Ninguno elegido",
+
+restrictionFood_vegetarian:"Vegetariano",
+restrictionFood_vegan:"Vegano",
+restrictionFood_glutenFree:"Sin gluten",
+restrictionFood_lactoseFree:"Sin lactosa",
+restrictionFood_nutsAllergy:"Alergia a frutos secos",
+restrictionFood_noSeafood:"Sin marisco",
+restrictionFood_halal:"Halal",
+restrictionFood_kosher:"Kosher",
+
+restrictionAvoid_crowds:"Multitudes",
+restrictionAvoid_noise:"Ruido",
+restrictionAvoid_longHills:"Cuestas largas",
+restrictionAvoid_earlyMornings:"Madrugar",
+restrictionAvoid_flying:"Volar",
+restrictionAvoid_expensivePlaces:"Sitios muy caros",
+restrictionAvoid_queues:"Colas",
+
+restrictionAccessibility_stepFree:"Necesito accesos sin escaleras",
+restrictionAccessibility_travellingWithChildren:"Viajo con niños",
+restrictionAccessibility_travellingWithPet:"Viajo con mascota",
+restrictionAccessibility_warnIfUnsuitable:"Avisarme si un plan puede no encajar",
 settingsMemory:"Memoria",
 memoryHistory:"Consultar y editar el historial de conversaciones",
 memoryToggle:"Activar o desactivar la memoria",
@@ -2009,10 +2114,57 @@ travelFood_international:"International cuisine",
 travelFood_gourmet:"Gourmet dining",
 travelFood_street:"Street food",
 preferencesAbout:"About you",
+aboutModalTitle:"About you",
+aboutModalDescription:"A little context helps personalize things better. You can leave anything you prefer blank.",
+aboutNameLabel:"What’s your name?",
+aboutCityLabel:"City where you live",
+aboutTextLabel:"Tell me a little about yourself",
+aboutAgeRangeTitle:"Age range (optional)",
+aboutPrivacyTitle:"Privacy",
+aboutPersonalizationLabel:"Use this information to personalize my recommendations",
+aboutSave:"Save changes",
+aboutCityTooLong:"The city cannot exceed 50 characters.",
+aboutTextTooLong:"The description cannot exceed 500 characters.",
+
+"aboutAgeRange_18-24":"18–24",
+"aboutAgeRange_25-34":"25–34",
+"aboutAgeRange_35-44":"35–44",
+"aboutAgeRange_45-54":"45–54",
+"aboutAgeRange_55plus":"55+",
 preferencesBudget:"Usual budget",
 preferencesSchedule:"Schedule and availability",
 preferencesTravel:"Travel, leisure and dining preferences",
 preferencesRestrictions:"Restrictions or things you dislike",
+restrictionsModalTitle:"Restrictions or things you dislike",
+restrictionsDescription:"I’ll take these into account so I don’t suggest anything that doesn’t suit you.",
+restrictionsFoodTitle:"Food and dietary needs",
+restrictionsAvoidTitle:"You prefer to avoid",
+restrictionsAccessibilityTitle:"Accessibility and travel",
+restrictionsSave:"Save changes",
+restrictionsSelectedCount:"{count} selected",
+restrictionsNoneSelected:"None selected",
+
+restrictionFood_vegetarian:"Vegetarian",
+restrictionFood_vegan:"Vegan",
+restrictionFood_glutenFree:"Gluten-free",
+restrictionFood_lactoseFree:"Lactose-free",
+restrictionFood_nutsAllergy:"Nut allergy",
+restrictionFood_noSeafood:"No seafood",
+restrictionFood_halal:"Halal",
+restrictionFood_kosher:"Kosher",
+
+restrictionAvoid_crowds:"Crowds",
+restrictionAvoid_noise:"Noise",
+restrictionAvoid_longHills:"Long hills",
+restrictionAvoid_earlyMornings:"Early mornings",
+restrictionAvoid_flying:"Flying",
+restrictionAvoid_expensivePlaces:"Very expensive places",
+restrictionAvoid_queues:"Queues",
+
+restrictionAccessibility_stepFree:"I need step-free access",
+restrictionAccessibility_travellingWithChildren:"I travel with children",
+restrictionAccessibility_travellingWithPet:"I travel with a pet",
+restrictionAccessibility_warnIfUnsuitable:"Warn me if a plan may not be suitable",
 settingsMemory:"Memory",
 memoryHistory:"View and edit conversation history",
 memoryToggle:"Turn memory on or off",
@@ -2228,10 +2380,57 @@ travelFood_international:"Cuisine internationale",
 travelFood_gourmet:"Gastronomie gourmet",
 travelFood_street:"Street food",
 preferencesAbout:"À propos de vous",
+aboutModalTitle:"À propos de vous",
+aboutModalDescription:"Quelques informations permettent de mieux personnaliser les recommandations. Vous pouvez laisser vides les champs que vous préférez.",
+aboutNameLabel:"Comment vous appelez-vous ?",
+aboutCityLabel:"Ville où vous habitez",
+aboutTextLabel:"Parlez-moi un peu de vous",
+aboutAgeRangeTitle:"Tranche d’âge (facultatif)",
+aboutPrivacyTitle:"Confidentialité",
+aboutPersonalizationLabel:"Utiliser ces informations pour personnaliser mes recommandations",
+aboutSave:"Enregistrer les modifications",
+aboutCityTooLong:"La ville ne peut pas dépasser 50 caractères.",
+aboutTextTooLong:"La description ne peut pas dépasser 500 caractères.",
+
+"aboutAgeRange_18-24":"18–24",
+"aboutAgeRange_25-34":"25–34",
+"aboutAgeRange_35-44":"35–44",
+"aboutAgeRange_45-54":"45–54",
+"aboutAgeRange_55plus":"55+",
 preferencesBudget:"Budget habituel",
 preferencesSchedule:"Horaires et disponibilités",
 preferencesTravel:"Préférences de voyage, loisirs et gastronomie",
 preferencesRestrictions:"Restrictions ou choses que vous n’aimez pas",
+restrictionsModalTitle:"Restrictions ou choses que vous n’aimez pas",
+restrictionsDescription:"J’en tiendrai compte pour ne rien vous proposer qui ne vous convienne pas.",
+restrictionsFoodTitle:"Alimentation",
+restrictionsAvoidTitle:"Vous préférez éviter",
+restrictionsAccessibilityTitle:"Accessibilité et voyage",
+restrictionsSave:"Enregistrer les modifications",
+restrictionsSelectedCount:"{count} sélectionnés",
+restrictionsNoneSelected:"Aucun élément sélectionné",
+
+restrictionFood_vegetarian:"Végétarien",
+restrictionFood_vegan:"Végane",
+restrictionFood_glutenFree:"Sans gluten",
+restrictionFood_lactoseFree:"Sans lactose",
+restrictionFood_nutsAllergy:"Allergie aux fruits à coque",
+restrictionFood_noSeafood:"Sans fruits de mer",
+restrictionFood_halal:"Halal",
+restrictionFood_kosher:"Casher",
+
+restrictionAvoid_crowds:"Foules",
+restrictionAvoid_noise:"Bruit",
+restrictionAvoid_longHills:"Longues montées",
+restrictionAvoid_earlyMornings:"Se lever tôt",
+restrictionAvoid_flying:"Prendre l’avion",
+restrictionAvoid_expensivePlaces:"Endroits très chers",
+restrictionAvoid_queues:"Files d’attente",
+
+restrictionAccessibility_stepFree:"J’ai besoin d’un accès sans escaliers",
+restrictionAccessibility_travellingWithChildren:"Je voyage avec des enfants",
+restrictionAccessibility_travellingWithPet:"Je voyage avec un animal",
+restrictionAccessibility_warnIfUnsuitable:"M’avertir si une activité risque de ne pas convenir",
 settingsMemory:"Mémoire",
 memoryHistory:"Consulter et modifier l’historique des conversations",
 memoryToggle:"Activer ou désactiver la mémoire",
@@ -2534,7 +2733,42 @@ function renderAgentPreferences() {
             parts.push(t("travelFood_" + value));
         });
 
-        travelLabel.textContent = parts.join(" · ");
+               travelLabel.textContent = parts.join(" · ");
+    }
+
+    // RESTRICCIONES O COSAS QUE NO TE GUSTAN
+
+    const restrictionsLabel =
+        document.getElementById("preferencesRestrictionsValue");
+
+    const savedRestrictionsFood = JSON.parse(
+        localStorage.getItem("userRestrictionsFood") || "[]"
+    );
+
+    const savedRestrictionsAvoid = JSON.parse(
+        localStorage.getItem("userRestrictionsAvoid") || "[]"
+    );
+
+    const savedRestrictionsAccessibility = JSON.parse(
+        localStorage.getItem("userRestrictionsAccessibility") || "{}"
+    );
+
+    const enabledRestrictionsAccessibility =
+        Object.values(savedRestrictionsAccessibility)
+            .filter(Boolean)
+            .length;
+
+    const restrictionsCount =
+        savedRestrictionsFood.length
+        + savedRestrictionsAvoid.length
+        + enabledRestrictionsAccessibility;
+
+    if (restrictionsLabel) {
+        restrictionsLabel.textContent = restrictionsCount > 0
+            ? t("restrictionsSelectedCount", {
+                count: restrictionsCount
+            })
+            : "";
     }
 
 }
@@ -3994,6 +4228,602 @@ function renderTravelPreferences() {
     });
 
     applyLanguage(currentLanguage);
+}
+// RESTRICCIONES O COSAS QUE NO TE GUSTAN
+
+let restrictionsFoodTemp = [];
+let restrictionsAvoidTemp = [];
+let restrictionsAccessibilityTemp = {};
+
+const restrictionFoodOptions = [
+    "vegetarian",
+    "vegan",
+    "glutenFree",
+    "lactoseFree",
+    "nutsAllergy",
+    "noSeafood",
+    "halal",
+    "kosher"
+];
+
+const restrictionAvoidOptions = [
+    "crowds",
+    "noise",
+    "longHills",
+    "earlyMornings",
+    "flying",
+    "expensivePlaces",
+    "queues"
+];
+
+const restrictionAccessibilityOptions = [
+    "stepFree",
+    "travellingWithChildren",
+    "travellingWithPet",
+    "warnIfUnsuitable"
+];
+
+function openRestrictionsModal() {
+
+    restrictionsFoodTemp = JSON.parse(
+        localStorage.getItem("userRestrictionsFood") || "[]"
+    );
+
+    restrictionsAvoidTemp = JSON.parse(
+        localStorage.getItem("userRestrictionsAvoid") || "[]"
+    );
+
+    restrictionsAccessibilityTemp = JSON.parse(
+        localStorage.getItem("userRestrictionsAccessibility") || "{}"
+    );
+
+    renderRestrictions();
+
+    const modal = document.getElementById("restrictionsModal");
+
+    if (modal) {
+        modal.style.display = "flex";
+    }
+
+    applyLanguage(currentLanguage);
+}
+
+function closeRestrictionsModal() {
+
+    const modal = document.getElementById("restrictionsModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+function toggleRestrictionFood(value) {
+
+    if (restrictionsFoodTemp.includes(value)) {
+        restrictionsFoodTemp = restrictionsFoodTemp.filter(
+            item => item !== value
+        );
+    } else {
+        restrictionsFoodTemp.push(value);
+    }
+
+    renderRestrictions();
+}
+
+function toggleRestrictionAvoid(value) {
+
+    if (restrictionsAvoidTemp.includes(value)) {
+        restrictionsAvoidTemp = restrictionsAvoidTemp.filter(
+            item => item !== value
+        );
+    } else {
+        restrictionsAvoidTemp.push(value);
+    }
+
+    renderRestrictions();
+}
+
+function toggleRestrictionAccessibility(value) {
+
+    restrictionsAccessibilityTemp[value] =
+        !restrictionsAccessibilityTemp[value];
+
+    renderRestrictions();
+}
+
+function saveRestrictions() {
+
+    localStorage.setItem(
+        "userRestrictionsFood",
+        JSON.stringify(restrictionsFoodTemp)
+    );
+
+    localStorage.setItem(
+        "userRestrictionsAvoid",
+        JSON.stringify(restrictionsAvoidTemp)
+    );
+
+    localStorage.setItem(
+        "userRestrictionsAccessibility",
+        JSON.stringify(restrictionsAccessibilityTemp)
+    );
+
+    renderAgentPreferences();
+    closeRestrictionsModal();
+}
+
+function getRestrictionsSelectedCount() {
+
+    const enabledAccessibilityOptions =
+        Object.values(restrictionsAccessibilityTemp)
+            .filter(Boolean)
+            .length;
+
+    return restrictionsFoodTemp.length
+        + restrictionsAvoidTemp.length
+        + enabledAccessibilityOptions;
+}
+
+function renderRestrictions() {
+
+    const foodContainer =
+        document.getElementById("restrictionsFoodOptions");
+
+    const avoidContainer =
+        document.getElementById("restrictionsAvoidOptions");
+
+    const accessibilityContainer =
+        document.getElementById("restrictionsAccessibilityOptions");
+
+    const countLabel =
+        document.getElementById("restrictionsSelectedCount");
+
+    if (
+        !foodContainer ||
+        !avoidContainer ||
+        !accessibilityContainer
+    ) {
+        return;
+    }
+
+    foodContainer.innerHTML = "";
+    avoidContainer.innerHTML = "";
+    accessibilityContainer.innerHTML = "";
+
+    restrictionFoodOptions.forEach(value => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "tone-card";
+        button.dataset.i18n = "restrictionFood_" + value;
+        button.onclick = () => toggleRestrictionFood(value);
+
+        if (restrictionsFoodTemp.includes(value)) {
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+        }
+
+        foodContainer.appendChild(button);
+    });
+
+    restrictionAvoidOptions.forEach(value => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "tone-card";
+        button.dataset.i18n = "restrictionAvoid_" + value;
+        button.onclick = () => toggleRestrictionAvoid(value);
+
+        if (restrictionsAvoidTemp.includes(value)) {
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+        }
+
+        avoidContainer.appendChild(button);
+    });
+
+    restrictionAccessibilityOptions.forEach(value => {
+
+        const row = document.createElement("div");
+
+        row.style.display = "flex";
+        row.style.alignItems = "center";
+        row.style.justifyContent = "space-between";
+        row.style.gap = "16px";
+
+        const label = document.createElement("span");
+
+        label.dataset.i18n = "restrictionAccessibility_" + value;
+        label.style.fontSize = "14px";
+
+        const switchButton = document.createElement("button");
+
+        switchButton.type = "button";
+        switchButton.setAttribute("role", "switch");
+        switchButton.setAttribute(
+            "aria-checked",
+            restrictionsAccessibilityTemp[value] ? "true" : "false"
+        );
+
+        switchButton.style.width = "42px";
+        switchButton.style.height = "24px";
+        switchButton.style.padding = "2px";
+        switchButton.style.border = "none";
+        switchButton.style.borderRadius = "999px";
+        switchButton.style.cursor = "pointer";
+        switchButton.style.flexShrink = "0";
+        switchButton.style.background =
+            restrictionsAccessibilityTemp[value]
+                ? "#3b82f6"
+                : "#4b5563";
+
+        const knob = document.createElement("span");
+
+        knob.style.display = "block";
+        knob.style.width = "20px";
+        knob.style.height = "20px";
+        knob.style.borderRadius = "50%";
+        knob.style.background = "#ffffff";
+        knob.style.transition = "transform .2s";
+        knob.style.transform =
+            restrictionsAccessibilityTemp[value]
+                ? "translateX(18px)"
+                : "translateX(0)";
+
+        switchButton.appendChild(knob);
+
+        switchButton.onclick = () =>
+            toggleRestrictionAccessibility(value);
+
+        row.appendChild(label);
+        row.appendChild(switchButton);
+        accessibilityContainer.appendChild(row);
+    });
+
+    if (countLabel) {
+
+        const count = getRestrictionsSelectedCount();
+
+        countLabel.textContent = count > 0
+            ? t("restrictionsSelectedCount", { count })
+            : t("restrictionsNoneSelected");
+    }
+
+    applyLanguage(currentLanguage);
+}
+// SOBRE TI
+
+let aboutProfileTemp = null;
+let aboutAgeRangeTemp = "";
+let aboutPersonalizationTemp = true;
+
+const aboutAgeRanges = [
+    "18-24",
+    "25-34",
+    "35-44",
+    "45-54",
+    "55plus"
+];
+
+async function openAboutModal() {
+
+    try {
+
+        let profile = null;
+
+        if (location.protocol === "file:") {
+
+            profile = JSON.parse(
+                localStorage.getItem("beam_profile") || "null"
+            );
+
+        } else {
+
+            const response = await fetch("/user");
+
+            if (!response.ok) {
+                throw new Error("Profile request failed");
+            }
+
+            const data = await response.json();
+
+            if (!data.exists || !data.user) {
+                return;
+            }
+
+            profile = data.user;
+        }
+
+        if (!profile) {
+            return;
+        }
+
+        aboutProfileTemp = profile;
+
+        const nameInput =
+            document.getElementById("aboutNameInput");
+
+        const cityInput =
+            document.getElementById("aboutCityInput");
+
+        const textInput =
+            document.getElementById("aboutTextInput");
+
+        if (nameInput) {
+            nameInput.value = profile.name || "";
+        }
+
+        if (cityInput) {
+            cityInput.value = profile.city || "";
+        }
+
+        if (textInput) {
+            textInput.value = profile.about || "";
+        }
+
+        aboutAgeRangeTemp =
+            profile.age_range || "";
+
+        aboutPersonalizationTemp =
+            profile.personalization_enabled !== false;
+
+        renderAbout();
+
+        const modal =
+            document.getElementById("aboutModal");
+
+        if (modal) {
+            modal.style.display = "flex";
+        }
+
+        applyLanguage(currentLanguage);
+
+    } catch (error) {
+
+        console.error(error);
+        alert(t("profileCheckError"));
+    }
+}
+
+
+function closeAboutModal() {
+
+    const modal =
+        document.getElementById("aboutModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+    aboutProfileTemp = null;
+}
+
+
+function selectAboutAgeRange(value) {
+
+    aboutAgeRangeTemp =
+        aboutAgeRangeTemp === value ? "" : value;
+
+    renderAbout();
+}
+
+
+function toggleAboutPersonalization() {
+
+    aboutPersonalizationTemp =
+        !aboutPersonalizationTemp;
+
+    renderAbout();
+}
+
+
+function renderAbout() {
+
+    const ageContainer =
+        document.getElementById("aboutAgeRangeOptions");
+
+    const personalizationSwitch =
+        document.getElementById("aboutPersonalizationSwitch");
+
+    const personalizationKnob =
+        document.getElementById("aboutPersonalizationKnob");
+
+    const summary =
+        document.getElementById("aboutModalSummary");
+
+    if (ageContainer) {
+
+        ageContainer.innerHTML = "";
+
+        aboutAgeRanges.forEach(value => {
+
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+            button.className = "tone-card";
+            button.dataset.i18n =
+                "aboutAgeRange_" + value;
+
+            button.onclick = () =>
+                selectAboutAgeRange(value);
+
+            if (aboutAgeRangeTemp === value) {
+                button.style.borderColor = "#3b82f6";
+                button.style.background = "#1e3a5f";
+            }
+
+            ageContainer.appendChild(button);
+        });
+    }
+
+    if (personalizationSwitch) {
+
+        personalizationSwitch.setAttribute(
+            "aria-checked",
+            aboutPersonalizationTemp
+                ? "true"
+                : "false"
+        );
+
+        personalizationSwitch.style.background =
+            aboutPersonalizationTemp
+                ? "#3b82f6"
+                : "#4b5563";
+
+        personalizationSwitch.onclick =
+            toggleAboutPersonalization;
+    }
+
+    if (personalizationKnob) {
+
+        personalizationKnob.style.transform =
+            aboutPersonalizationTemp
+                ? "translateX(18px)"
+                : "translateX(0)";
+    }
+
+    if (summary && aboutProfileTemp) {
+
+        const parts = [];
+
+        if (aboutProfileTemp.name) {
+            parts.push(aboutProfileTemp.name);
+        }
+
+        if (aboutProfileTemp.city) {
+            parts.push(aboutProfileTemp.city);
+        }
+
+        summary.textContent =
+            parts.join(" · ");
+    }
+
+    applyLanguage(currentLanguage);
+}
+
+
+async function saveAboutProfile() {
+
+    if (!aboutProfileTemp) {
+        return;
+    }
+
+    const nameInput =
+        document.getElementById("aboutNameInput");
+
+    const cityInput =
+        document.getElementById("aboutCityInput");
+
+    const textInput =
+        document.getElementById("aboutTextInput");
+
+    const name =
+        nameInput ? nameInput.value.trim() : "";
+
+    const city =
+        cityInput ? cityInput.value.trim() : "";
+
+    const about =
+        textInput ? textInput.value.trim() : "";
+
+    if (name.length < 2 || name.length > 50) {
+        alert(t("nameRequired"));
+        return;
+    }
+
+    if (city.length > 50) {
+        alert(t("aboutCityTooLong"));
+        return;
+    }
+
+    if (about.length > 500) {
+        alert(t("aboutTextTooLong"));
+        return;
+    }
+
+    const profile = {
+        ...aboutProfileTemp,
+        name: name,
+        city: city,
+        about: about,
+        age_range: aboutAgeRangeTemp,
+        personalization_enabled:
+            aboutPersonalizationTemp
+    };
+
+    try {
+
+        if (location.protocol === "file:") {
+
+            localStorage.setItem(
+                "beam_profile",
+                JSON.stringify(profile)
+            );
+
+        } else {
+
+            const response = await fetch("/user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(profile)
+            });
+
+            if (!response.ok) {
+
+                const errorData =
+                    await response.json()
+                        .catch(() => ({}));
+
+                throw new Error(
+                    errorData.detail ||
+                    "Profile save failed"
+                );
+            }
+        }
+
+        aboutProfileTemp = profile;
+
+        updateWelcomeUser(profile);
+        renderAboutProfileSummary(profile);
+
+        closeAboutModal();
+
+    } catch (error) {
+
+        console.error(error);
+        alert(t("profileSaveError"));
+    }
+}
+
+
+function renderAboutProfileSummary(profile) {
+
+    const label =
+        document.getElementById(
+            "preferencesAboutValue"
+        );
+
+    if (!label) {
+        return;
+    }
+
+    const parts = [];
+
+    if (profile && profile.name) {
+        parts.push(profile.name);
+    }
+
+    if (profile && profile.city) {
+        parts.push(profile.city);
+    }
+
+    label.textContent =
+        parts.join(" · ");
 }
 function openBirthdateDialog(currentValue = "") {
     return new Promise((resolve) => {
@@ -5510,6 +6340,412 @@ checkUser();
         <button
             type="button"
             onclick="closeTravelModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+
+</div>
+<!-- MODAL: Restricciones o cosas que no te gustan -->
+<div id="restrictionsModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+">
+
+    <div style="
+        width:min(100%,520px);
+        max-height:90vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:20px;
+        padding:24px;
+        color:white;
+        box-sizing:border-box;
+    ">
+
+        <h3 style="margin-top:0;margin-bottom:6px;"
+            data-i18n="restrictionsModalTitle">
+            Restricciones o cosas que no te gustan
+        </h3>
+
+        <div
+            id="restrictionsSelectedCount"
+            style="
+                color:#9ca3af;
+                font-size:13px;
+                margin-bottom:18px;
+            "
+        ></div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px;"
+            data-i18n="restrictionsDescription"
+        >
+            Lo tendré en cuenta para no proponerte nada que no encaje contigo.
+        </p>
+
+        <div
+            style="color:#9ca3af;font-size:13px;margin-bottom:10px;"
+            data-i18n="restrictionsFoodTitle"
+        >
+            Alimentación
+        </div>
+
+        <div
+            id="restrictionsFoodOptions"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:20px;
+            "
+        ></div>
+
+        <div
+            style="color:#9ca3af;font-size:13px;margin-bottom:10px;"
+            data-i18n="restrictionsAvoidTitle"
+        >
+            Prefieres evitar
+        </div>
+
+        <div
+            id="restrictionsAvoidOptions"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:22px;
+            "
+        ></div>
+
+        <div
+            style="color:#9ca3af;font-size:13px;margin-bottom:12px;"
+            data-i18n="restrictionsAccessibilityTitle"
+        >
+            Accesibilidad y viaje
+        </div>
+
+        <div
+            id="restrictionsAccessibilityOptions"
+            style="
+                display:flex;
+                flex-direction:column;
+                gap:14px;
+                margin-bottom:24px;
+            "
+        ></div>
+
+        <button
+            type="button"
+            onclick="saveRestrictions()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-bottom:8px;
+            "
+            data-i18n="restrictionsSave"
+        >
+            Guardar cambios
+        </button>
+
+        <button
+            type="button"
+            onclick="closeRestrictionsModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+
+</div>
+<!-- MODAL: Sobre ti -->
+<div id="aboutModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+">
+
+    <div style="
+        width:min(100%,520px);
+        max-height:90vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:20px;
+        padding:24px;
+        color:white;
+        box-sizing:border-box;
+    ">
+
+        <h3
+            style="margin:0 0 6px;"
+            data-i18n="aboutModalTitle"
+        >
+            Sobre ti
+        </h3>
+
+        <div
+            id="aboutModalSummary"
+            style="
+                color:#9ca3af;
+                font-size:13px;
+                margin-bottom:18px;
+            "
+        ></div>
+
+        <p
+            style="
+                color:#9ca3af;
+                font-size:14px;
+                line-height:1.5;
+                margin:0 0 22px;
+            "
+            data-i18n="aboutModalDescription"
+        >
+            Un poco de contexto para personalizar mejor. Puedes dejar en blanco lo que prefieras.
+        </p>
+
+        <!-- NOMBRE -->
+        <div style="margin-bottom:16px;">
+
+            <label
+                for="aboutNameInput"
+                style="
+                    display:block;
+                    color:#9ca3af;
+                    font-size:13px;
+                    margin-bottom:7px;
+                "
+                data-i18n="aboutNameLabel"
+            >
+                ¿Cómo te llamas?
+            </label>
+
+            <input
+                id="aboutNameInput"
+                type="text"
+                maxlength="50"
+                autocomplete="name"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:11px 12px;
+                    border-radius:10px;
+                    border:1px solid #374151;
+                    background:#f9fafb;
+                    color:#111827;
+                    outline:none;
+                "
+            >
+
+        </div>
+
+        <!-- CIUDAD -->
+        <div style="margin-bottom:16px;">
+
+            <label
+                for="aboutCityInput"
+                style="
+                    display:block;
+                    color:#9ca3af;
+                    font-size:13px;
+                    margin-bottom:7px;
+                "
+                data-i18n="aboutCityLabel"
+            >
+                Ciudad donde vives
+            </label>
+
+            <input
+                id="aboutCityInput"
+                type="text"
+                maxlength="50"
+                autocomplete="address-level2"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:11px 12px;
+                    border-radius:10px;
+                    border:1px solid #374151;
+                    background:#f9fafb;
+                    color:#111827;
+                    outline:none;
+                "
+            >
+
+        </div>
+
+        <!-- DESCRIPCIÓN -->
+        <div style="margin-bottom:18px;">
+
+            <label
+                for="aboutTextInput"
+                style="
+                    display:block;
+                    color:#9ca3af;
+                    font-size:13px;
+                    margin-bottom:7px;
+                "
+                data-i18n="aboutTextLabel"
+            >
+                Cuéntame algo sobre ti
+            </label>
+
+            <textarea
+                id="aboutTextInput"
+                maxlength="500"
+                rows="3"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    resize:vertical;
+                    padding:11px 12px;
+                    border-radius:10px;
+                    border:1px solid #374151;
+                    background:#f9fafb;
+                    color:#111827;
+                    outline:none;
+                    font-family:inherit;
+                "
+            ></textarea>
+
+        </div>
+
+        <!-- RANGO DE EDAD -->
+        <div
+            style="
+                color:#9ca3af;
+                font-size:13px;
+                margin-bottom:10px;
+            "
+            data-i18n="aboutAgeRangeTitle"
+        >
+            Rango de edad (opcional)
+        </div>
+
+        <div
+            id="aboutAgeRangeOptions"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:22px;
+            "
+        ></div>
+
+        <!-- PRIVACIDAD -->
+        <div
+            style="
+                color:#9ca3af;
+                font-size:13px;
+                margin-bottom:12px;
+            "
+            data-i18n="aboutPrivacyTitle"
+        >
+            Privacidad
+        </div>
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:24px;
+        ">
+
+            <span
+                style="
+                    font-size:14px;
+                    line-height:1.4;
+                "
+                data-i18n="aboutPersonalizationLabel"
+            >
+                Usar esta información para personalizar mis recomendaciones
+            </span>
+
+            <button
+                id="aboutPersonalizationSwitch"
+                type="button"
+                role="switch"
+                aria-checked="true"
+                style="
+                    width:42px;
+                    height:24px;
+                    padding:2px;
+                    border:none;
+                    border-radius:999px;
+                    cursor:pointer;
+                    flex-shrink:0;
+                    background:#3b82f6;
+                "
+            >
+                <span
+                    id="aboutPersonalizationKnob"
+                    style="
+                        display:block;
+                        width:20px;
+                        height:20px;
+                        border-radius:50%;
+                        background:#ffffff;
+                        transition:transform .2s;
+                        transform:translateX(18px);
+                    "
+                ></span>
+            </button>
+
+        </div>
+
+        <!-- GUARDAR -->
+        <button
+            type="button"
+            onclick="saveAboutProfile()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-bottom:8px;
+            "
+            data-i18n="aboutSave"
+        >
+            Guardar cambios
+        </button>
+
+        <!-- CERRAR -->
+        <button
+            type="button"
+            onclick="closeAboutModal()"
             style="
                 width:100%;
                 padding:10px;
