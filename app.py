@@ -121,25 +121,24 @@ def save_buttons(key: str, buttons):
     write_json(session_file(SHORTCUT_DIR, key), buttons)
 
 
-@app.get("/")
-async def home(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
-
-
 @app.get("/chat")
 def chat(
     request: Request,
     message: str,
-    tone: str = "Profesional"
+    tone: str = "Profesional",
+    agent_name: str = "BEAM AI"
 ):
+    clean_agent_name = agent_name.strip() or "BEAM AI"
 
     print("SESSION:", session_key(request))
     print("TONO SELECCIONADO:", tone)
+    print("NOMBRE AGENTE:", clean_agent_name)
 
     response = router.process(
         message,
         session_key(request),
-        tone
+        tone,
+        clean_agent_name
     )
 
     return {

@@ -442,15 +442,23 @@
             z-index: 20;
         }
 
-        #message {
-            flex: 1;
-            min-width: 0;
-            padding: 15px;
-            font-size: 17px;
-            border: 1px solid #333333;
-            border-radius: 10px;
-            outline: none;
-        }
+#message {
+    flex: 1;
+    min-width: 0;
+    padding: 15px;
+    font-size: 17px;
+    border: 1px solid #333333;
+    border-radius: 10px;
+    outline: none;
+
+resize: none;
+overflow-y: hidden;
+min-height: 52px;
+line-height: 22px;
+font-family: inherit;
+box-sizing: border-box;
+
+}
 
         /* VENTANA DE ACCESOS RÁPIDOS */
 
@@ -744,13 +752,13 @@
      
         <div class="input-row">
 
-            <input
-                id="message"
-                type="text"
-                placeholder="¿Qué te apetece hacer hoy?"
-                data-i18n-placeholder="messagePlaceholder"
-                autocomplete="off"
-            >
+<textarea
+    id="message"
+    rows="1"
+    placeholder="¿Qué te apetece hacer hoy?"
+    data-i18n-placeholder="messagePlaceholder"
+    autocomplete="off"
+></textarea>
 
             <button
                 class="primary-button"
@@ -1284,10 +1292,39 @@
 
 </div>
 
-        <div class="settings-option">
-            <span data-i18n="preferencesTravel">Preferencias de viaje, ocio y gastronomía</span>
-<button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+      <div class="settings-option">
+
+    <div style="
+        flex:1;
+        min-width:0;
+        text-align:left;
+    ">
+        <div data-i18n="preferencesTravel">
+            Preferencias de viaje, ocio y gastronomía
         </div>
+
+        <div
+            id="preferencesTravelValue"
+            style="
+                font-size:13px;
+                color:#9ca3af;
+                margin-top:4px;
+                text-align:left;
+            "
+        >
+        </div>
+    </div>
+
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openTravelModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+
+</div>
 
         <div class="settings-option">
             <span data-i18n="preferencesRestrictions">Restricciones o cosas que no le gustan</span>
@@ -1609,6 +1646,7 @@ deleteConfirm:
 deletePending:
 "La eliminación estará disponible cuando la cuenta esté vinculada con la sesión actual.",
 todayPlan:"Plan para hoy",
+todayPlanInstruction:"Recomiéndame planes interesantes para hacer hoy cerca de mí.",
 settingsTitle:"AJUSTES",
 settingsAccount:"Mi cuenta",
 settingsAgent:"Mi agente",
@@ -1724,6 +1762,33 @@ activityCompanion_family:"En familia",
 activityTime_morning:"Mañana",
 activityTime_afternoon:"Tarde",
 activityTime_night:"Noche",
+travelModalTitle:"Viaje, ocio y gastronomía",
+travelDescription:"Personaliza tus preferencias para recibir recomendaciones más adaptadas a ti.",
+travelStyleTitle:"Cómo te gusta viajar",
+travelLeisureTitle:"Planes y ocio",
+travelFoodTitle:"Gastronomía",
+travelSave:"Guardar cambios",
+
+travelStyle_relaxed:"Relax y descanso",
+travelStyle_adventure:"Aventura",
+travelStyle_cultural:"Cultural",
+travelStyle_nature:"Naturaleza",
+travelStyle_city:"Ciudades",
+travelStyle_roadtrip:"Road trips",
+
+travelLeisure_beach:"Playa",
+travelLeisure_mountains:"Montaña",
+travelLeisure_museums:"Museos",
+travelLeisure_concerts:"Conciertos",
+travelLeisure_shopping:"Compras",
+travelLeisure_nightlife:"Vida nocturna",
+
+travelFood_local:"Cocina local",
+travelFood_tapas:"Tapas",
+travelFood_traditional:"Cocina tradicional",
+travelFood_international:"Cocina internacional",
+travelFood_gourmet:"Gastronomía gourmet",
+travelFood_street:"Street food",
 preferencesAbout:"Sobre ti",
 preferencesBudget:"Presupuesto habitual",
 preferencesSchedule:"Horarios y disponibilidad",
@@ -1801,7 +1866,7 @@ deletePending:
 "Account deletion will be available when the account is linked to the current session.",
 deleteAccount:"Delete",
 todayPlan:"Today’s Plan",
-settingsTitle:"SETTINGS",
+todayPlanInstruction:"Recommend interesting things to do near me today.",settingsTitle:"SETTINGS",
 settingsAccount:"My account",
 settingsAgent:"My agent",
 agentDescription:"Customize how you want BEAM AI to interact with you.",
@@ -1916,6 +1981,33 @@ activityCompanion_family:"With family",
 activityTime_morning:"Morning",
 activityTime_afternoon:"Afternoon",
 activityTime_night:"Night",
+travelModalTitle:"Travel, leisure and dining",
+travelDescription:"Customize your preferences to receive recommendations better suited to you.",
+travelStyleTitle:"How you like to travel",
+travelLeisureTitle:"Plans and leisure",
+travelFoodTitle:"Food and dining",
+travelSave:"Save changes",
+
+travelStyle_relaxed:"Relaxation and rest",
+travelStyle_adventure:"Adventure",
+travelStyle_cultural:"Cultural",
+travelStyle_nature:"Nature",
+travelStyle_city:"Cities",
+travelStyle_roadtrip:"Road trips",
+
+travelLeisure_beach:"Beach",
+travelLeisure_mountains:"Mountains",
+travelLeisure_museums:"Museums",
+travelLeisure_concerts:"Concerts",
+travelLeisure_shopping:"Shopping",
+travelLeisure_nightlife:"Nightlife",
+
+travelFood_local:"Local cuisine",
+travelFood_tapas:"Tapas",
+travelFood_traditional:"Traditional cuisine",
+travelFood_international:"International cuisine",
+travelFood_gourmet:"Gourmet dining",
+travelFood_street:"Street food",
 preferencesAbout:"About you",
 preferencesBudget:"Usual budget",
 preferencesSchedule:"Schedule and availability",
@@ -1992,6 +2084,7 @@ deleteConfirm:
 deletePending:
 "La suppression sera disponible lorsque le compte sera lié à la session actuelle.",
 deleteAccount:"Supprimer",todayPlan:"Programme du jour",
+todayPlanInstruction:"Recommande-moi des activités intéressantes à faire près de chez moi aujourd'hui.",
 settingsTitle:"PARAMÈTRES",
 settingsAccount:"Mon compte",
 settingsAgent:"Mon agent",
@@ -2107,6 +2200,33 @@ activityCompanion_family:"En famille",
 activityTime_morning:"Matin",
 activityTime_afternoon:"Après-midi",
 activityTime_night:"Soir",
+travelModalTitle:"Voyage, loisirs et gastronomie",
+travelDescription:"Personnalisez vos préférences pour recevoir des recommandations mieux adaptées à vos goûts.",
+travelStyleTitle:"Comment vous aimez voyager",
+travelLeisureTitle:"Sorties et loisirs",
+travelFoodTitle:"Gastronomie",
+travelSave:"Enregistrer les modifications",
+
+travelStyle_relaxed:"Détente et repos",
+travelStyle_adventure:"Aventure",
+travelStyle_cultural:"Culture",
+travelStyle_nature:"Nature",
+travelStyle_city:"Villes",
+travelStyle_roadtrip:"Road trips",
+
+travelLeisure_beach:"Plage",
+travelLeisure_mountains:"Montagne",
+travelLeisure_museums:"Musées",
+travelLeisure_concerts:"Concerts",
+travelLeisure_shopping:"Shopping",
+travelLeisure_nightlife:"Vie nocturne",
+
+travelFood_local:"Cuisine locale",
+travelFood_tapas:"Tapas",
+travelFood_traditional:"Cuisine traditionnelle",
+travelFood_international:"Cuisine internationale",
+travelFood_gourmet:"Gastronomie gourmet",
+travelFood_street:"Street food",
 preferencesAbout:"À propos de vous",
 preferencesBudget:"Budget habituel",
 preferencesSchedule:"Horaires et disponibilités",
@@ -2377,7 +2497,44 @@ function renderAgentPreferences() {
             );
         }
 
-        activitiesLabel.textContent = parts.join(" · ");
+        activitiesLabel.textContent = parts.join(" Â· ");
+    }
+
+
+    // VIAJE, OCIO Y GASTRONOMÍA
+
+    const travelLabel =
+        document.getElementById("preferencesTravelValue");
+
+    const savedTravelStyle = JSON.parse(
+        localStorage.getItem("userTravelStyle") || "[]"
+    );
+
+    const savedTravelLeisure = JSON.parse(
+        localStorage.getItem("userTravelLeisure") || "[]"
+    );
+
+    const savedTravelFood = JSON.parse(
+        localStorage.getItem("userTravelFood") || "[]"
+    );
+
+    if (travelLabel) {
+
+        const parts = [];
+
+        savedTravelStyle.forEach(value => {
+            parts.push(t("travelStyle_" + value));
+        });
+
+        savedTravelLeisure.forEach(value => {
+            parts.push(t("travelLeisure_" + value));
+        });
+
+        savedTravelFood.forEach(value => {
+            parts.push(t("travelFood_" + value));
+        });
+
+        travelLabel.textContent = parts.join(" · ");
     }
 
 }
@@ -2389,9 +2546,47 @@ function applyLanguage(language) {
             document.querySelectorAll("[data-i18n]").forEach(element => {
                 element.textContent = t(element.dataset.i18n);
             });
-            document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
-                element.placeholder = t(element.dataset.i18nPlaceholder);
-            });
+document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
+    element.placeholder = t(element.dataset.i18nPlaceholder);
+});
+
+const messageInput = document.getElementById("message");
+
+if (messageInput) {
+
+    const randomPlaceholders = {
+        es: [
+            "¿Qué te apetece hacer hoy?",
+            "Cuéntame qué tienes en mente",
+            "¿Qué necesitas hoy?",
+            "¿En qué te ayudo?",
+            "Dime qué buscas"
+        ],
+
+        en: [
+            "What would you like to do today?",
+            "Tell me what's on your mind",
+            "What do you need today?",
+            "How can I help?",
+            "Tell me what you're looking for"
+        ],
+
+        fr: [
+            "Qu’avez-vous envie de faire aujourd’hui ?",
+            "Dites-moi ce que vous avez en tête",
+            "De quoi avez-vous besoin aujourd’hui ?",
+            "Comment puis-je vous aider ?",
+            "Dites-moi ce que vous recherchez"
+        ]
+    };
+
+    const options =
+        randomPlaceholders[currentLanguage] ||
+        randomPlaceholders.es;
+
+    messageInput.placeholder =
+        options[Math.floor(Math.random() * options.length)];
+}
             const picker = document.getElementById("user-language");
             if (picker) picker.value = currentLanguage;
             showAgeStatus();
@@ -3611,6 +3806,195 @@ function renderActivities() {
 
     applyLanguage(currentLanguage);
 }
+let travelStyleTemp = [];
+let travelLeisureTemp = [];
+let travelFoodTemp = [];
+
+const travelStyles = [
+    "relaxed",
+    "adventure",
+    "cultural",
+    "nature",
+    "city",
+    "roadtrip"
+];
+
+const travelLeisureOptions = [
+    "beach",
+    "mountains",
+    "museums",
+    "concerts",
+    "shopping",
+    "nightlife"
+];
+
+const travelFoodOptions = [
+    "local",
+    "tapas",
+    "traditional",
+    "international",
+    "gourmet",
+    "street"
+];
+
+function openTravelModal() {
+
+    travelStyleTemp = JSON.parse(
+        localStorage.getItem("userTravelStyle") || "[]"
+    );
+
+    travelLeisureTemp = JSON.parse(
+        localStorage.getItem("userTravelLeisure") || "[]"
+    );
+
+    travelFoodTemp = JSON.parse(
+        localStorage.getItem("userTravelFood") || "[]"
+    );
+
+    renderTravelPreferences();
+
+    document.getElementById("travelModal").style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeTravelModal() {
+    document.getElementById("travelModal").style.display = "none";
+}
+
+function toggleTravelStyle(value) {
+
+    if (travelStyleTemp.includes(value)) {
+        travelStyleTemp = travelStyleTemp.filter(
+            item => item !== value
+        );
+    } else {
+        travelStyleTemp.push(value);
+    }
+
+    renderTravelPreferences();
+}
+
+function toggleTravelLeisure(value) {
+
+    if (travelLeisureTemp.includes(value)) {
+        travelLeisureTemp = travelLeisureTemp.filter(
+            item => item !== value
+        );
+    } else {
+        travelLeisureTemp.push(value);
+    }
+
+    renderTravelPreferences();
+}
+
+function toggleTravelFood(value) {
+
+    if (travelFoodTemp.includes(value)) {
+        travelFoodTemp = travelFoodTemp.filter(
+            item => item !== value
+        );
+    } else {
+        travelFoodTemp.push(value);
+    }
+
+    renderTravelPreferences();
+}
+
+function saveTravelPreferences() {
+
+    localStorage.setItem(
+        "userTravelStyle",
+        JSON.stringify(travelStyleTemp)
+    );
+
+    localStorage.setItem(
+        "userTravelLeisure",
+        JSON.stringify(travelLeisureTemp)
+    );
+
+    localStorage.setItem(
+        "userTravelFood",
+        JSON.stringify(travelFoodTemp)
+    );
+
+    renderAgentPreferences();
+
+    closeTravelModal();
+}
+
+function renderTravelPreferences() {
+
+    const styleContainer =
+        document.getElementById("travelStyleOptions");
+
+    const leisureContainer =
+        document.getElementById("travelLeisureOptions");
+
+    const foodContainer =
+        document.getElementById("travelFoodOptions");
+
+    if (!styleContainer || !leisureContainer || !foodContainer) {
+        return;
+    }
+
+    styleContainer.innerHTML = "";
+    leisureContainer.innerHTML = "";
+    foodContainer.innerHTML = "";
+
+    travelStyles.forEach(value => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "tone-card";
+        button.dataset.i18n = "travelStyle_" + value;
+        button.onclick = () => toggleTravelStyle(value);
+
+        if (travelStyleTemp.includes(value)) {
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+        }
+
+        styleContainer.appendChild(button);
+    });
+
+    travelLeisureOptions.forEach(value => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "tone-card";
+        button.dataset.i18n = "travelLeisure_" + value;
+        button.onclick = () => toggleTravelLeisure(value);
+
+        if (travelLeisureTemp.includes(value)) {
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+        }
+
+        leisureContainer.appendChild(button);
+    });
+
+    travelFoodOptions.forEach(value => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "tone-card";
+        button.dataset.i18n = "travelFood_" + value;
+        button.onclick = () => toggleTravelFood(value);
+
+        if (travelFoodTemp.includes(value)) {
+            button.style.borderColor = "#3b82f6";
+            button.style.background = "#1e3a5f";
+        }
+
+        foodContainer.appendChild(button);
+    });
+
+    applyLanguage(currentLanguage);
+}
 function openBirthdateDialog(currentValue = "") {
     return new Promise((resolve) => {
         const overlay = document.createElement("div");
@@ -4069,14 +4453,32 @@ if (birthdateValue) {
             document.getElementById("shortcut-name").focus();
         }
 
-        function openEditModal(shortcut) {
-            editingShortcutId = shortcut.id;
-            document.getElementById("modal-title").textContent = t("editShortcutTitle");
-            document.getElementById("shortcut-name").value = shortcut.name;
-            document.getElementById("shortcut-instruction").value = shortcut.instruction;
-            document.getElementById("form-error").textContent = "";
-            document.getElementById("shortcut-modal").style.display = "flex";
-        }
+function openEditModal(shortcut) {
+    editingShortcutId = shortcut.id;
+
+    document.getElementById("modal-title").textContent =
+        t("editShortcutTitle");
+
+    const todayPlanNames = [
+        "Plan para hoy",
+        "Plan for today",
+        "Today's Plan",
+        "Today’s Plan",
+        "Programme pour aujourd’hui",
+        "Programme du jour"
+    ];
+
+    const isTodayPlan = todayPlanNames.includes(shortcut.name);
+
+    document.getElementById("shortcut-name").value =
+        isTodayPlan ? t("todayPlan") : shortcut.name;
+
+    document.getElementById("shortcut-instruction").value =
+        isTodayPlan ? t("todayPlanInstruction") : shortcut.instruction;
+
+    document.getElementById("form-error").textContent = "";
+    document.getElementById("shortcut-modal").style.display = "flex";
+}
 
         function closeModal() {
             document.getElementById("shortcut-modal").style.display = "none";
@@ -4158,7 +4560,19 @@ if (birthdateValue) {
     	    "settings-toggle"
 	    ).style.display = "none";
             addChatMessage(t("you"), msg, "user-message");
-            const botContent = addChatMessage("BEAM AI", location.protocol === "file:" ? t("localChatError") : t("chatThinking"), "bot-message");
+const agentDisplayName =
+    localStorage.getItem("agentName") || "BEAM AI";
+
+const selectedAgentName =
+    (localStorage.getItem("agentName") || "").trim() || "BEAM AI";
+
+const botContent = addChatMessage(
+    selectedAgentName,
+    location.protocol === "file:"
+        ? t("localChatError")
+        : t("chatThinking"),
+    "bot-message"
+);
             messageInput.value = "";
             if (location.protocol === "file:") return;
             try {
@@ -4195,9 +4609,14 @@ ${msg}
 
 const selectedTone =
     localStorage.getItem("agentTone") || "Profesional";
+const selectedAgentName =
+    localStorage.getItem("agentName") || "BEAM AI";
 
 const response = await fetch(
-    `/chat?message=${encodeURIComponent(languageInstruction + finalMessage)}&language=${encodeURIComponent(currentLanguage)}&tone=${encodeURIComponent(selectedTone)}`
+    `/chat?message=${encodeURIComponent(languageInstruction + finalMessage)}` +
+    `&language=${encodeURIComponent(currentLanguage)}` +
+    `&tone=${encodeURIComponent(selectedTone)}` +
+    `&agent_name=${encodeURIComponent(selectedAgentName)}`
 );
                 if (!response.ok) throw new Error("Chat request failed");
                 const data = await response.json();
@@ -4262,9 +4681,20 @@ Longitud: ${lon}`
 }
 
         document.getElementById("user-language").addEventListener("change", event => applyLanguage(event.target.value));
-        document.getElementById("message").addEventListener("keydown", event => {
-            if (event.key === "Enter") { event.preventDefault(); sendMessage(); }
-        });
+const messageTextarea = document.getElementById("message");
+
+messageTextarea.addEventListener("input", () => {
+    messageTextarea.style.height = "auto";
+    messageTextarea.style.height = messageTextarea.scrollHeight + "px";
+});
+
+messageTextarea.addEventListener("keydown", event => {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+});
+
         document.getElementById("shortcut-modal").addEventListener("click", event => {
             if (event.target.id === "shortcut-modal") closeModal();
         });
@@ -4959,6 +5389,127 @@ checkUser();
         <button
             type="button"
             onclick="closeActivitiesModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+
+</div>
+<!-- MODAL: Preferencias de viaje, ocio y gastronomía -->
+<div id="travelModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+
+    <div style="
+        width:90%;
+        max-width:520px;
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:22px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="travelModalTitle">
+            Viaje, ocio y gastronomía
+        </h3>
+
+        <p
+            style="color:#9ca3af;margin-bottom:20px;"
+            data-i18n="travelDescription"
+        >
+            Personaliza tus preferencias para recibir recomendaciones más adaptadas a ti.
+        </p>
+
+        <div
+            style="font-weight:600;margin-bottom:10px;"
+            data-i18n="travelStyleTitle"
+        >
+            Cómo te gusta viajar
+        </div>
+
+        <div
+            id="travelStyleOptions"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:20px;
+            "
+        ></div>
+
+
+        <div
+            style="font-weight:600;margin-bottom:10px;"
+            data-i18n="travelLeisureTitle"
+        >
+            Planes y ocio
+        </div>
+
+        <div
+            id="travelLeisureOptions"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:20px;
+            "
+        ></div>
+
+
+        <div
+            style="font-weight:600;margin-bottom:10px;"
+            data-i18n="travelFoodTitle"
+        >
+            Gastronomía
+        </div>
+
+        <div
+            id="travelFoodOptions"
+            style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px;
+                margin-bottom:20px;
+            "
+        ></div>
+
+
+        <button
+            type="button"
+            onclick="saveTravelPreferences()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-bottom:8px;
+            "
+            data-i18n="travelSave"
+        >
+            Guardar cambios
+        </button>
+
+        <button
+            type="button"
+            onclick="closeTravelModal()"
             style="
                 width:100%;
                 padding:10px;
