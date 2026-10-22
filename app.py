@@ -1,3 +1,5 @@
+from pathlib import Path
+from fastapi.responses import FileResponse
 import hashlib
 import json
 import re
@@ -22,6 +24,15 @@ SESSION_COOKIE = "beam_session"
 SESSION_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{43}$")
 
 app = FastAPI()
+BASE_DIR = Path(__file__).resolve().parent
+
+
+@app.api_route("/", methods=["GET", "HEAD"], include_in_schema=False)
+async def home():
+    return FileResponse(
+        BASE_DIR / "templates" / "index.html",
+        media_type="text/html"
+    )
 router = Router()
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
