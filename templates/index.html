@@ -262,11 +262,21 @@
             margin-top: 30px;
             text-align: left;
         }
-.settings-toggle {
-    position: fixed;
+.beam-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+}
 
-    top: 125px;
-    right: 300px;
+.beam-header-text {
+    flex: 1;
+    min-width: 0;
+}
+.settings-toggle {
+    position: static;
+    flex-shrink: 0;
 
     width: 52px;
     height: 52px;
@@ -720,18 +730,37 @@ box-sizing: border-box;
         id="main-app"
     >
 
+<div class="beam-header">
+
+    <div class="beam-header-text">
+
         <h1 id="welcome-user">
-    BEAM AI
-</h1>
+            BEAM AI
+        </h1>
 
-<div
-    class="subtitle"
-    id="welcome-subtitle">
+        <div
+            class="subtitle"
+            id="welcome-subtitle"
+        >
+            <span data-i18n="subtitle">
+                Tu agente personal inteligente para experiencias, planes, escapadas viajes...
+            </span>
+        </div>
 
-    <span data-i18n="subtitle">Tu agente personal inteligente para experiencias, planes, escapadas viajes...</span>
+    </div>
+
+    <button
+        id="settings-toggle"
+        class="settings-toggle"
+        type="button"
+        onclick="toggleSettings()"
+        style="display:none;"
+        aria-label="Ajustes"
+    >
+        ☰
+    </button>
 
 </div>
-
         <div class="shortcuts-header">
 
             <h2 data-i18n="shortcuts">Accesos rápidos</h2>
@@ -769,15 +798,6 @@ box-sizing: border-box;
             </button>
 
         </div>
-
-    <div
-    id="settings-toggle"
-    class="settings-toggle"
-    onclick="toggleSettings()"
-    style="display:none;"
->
-    ☰
-</div>
 
 <div id="settings-panel" class="settings-panel">
 
@@ -5386,9 +5406,6 @@ function openEditModal(shortcut) {
             localStorage.getItem("beam_location") || "null"
 );
             if (!msg) return;
-            document.getElementById(
-    	    "settings-toggle"
-	    ).style.display = "none";
             addChatMessage(t("you"), msg, "user-message");
 const agentDisplayName =
     localStorage.getItem("agentName") || "BEAM AI";

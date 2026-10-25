@@ -96,23 +96,29 @@ Pregunta:
         return response.text
 
     except Exception as e:
-
         error_text = str(e)
+        error_text_lower = error_text.lower()
 
-        if "429" in error_text or "ResourceExhausted" in error_text:
+        print("ERROR REAL DE GEMINI:", repr(error_text))
 
-            return """
- BEAM AI ha alcanzado temporalmente el límite de consultas disponible.
+        quota_error_markers = (
+            "429",
+            "resourceexhausted",
+            "resource_exhausted",
+            "quota",
+            "rate limit",
+            "rate_limit",
+            "too many requests",
+            "exceeded your current quota"
+        )
 
-Estamos utilizando una versión gratuita del servicio de IA y actualmente se ha agotado la cuota disponible.
+        if any(marker in error_text_lower for marker in quota_error_markers):
+            return (
+                "Has alcanzado tu límite de consultas de BEAM AI FREE por ahora.\n\n"
+                "¡Volveré a estar disponible pronto!"
+            )
 
-Por favor, vuelve a intentarlo más tarde.
-"""
-
-        return f"""
- Se ha producido un error temporal.
-
-Detalle técnico:
-
-{error_text}
-"""
+        return (
+            "BEAM AI FREE no puede procesar tu consulta en este momento.\n\n"
+            "Se ha producido un error temporal. Inténtalo de nuevo más tarde."
+        )
