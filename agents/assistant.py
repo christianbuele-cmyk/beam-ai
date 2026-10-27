@@ -12,9 +12,14 @@ class AssistantAgent:
         agent_name: str = "BEAM AI"
     ):
         memory = load_memory(session_key)
-        history = memory.get("history", [])
+        memory_enabled = memory.get("enabled", True)
 
-        if message.lower().startswith("me llamo"):
+        history = memory.get("history", []) if memory_enabled else []
+
+        if not isinstance(history, list):
+            history = []
+
+        if memory_enabled and message.lower().startswith("me llamo"):
             name = message[8:].strip()
             memory["name"] = name
 
@@ -43,19 +48,22 @@ Usuario:
             agent_name=agent_name
         )
 
-        history.append({
-            "role": "assistant",
-            "content": response
-        })
+        if memory_enabled:
+            history.append({
+                "role": "assistant",
+                "content": response
+            })
 
-        memory["history"] = history[-20:]
+            memory["history"] = history[-20:]
 
-        print("NOMBRE DEL AGENTE EN ASSISTANT:", agent_name)
-        print("GUARDANDO MEMORIA")
-        print(memory)
+            print("NOMBRE DEL AGENTE EN ASSISTANT:", agent_name)
+            print("GUARDANDO MEMORIA")
+            print(memory)
 
-        save_memory(memory, session_key)
+            save_memory(memory, session_key)
 
-        print("MEMORIA GUARDADA")
+            print("MEMORIA GUARDADA")
+        else:
+            print("MEMORIA DESACTIVADA - historial no guardado")
 
         return response

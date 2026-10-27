@@ -263,3 +263,62 @@ async def save_user(request: Request):
     write_json(session_file(PROFILE_DIR, key), user)
 
     return {"saved": True}
+@app.get("/memory")
+def get_memory(request: Request):
+    key = session_key(request)
+    memory = read_json(session_file(MEMORY_DIR, key), {})
+
+    if not isinstance(memory, dict):
+        memory = {}
+
+    history = memory.get("history", [])
+    if not isinstance(history, list):
+        history = []
+
+    return JSONResponse(
+        {
+            "enabled": memory.get("enabled", True),
+            "history": history
+        },
+        headers={"Cache-Control": "no-store"}
+    )
+
+
+@app.put("/memory")
+async def update_memory(request: Request):
+    try:
+        data = await request.json()
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise HTTPException(status_code=400, detail="La configuración de memoria debe ser JSON válido.")
+
+    enabled = data.get("enabled")
+
+    if not isinstance(enabled, bool):
+        raise HTTPException(status_code=400, detail="El estado de memoria debe ser true o false.")
+
+    key = session_key(request)
+    path = session_file(MEMORY_DIR, key)
+    memory = read_json(path, {})
+
+    if not isinstance(memory, dict):
+        memory = {}
+
+    memory["enabled"] = enabled
+    write_json(path, memory)
+
+    return {"saved": True, "enabled": enabled}
+
+
+@app.delete("/memory")
+def reset_memory(request: Request):
+    key = session_key(request)
+    path = session_file(MEMORY_DIR, key)
+
+    try:
+        path.unlink()
+    except FileNotFoundError:
+        pass
+    except OSError:
+        raise HTTPException(status_code=500, detail="No se ha podido reiniciar la memoria.")
+
+    return {"reset": True}

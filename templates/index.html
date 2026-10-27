@@ -416,10 +416,90 @@
 .settings-edit:hover {
     color: #4da3ff;
 }
+/* ===== MEMORIA ===== */
+
+.memory-content {
+    padding: 0 6px 14px 6px;
+}
+
+.memory-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 12px;
+    margin-bottom: 14px;
+    background: #1b1e26;
+    border: 1px solid #30343d;
+    border-radius: 10px;
+    color: #dddddd;
+    font-size: 12px;
+}
+
+.memory-status-dot {
+    width: 9px;
+    height: 9px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #4da3ff;
+}
+
+.memory-status-description {
+    color: #8f96a3;
+    font-weight: 400;
+}
+
+.memory-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #292c33;
+    color: #dddddd;
+    text-align: left;
+    cursor: pointer;
+}
+
+.memory-option-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.memory-option-title {
+    color: #eeeeee;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.memory-option-description {
+    color: #8f96a3;
+    font-size: 12px;
+}
+
+.memory-option-arrow {
+    flex-shrink: 0;
+    color: #8f96a3;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.memory-option:hover .memory-option-title,
+.memory-option:hover .memory-option-arrow {
+    color: #4da3ff;
+}
         .user-message,
         .bot-message {
             padding: 16px;
             border-radius: 14px;
+            margin-left: 0;
+            margin-right: auto;
+            width: fit-content;
+            max-width: 80%;
             margin-bottom: 14px;
             white-space: pre-wrap;
             line-height: 1.6;
@@ -428,6 +508,10 @@
 
         .user-message {
             background: #4da3ff;
+            margin-left: auto;
+            margin-right: 0;
+            width: fit-content;
+            max-width: 80%;
         }
 
         .bot-message {
@@ -1417,28 +1501,42 @@ box-sizing: border-box;
     </div>
 </details>
 
-<details class="settings-section" name="settings-accordion">
+<details class="settings-section memory-section" name="settings-accordion">
     <summary>
         <span data-i18n="settingsMemory">Memoria</span>
     </summary>
 
-    <div class="settings-content">
+    <div class="settings-content memory-content">
 
-<div class="settings-option">
-    <span data-i18n="memoryHistory">Consultar y editar el historial de conversaciones</span>
-    <button class="settings-edit" type="button" data-i18n="manage">Gestionar</button>
-</div>
+        <div class="memory-status">
+            <span class="memory-status-dot"></span>
+            <strong>Memoria activada</strong>
+            <span class="memory-status-description">· tu agente aprende de ti</span>
+        </div>
 
-<div class="settings-option">
-    <span data-i18n="memoryToggle">Activar o desactivar la memoria</span>
-    <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
-</div>
+        <button class="memory-option" type="button" onclick="openMemoryHistory()">
+            <span class="memory-option-text">
+                <span class="memory-option-title">Historial de conversaciones</span>
+                <span class="memory-option-description" id="memoryHistoryCount">Cargando conversaciones...</span>
+            </span>
+            <span class="memory-option-arrow">›</span>
+        </button>
 
-<div class="settings-option">
-    <span data-i18n="memoryReset">Reiniciar la personalización</span>
-    <button class="settings-edit" type="button" data-i18n="restart">Reiniciar</button>
-</div>
+        <button class="memory-option" type="button">
+            <span class="memory-option-text">
+                <span class="memory-option-title">Activar o desactivar la memoria</span>
+                <span class="memory-option-description" id="memoryStatusText">Activada</span>
+            </span>
+            <span class="memory-option-arrow">›</span>
+        </button>
 
+        <button class="memory-option" type="button">
+            <span class="memory-option-text">
+                <span class="memory-option-title">Reiniciar personalización</span>
+                <span class="memory-option-description">Restablece lo aprendido y tus ajustes</span>
+            </span>
+            <span class="memory-option-arrow">›</span>
+        </button>
 
     </div>
 </details>
@@ -5578,6 +5676,78 @@ console.log("TOGGLE SETTINGS");
 
 applyLanguage(currentLanguage);
 checkUser();
+async function loadMemorySettings() {
+    try {
+        const response = await fetch("/memory", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("No se pudo cargar la memoria");
+        }
+
+        const data = await response.json();
+        const history = Array.isArray(data.history) ? data.history : [];
+
+        const historyCount = document.getElementById("memoryHistoryCount");
+   const memoryStatusText = document.getElementById("memoryStatusText");
+if (memoryStatusText) {
+    memoryStatusText.textContent = data.enabled !== false ? "Activada" : "Desactivada";
+}
+
+        if (historyCount) {
+            historyCount.textContent =
+                history.length === 1
+                    ? "1 conversación"
+                    : `${history.length} conversaciones`;
+        }
+
+    } catch (error) {
+        console.error("Error cargando la memoria:", error);
+
+        const historyCount = document.getElementById("memoryHistoryCount");
+
+        if (historyCount) {
+            historyCount.textContent = "No disponible";
+        }
+    }
+}
+loadMemorySettings();
+async function loadMemorySummary() {
+    try {
+        const response = await fetch("/memory", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("No se pudo cargar la memoria");
+        }
+
+        const data = await response.json();
+        const history = Array.isArray(data.history) ? data.history : [];
+
+        const historyCount = document.getElementById("memoryHistoryCount");
+
+        if (historyCount) {
+            const total = history.length;
+            historyCount.textContent =
+                total === 1
+                    ? "1 conversación"
+                    : `${total} conversaciones`;
+        }
+    } catch (error) {
+        console.error("Error cargando el resumen de memoria:", error);
+
+        const historyCount = document.getElementById("memoryHistoryCount");
+
+        if (historyCount) {
+            historyCount.textContent = "Historial no disponible";
+        }
+    }
+}
+loadMemorySummary();
     </script>
 <div id="toneModal" style="
     display:none;
