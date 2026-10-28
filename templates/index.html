@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -695,7 +695,7 @@ box-sizing: border-box;
         font-size: 16px;
         padding: 18px 0;
     }
-}  
+}
 .settings-title-bar {
     display: flex;
     justify-content: space-between;
@@ -708,7 +708,7 @@ box-sizing: border-box;
     color: white;
     font-size: 26px;
     cursor: pointer;
-}  
+}
 </style>
 </head>
 
@@ -768,7 +768,7 @@ box-sizing: border-box;
 >
 </div>
 
-            
+
             <div class="form-group">
                 <label for="user-birthdate" data-i18n="birthdateLabel">
                     Fecha de nacimiento
@@ -862,7 +862,7 @@ box-sizing: border-box;
         <div id="shortcuts"></div>
 
         <div id="chat"></div>
-     
+
         <div class="input-row">
 
 <textarea
@@ -905,7 +905,7 @@ box-sizing: border-box;
     </summary>
 
     <div class="settings-content">
-             
+
        <div class="settings-option">
     <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start; text-align:left;">
         <span data-i18n="accountName">
@@ -1105,7 +1105,7 @@ box-sizing: border-box;
                 text-align:left;
             "
         >
-          
+
         </div>
 
     </div>
@@ -1145,7 +1145,7 @@ box-sizing: border-box;
                 text-align:left;
             "
         >
-            
+
         </div>
 
     </div>
@@ -1185,7 +1185,7 @@ box-sizing: border-box;
                 text-align:left;
             "
         >
-            
+
         </div>
 
     </div>
@@ -1225,7 +1225,7 @@ box-sizing: border-box;
                 text-align:left;
             "
         >
-            
+
         </div>
 
     </div>
@@ -1514,13 +1514,13 @@ box-sizing: border-box;
             <span class="memory-status-description">· tu agente aprende de ti</span>
         </div>
 
-        <button class="memory-option" type="button" onclick="openMemoryHistory()">
-            <span class="memory-option-text">
-                <span class="memory-option-title">Historial de conversaciones</span>
-                <span class="memory-option-description" id="memoryHistoryCount">Cargando conversaciones...</span>
-            </span>
-            <span class="memory-option-arrow">›</span>
-        </button>
+  <button class="memory-option" type="button" onclick="openMemoryHistory()">
+    <span class="memory-option-text">
+        <span class="memory-option-title">Historial de conversaciones</span>
+        <span class="memory-option-description" id="memoryHistoryCount">Cargando conversaciones...</span>
+    </span>
+    <span class="memory-option-arrow">›</span>
+</button>
 
         <button class="memory-option" type="button">
             <span class="memory-option-text">
@@ -1539,8 +1539,19 @@ box-sizing: border-box;
         </button>
 
     </div>
-</details>
+<div id="memoryHistoryPanel" class="memory-history-panel" hidden>
+    <div class="memory-history-header">
+        <button type="button" class="memory-history-back" onclick="closeMemoryHistory()">&lsaquo;</button>
 
+        <div>
+            <div class="memory-history-title">Historial de conversaciones</div>
+            <div class="memory-history-subtitle">Conversaciones guardadas en la memoria</div>
+        </div>
+    </div>
+
+    <div id="memoryHistoryList" class="memory-history-list"></div>
+</div>
+</details>
 <details class="settings-section" name="settings-accordion">
     <summary>
         <span data-i18n="settingsNotifications">Notificaciones</span>
@@ -1548,29 +1559,104 @@ box-sizing: border-box;
 
    <div class="settings-content">
 
+<div class="settings-option">
+    <div style="text-align:left;">
+    <span data-i18n="notificationsReminders">Recordatorios y avisos</span>
+    <div id="notificationsRemindersSummary" style="margin-top:4px;color:#9ca3af;font-size:12px;"></div>
+</div>
+
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openNotificationsRemindersModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+</div>
+
     <div class="settings-option">
-        <span data-i18n="notificationsReminders">Recordatorios y avisos</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+        <div style="text-align:left;">
+    <span data-i18n="notificationsRecommendations">
+        Nuevas propuestas y recomendaciones
+    </span>
+
+    <div
+        id="notificationsRecommendationsSummary"
+        style="margin-top:4px;color:#9ca3af;font-size:12px;"
+    ></div>
+</div>
+        <button
+    class="settings-edit"
+    type="button"
+    onclick="openNotificationsRecommendationsModal()"
+    data-i18n="edit"
+>
+    Editar
+</button>
     </div>
 
     <div class="settings-option">
-        <span data-i18n="notificationsRecommendations">Nuevas propuestas y recomendaciones</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+        <div style="text-align:left;">
+    <span data-i18n="notificationsPlans">
+        Alertas sobre planes guardados
+    </span>
+
+    <div
+        id="notificationsPlansSummary"
+        style="margin-top:4px;color:#9ca3af;font-size:12px;"
+    ></div>
+</div>
+        <button
+    class="settings-edit"
+    type="button"
+    onclick="openNotificationsPlansModal()"
+    data-i18n="edit"
+>
+    Editar
+</button>
     </div>
 
     <div class="settings-option">
-        <span data-i18n="notificationsPlans">Alertas sobre planes guardados</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+        <div style="text-align:left;">
+    <span data-i18n="notificationsSummaries">
+        Resúmenes personalizados
+    </span>
+
+    <div
+        id="notificationsSummariesSummary"
+        style="margin-top:4px;color:#9ca3af;font-size:12px;"
+    ></div>
+</div>
+        <button
+    class="settings-edit"
+    type="button"
+    onclick="openNotificationsSummariesModal()"
+    data-i18n="edit"
+>
+    Editar
+</button>
     </div>
 
     <div class="settings-option">
-        <span data-i18n="notificationsSummaries">Resúmenes personalizados</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
-    </div>
+        <div style="text-align:left;">
+    <span data-i18n="notificationsQuietHours">
+        Horario de silencio
+    </span>
 
-    <div class="settings-option">
-        <span data-i18n="notificationsQuietHours">Horario de silencio</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+    <div
+        id="notificationsQuietHoursSummary"
+        style="margin-top:4px;color:#9ca3af;font-size:12px;"
+    ></div>
+</div>
+        <button
+    class="settings-edit"
+    type="button"
+    onclick="openNotificationsQuietHoursModal()"
+    data-i18n="edit"
+>
+    Editar
+</button>
     </div>
 
 </div>
@@ -2026,9 +2112,55 @@ restart:"Reiniciar",
 settingsNotifications:"Notificaciones",
 notificationsReminders:"Recordatorios y avisos",
 notificationsRecommendations:"Nuevas propuestas y recomendaciones",
+notificationsRecommendationsTitle:"Nuevas propuestas y recomendaciones",
+notificationsRecommendationsDescription:"Recibe nuevas ideas y recomendaciones adaptadas a ti.",
+notificationsRecommendationsEnabled:"Recibir nuevas propuestas",
+notificationsRecommendationsFrequency:"Frecuencia",
+notificationsRecommendationsDaily:"Cada día",
+notificationsRecommendationsSeveralWeek:"Varias a la semana",
+notificationsRecommendationsWeekly:"Una a la semana",
+notificationsRecommendationsRelevant:"Solo si es muy relevante",
+notificationsRecommendationsTypes:"Tipos de propuestas",
+notificationsRecommendationsPlansToday:"Planes del día",
+notificationsRecommendationsGetaways:"Escapadas",
+notificationsRecommendationsFood:"Dónde comer",
+notificationsRecommendationsNearbyEvents:"Eventos cerca de mí",
+notificationsRecommendationsLocation:"Usar mi ubicación",
 notificationsPlans:"Alertas sobre planes guardados",
+notificationsPlansTitle:"Alertas sobre planes guardados",
+notificationsPlansDescription:"Mantente informado sobre cambios importantes en tus planes guardados.",
+notificationsPlansEnabled:"Recibir alertas",
+notificationsPlansAlertTypes:"Avisarme cuando haya",
+notificationsPlansSchedule:"Cambios de horario",
+notificationsPlansClosure:"Cierres o cancelaciones",
+notificationsPlansWeather:"Cambios importantes de clima",
+notificationsPlansAvailability:"Cambios de disponibilidad",
 notificationsSummaries:"Resúmenes personalizados",
+notificationsSummariesTitle:"Resúmenes personalizados",
+notificationsSummariesDescription:"Recibe resúmenes personalizados con información relevante para ti.",
+notificationsSummariesEnabled:"Recibir resúmenes",
+notificationsSummariesFrequency:"Frecuencia",
+notificationsSummariesDaily:"Diario",
+notificationsSummariesWeekly:"Semanal",
+notificationsSummariesContent:"Incluir en el resumen",
+notificationsSummariesPlans:"Próximos planes",
+notificationsSummariesRecommendations:"Recomendaciones",
+notificationsSummariesAlerts:"Alertas importantes",
 notificationsQuietHours:"Horario de silencio",
+notificationsQuietHoursTitle:"Horario de silencio",
+notificationsQuietHoursDescription:"Elige cuándo no quieres recibir notificaciones.",
+notificationsQuietHoursEnabled:"Activar horario de silencio",
+notificationsQuietHoursStart:"Desde",
+notificationsQuietHoursEnd:"Hasta",
+notificationsRemindersModalTitle:"Recordatorios y avisos",
+notificationsRemindersDescription:"Te aviso antes de que empiece un plan para que no se te pase.",
+notificationsRemindersEnabled:"Recibir recordatorios",
+notificationsRemindersWhen:"Avisarme",
+notificationsReminder15Minutes:"15 min antes",
+notificationsReminder1Hour:"1 hora antes",
+notificationsReminder1Day:"1 día antes",
+notificationsLastMinute:"Avisos de última hora (clima, cierres o cambios de horario)",
+notificationsSave:"Guardar cambios",
 settingsPrivacy:"Privacidad y seguridad",
 privacyPermissions:"Gestionar los permisos concedidos",
 privacyConnections:"Gestionar conexiones con otras aplicaciones",
@@ -2062,7 +2194,7 @@ contact:"Contactar",
 report:"Informar",
 settingsLocation:"Ubicación",
                 welcomeDescription:"Quiero conocerte un poco mejor. Este regristo solo se mostrará la primera vez", languageLabel:"Idioma", nameLabel:"Nombre", emailLabel:"Correo electrónico", emailPlaceholder:"tu@email.com",  namePlaceholder:"Tu nombre", cityLabel:"Ciudad", cityPlaceholder:"Tu ciudad", birthdateLabel:"Fecha de nacimiento", privacyText:"La fecha de nacimiento se utiliza para calcular la edad, adaptar las recomendaciones y aplicar restricciones para menores. No se muestra públicamente en la aplicación.", companionsLabel:"¿Con quién haces más planes?", selectOption:"Selecciona una opción", solo:"Solo", couple:"Pareja", family:"Familia", friends:"Amigos", interestsLabel:"¿Qué te interesa más?", getaways:"Escapadas", travel:"Viajes", restaurants:"Restaurantes", nature:"Naturaleza", culture:"Cultura", sports:"Deportes", adventure:"Aventura", relax:"Relax", budgetLabel:"Presupuesto habitual", economical:"Económico", midRange:"Intermedio", flexible:"Flexible", aboutLabel:"Cuéntame algo más sobre ti",
-aboutPlaceholder:"Por ejemplo: Prefiero lugares tranquilos, escapadas rurales y restaurantes poco masificados.", begin:"Comenzar", subtitle:"Tu agente personal inteligente", shortcuts:"Accesos rápidos", createShortcut:"+", messagePlaceholder:"¿Qué te apetece hacer hoy?", send:"Enviar", instructionLabel:"Instrucción", shortcutNamePlaceholder:"Por ejemplo: Escapada", shortcutInstructionPlaceholder:"Por ejemplo: Propón una escapada de fin de semana cerca de mi ubicación", cancel:"Cancelar", save:"Guardar", edit:"Editar", delete:"Eliminar", createShortcutTitle:"Crear acceso rápido", editShortcutTitle:"Editar acceso rápido", profileCheckError:"No se pudo comprobar el perfil de usuario.", nameRequired:"Escribe tu nombre.", cityRequired:"Escribe tu ciudad.", birthdateRequired:"Introduce una fecha de nacimiento válida.", birthdateInvalid:"La fecha de nacimiento no es válida.", companionsRequired:"Selecciona con quién haces más planes.", interestRequired:"Selecciona al menos un interés.", budgetRequired:"Selecciona un presupuesto habitual.", profileSaveError:"No se pudo guardar el perfil. Comprueba que BEAM AI está funcionando.", shortcutRequired:"Escribe un nombre y una instrucción.", shortcutSaveError:"No se pudo guardar.", deleteConfirm:"¿Quieres eliminar este acceso rápido?", deleteError:"No se pudo eliminar el acceso rápido.", chatThinking:"Pensando...", you:"Tú", chatError:"No he podido procesar la consulta. Comprueba que el servidor de BEAM AI está funcionando.", localChatError:"El perfil y los accesos se han guardado en este dispositivo. Para usar el chat, abre BEAM AI desde su servidor.", age:"Edad calculada: {age} años.", ageMinor:"Edad calculada: {age} años. BEAM AI adaptará los planes y recomendaciones para que sean adecuados para menores de edad.", fileProtocolError:"Para guardar el perfil en BEAM AI, abre la aplicación desde su servidor; no desde un archivo local. Puedes continuar en este dispositivo, pero los datos solo se guardarán aquí." 
+aboutPlaceholder:"Por ejemplo: Prefiero lugares tranquilos, escapadas rurales y restaurantes poco masificados.", begin:"Comenzar", subtitle:"Tu agente personal inteligente", shortcuts:"Accesos rápidos", createShortcut:"+", messagePlaceholder:"¿Qué te apetece hacer hoy?", send:"Enviar", instructionLabel:"Instrucción", shortcutNamePlaceholder:"Por ejemplo: Escapada", shortcutInstructionPlaceholder:"Por ejemplo: Propón una escapada de fin de semana cerca de mi ubicación", cancel:"Cancelar", save:"Guardar", edit:"Editar", delete:"Eliminar", createShortcutTitle:"Crear acceso rápido", editShortcutTitle:"Editar acceso rápido", profileCheckError:"No se pudo comprobar el perfil de usuario.", nameRequired:"Escribe tu nombre.", cityRequired:"Escribe tu ciudad.", birthdateRequired:"Introduce una fecha de nacimiento válida.", birthdateInvalid:"La fecha de nacimiento no es válida.", companionsRequired:"Selecciona con quién haces más planes.", interestRequired:"Selecciona al menos un interés.", budgetRequired:"Selecciona un presupuesto habitual.", profileSaveError:"No se pudo guardar el perfil. Comprueba que BEAM AI está funcionando.", shortcutRequired:"Escribe un nombre y una instrucción.", shortcutSaveError:"No se pudo guardar.", deleteConfirm:"¿Quieres eliminar este acceso rápido?", deleteError:"No se pudo eliminar el acceso rápido.", chatThinking:"Pensando...", you:"Tú", chatError:"No he podido procesar la consulta. Comprueba que el servidor de BEAM AI está funcionando.", localChatError:"El perfil y los accesos se han guardado en este dispositivo. Para usar el chat, abre BEAM AI desde su servidor.", age:"Edad calculada: {age} años.", ageMinor:"Edad calculada: {age} años. BEAM AI adaptará los planes y recomendaciones para que sean adecuados para menores de edad.", fileProtocolError:"Para guardar el perfil en BEAM AI, abre la aplicación desde su servidor; no desde un archivo local. Puedes continuar en este dispositivo, pero los datos solo se guardarán aquí."
             },
             en: {
 accountDescription:"Your identity within the platform.",
@@ -2292,9 +2424,55 @@ restart:"Reset",
 settingsNotifications:"Notifications",
 notificationsReminders:"Reminders and alerts",
 notificationsRecommendations:"New suggestions and recommendations",
+notificationsRecommendationsTitle:"New suggestions and recommendations",
+notificationsRecommendationsDescription:"Receive new ideas and recommendations tailored to you.",
+notificationsRecommendationsEnabled:"Receive new suggestions",
+notificationsRecommendationsFrequency:"Frequency",
+notificationsRecommendationsDaily:"Every day",
+notificationsRecommendationsSeveralWeek:"Several times a week",
+notificationsRecommendationsWeekly:"Once a week",
+notificationsRecommendationsRelevant:"Only if highly relevant",
+notificationsRecommendationsTypes:"Types of suggestions",
+notificationsRecommendationsPlansToday:"Plans for today",
+notificationsRecommendationsGetaways:"Getaways",
+notificationsRecommendationsFood:"Where to eat",
+notificationsRecommendationsNearbyEvents:"Events near me",
+notificationsRecommendationsLocation:"Use my location",
 notificationsPlans:"Saved plan alerts",
+notificationsPlansTitle:"Saved plan alerts",
+notificationsPlansDescription:"Stay informed about important changes to your saved plans.",
+notificationsPlansEnabled:"Receive alerts",
+notificationsPlansAlertTypes:"Notify me when there are",
+notificationsPlansSchedule:"Schedule changes",
+notificationsPlansClosure:"Closures or cancellations",
+notificationsPlansWeather:"Important weather changes",
+notificationsPlansAvailability:"Availability changes",
 notificationsSummaries:"Personalized summaries",
+notificationsSummariesTitle:"Personalized summaries",
+notificationsSummariesDescription:"Receive personalized summaries with information relevant to you.",
+notificationsSummariesEnabled:"Receive summaries",
+notificationsSummariesFrequency:"Frequency",
+notificationsSummariesDaily:"Daily",
+notificationsSummariesWeekly:"Weekly",
+notificationsSummariesContent:"Include in the summary",
+notificationsSummariesPlans:"Upcoming plans",
+notificationsSummariesRecommendations:"Recommendations",
+notificationsSummariesAlerts:"Important alerts",
 notificationsQuietHours:"Quiet hours",
+notificationsQuietHoursTitle:"Quiet hours",
+notificationsQuietHoursDescription:"Choose when you don't want to receive notifications.",
+notificationsQuietHoursEnabled:"Enable quiet hours",
+notificationsQuietHoursStart:"From",
+notificationsQuietHoursEnd:"Until",
+notificationsRemindersTitle:"Reminders and alerts",
+notificationsRemindersDescription:"Choose when you want to receive reminders about your plans.",
+notificationsRemindersEnabled:"Enable reminders",
+notificationsRemindersWhen:"Notify me in advance",
+notificationsReminder15Minutes:"15 minutes before",
+notificationsReminder1Hour:"1 hour before",
+notificationsReminder1Day:"1 day before",
+notificationsLastMinute:"Last-minute alerts",
+notificationsSave:"Save changes",
 settingsPrivacy:"Privacy and security",
 privacyPermissions:"Manage granted permissions",
 privacyConnections:"Manage connections with other applications",
@@ -2558,17 +2736,56 @@ restart:"Réinitialiser",
 settingsNotifications:"Notifications",
 notificationsReminders:"Rappels et alertes",
 notificationsRecommendations:"Nouvelles propositions et recommandations",
+notificationsRecommendationsTitle:"Nouvelles propositions et recommandations",
+notificationsRecommendationsDescription:"Recevez de nouvelles idées et recommandations adaptées à vos préférences.",
+notificationsRecommendationsEnabled:"Recevoir de nouvelles propositions",
+notificationsRecommendationsFrequency:"Fréquence",
+notificationsRecommendationsDaily:"Chaque jour",
+notificationsRecommendationsSeveralWeek:"Plusieurs fois par semaine",
+notificationsRecommendationsWeekly:"Une fois par semaine",
+notificationsRecommendationsRelevant:"Uniquement si c’est très pertinent",
+notificationsRecommendationsTypes:"Types de propositions",
+notificationsRecommendationsPlansToday:"Plans du jour",
+notificationsRecommendationsGetaways:"Escapades",
+notificationsRecommendationsFood:"Où manger",
+notificationsRecommendationsNearbyEvents:"Événements près de moi",
+notificationsRecommendationsLocation:"Utiliser ma localisation",
 notificationsPlans:"Alertes sur les plans enregistrés",
+notificationsPlansTitle:"Alertes sur les plans enregistrés",
+notificationsPlansDescription:"Restez informé des changements importants concernant vos plans enregistrés.",
+notificationsPlansEnabled:"Recevoir des alertes",
+notificationsPlansAlertTypes:"Me prévenir en cas de",
+notificationsPlansSchedule:"Changements d’horaire",
+notificationsPlansClosure:"Fermetures ou annulations",
+notificationsPlansWeather:"Changements météo importants",
+notificationsPlansAvailability:"Changements de disponibilité",
 notificationsSummaries:"Résumés personnalisés",
+notificationsSummariesTitle:"Résumés personnalisés",
+notificationsSummariesDescription:"Recevez des résumés personnalisés avec des informations pertinentes pour vous.",
+notificationsSummariesEnabled:"Recevoir des résumés",
+notificationsSummariesFrequency:"Fréquence",
+notificationsSummariesDaily:"Quotidien",
+notificationsSummariesWeekly:"Hebdomadaire",
+notificationsSummariesContent:"Inclure dans le résumé",
+notificationsSummariesPlans:"Prochains plans",
+notificationsSummariesRecommendations:"Recommandations",
+notificationsSummariesAlerts:"Alertes importantes",
 notificationsQuietHours:"Heures de silence",
-settingsPrivacy:"Confidentialité et sécurité",
-privacyPermissions:"Gérer les autorisations accordées",
-privacyConnections:"Gérer les connexions avec d’autres applications",
-privacyDownload:"Télécharger les données personnelles",
-privacyDeleteAccount:"Supprimer définitivement le compte",
-privacyPolicy:"Politique de confidentialité et conditions",
-download:"Télécharger",
-view:"Voir",
+notificationsQuietHoursTitle:"Heures de silence",
+notificationsQuietHoursDescription:"Choisissez quand vous ne souhaitez pas recevoir de notifications.",
+notificationsQuietHoursEnabled:"Activer les heures de silence",
+notificationsQuietHoursStart:"De",
+notificationsQuietHoursEnd:"À",
+notificationsRemindersTitle:"Rappels et alertes",
+notificationsRemindersDescription:"Choisissez quand vous souhaitez recevoir des rappels concernant vos plans.",
+notificationsRemindersEnabled:"Activer les rappels",
+notificationsRemindersWhen:"Me prévenir à l’avance",
+notificationsReminder15Minutes:"15 minutes avant",
+notificationsReminder1Hour:"1 heure avant",
+notificationsReminder1Day:"1 jour avant",
+notificationsLastMinute:"Alertes de dernière minute",
+notificationsSave:"Enregistrer les modifications",
+notificationsRemindersModalTitle:"Rappels et alertes",
 settingsLanguage:"Langue et apparence",
 languageInterface:"Langue de l’interface",
 languageTheme:"Thème clair, sombre ou automatique",
@@ -3124,7 +3341,7 @@ document.querySelector(
                     document.getElementById("main-app").style.display = "none";
             document.getElementById(
     "settings-toggle"
-).style.display = "none";    
+).style.display = "none";
 	    }
             } catch (error) {
                 console.error(error);
@@ -4189,11 +4406,642 @@ const travelFoodOptions = [
     "street"
 ];
 
+// =====================================================
+// NOTIFICACIONES - RECORDATORIOS Y AVISOS
+// =====================================================
+function renderNotificationsRemindersSummary() {
+    const summary = document.getElementById("notificationsRemindersSummary");
+    if (!summary) return;
+
+    const enabled =
+        localStorage.getItem("notificationsRemindersEnabled") === "true";
+
+    const reminderTime =
+        localStorage.getItem("notificationReminderTime") || "";
+
+    const lastMinute =
+        localStorage.getItem("notificationsLastMinute") === "true";
+
+    if (!enabled) {
+        summary.textContent = "";
+        return;
+    }
+
+    const translations = {
+        es: {
+            "1day": "1 día antes",
+            "1hour": "1 hora antes",
+            "15minutes": "15 min antes",
+            lastMinute: "Avisos de última hora"
+        },
+        en: {
+            "1day": "1 day before",
+            "1hour": "1 hour before",
+            "15minutes": "15 min before",
+            lastMinute: "Last-minute alerts"
+        },
+        fr: {
+            "1day": "1 jour avant",
+            "1hour": "1 heure avant",
+            "15minutes": "15 min avant",
+            lastMinute: "Alertes de dernière minute"
+        }
+    };
+
+    const lang = translations[currentLanguage] || translations.es;
+    const parts = [];
+
+    if (reminderTime && lang[reminderTime]) {
+        parts.push(lang[reminderTime]);
+    }
+
+    if (lastMinute) {
+        parts.push(lang.lastMinute);
+    }
+
+    summary.textContent = parts.join(" · ");
+}
+
+function openNotificationsRemindersModal() {
+
+    const enabled =
+        localStorage.getItem("notificationsRemindersEnabled") === "true";
+
+    const reminderTime =
+        localStorage.getItem("notificationReminderTime") || "";
+
+    const lastMinute =
+        localStorage.getItem("notificationsLastMinute") === "true";
+
+    document.getElementById(
+        "notificationsRemindersEnabled"
+    ).checked = enabled;
+
+    document.getElementById(
+        "notificationsLastMinute"
+    ).checked = lastMinute;
+
+    document.querySelectorAll(
+        'input[name="notificationReminderTime"]'
+    ).forEach(radio => {
+        radio.checked = radio.value === reminderTime;
+    });
+
+    document.getElementById(
+        "notificationsRemindersModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeNotificationsRemindersModal() {
+
+    document.getElementById(
+        "notificationsRemindersModal"
+    ).style.display = "none";
+}
+
+function saveNotificationsReminders() {
+
+    const enabled = document.getElementById(
+        "notificationsRemindersEnabled"
+    ).checked;
+
+    const selectedTime = document.querySelector(
+        'input[name="notificationReminderTime"]:checked'
+    );
+
+    const lastMinute = document.getElementById(
+        "notificationsLastMinute"
+    ).checked;
+
+    localStorage.setItem(
+        "notificationsRemindersEnabled",
+        enabled
+    );
+
+    localStorage.setItem(
+        "notificationReminderTime",
+        selectedTime ? selectedTime.value : ""
+    );
+
+    localStorage.setItem(
+        "notificationsLastMinute",
+        lastMinute
+    );
+
+ renderNotificationsRemindersSummary();
+
+closeNotificationsRemindersModal();
+}
+// =====================================================
+// NOTIFICACIONES - NUEVAS PROPUESTAS Y RECOMENDACIONES
+// =====================================================
+
+function renderNotificationsRecommendationsSummary() {
+
+    const summary =
+        document.getElementById("notificationsRecommendationsSummary");
+
+    if (!summary) return;
+
+    const enabled =
+        localStorage.getItem("notificationsRecommendationsEnabled") === "true";
+
+    const frequency =
+        localStorage.getItem("notificationsRecommendationFrequency") || "";
+
+    const language = currentLanguage || "es";
+
+    const texts = {
+        es: {
+            daily: "Cada día",
+            severalWeek: "Varias a la semana",
+            weekly: "Una a la semana",
+            relevant: "Solo si es muy relevante",
+            plansToday: "Planes del día",
+            getaways: "Escapadas",
+            food: "Dónde comer",
+            nearbyEvents: "Eventos cerca de mí",
+            location: "Ubicación"
+        },
+        en: {
+            daily: "Every day",
+            severalWeek: "Several times a week",
+            weekly: "Once a week",
+            relevant: "Only if highly relevant",
+            plansToday: "Plans for today",
+            getaways: "Getaways",
+            food: "Where to eat",
+            nearbyEvents: "Events near me",
+            location: "Location"
+        },
+        fr: {
+            daily: "Chaque jour",
+            severalWeek: "Plusieurs fois par semaine",
+            weekly: "Une fois par semaine",
+            relevant: "Uniquement si c’est très pertinent",
+            plansToday: "Plans du jour",
+            getaways: "Escapades",
+            food: "Où manger",
+            nearbyEvents: "Événements près de moi",
+            location: "Localisation"
+        }
+    };
+
+    const t = texts[language] || texts.es;
+    const parts = [];
+
+    if (frequency && t[frequency]) {
+        parts.push(t[frequency]);
+    }
+
+    if (localStorage.getItem("recommendationPlansToday") === "true") {
+        parts.push(t.plansToday);
+    }
+
+    if (localStorage.getItem("recommendationGetaways") === "true") {
+        parts.push(t.getaways);
+    }
+
+    if (localStorage.getItem("recommendationFood") === "true") {
+        parts.push(t.food);
+    }
+
+    if (localStorage.getItem("recommendationNearbyEvents") === "true") {
+        parts.push(t.nearbyEvents);
+    }
+
+    if (localStorage.getItem("notificationsRecommendationsLocation") === "true") {
+        parts.push(t.location);
+    }
+
+    summary.textContent = parts.join(" · ");
+}
+
+function openNotificationsRecommendationsModal() {
+
+    const enabled =
+        localStorage.getItem("notificationsRecommendationsEnabled") === "true";
+
+    const frequency =
+        localStorage.getItem("notificationsRecommendationFrequency") || "";
+
+    document.getElementById(
+        "notificationsRecommendationsEnabled"
+    ).checked = enabled;
+
+    document.querySelectorAll(
+        'input[name="notificationRecommendationFrequency"]'
+    ).forEach(radio => {
+        radio.checked = radio.value === frequency;
+    });
+
+    document.getElementById("recommendationPlansToday").checked =
+        localStorage.getItem("recommendationPlansToday") === "true";
+
+    document.getElementById("recommendationGetaways").checked =
+        localStorage.getItem("recommendationGetaways") === "true";
+
+    document.getElementById("recommendationFood").checked =
+        localStorage.getItem("recommendationFood") === "true";
+
+    document.getElementById("recommendationNearbyEvents").checked =
+        localStorage.getItem("recommendationNearbyEvents") === "true";
+
+    document.getElementById("notificationsRecommendationsLocation").checked =
+        localStorage.getItem("notificationsRecommendationsLocation") === "true";
+
+    document.getElementById(
+        "notificationsRecommendationsModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeNotificationsRecommendationsModal() {
+    document.getElementById(
+        "notificationsRecommendationsModal"
+    ).style.display = "none";
+}
+
+function saveNotificationsRecommendations() {
+
+    const enabled = document.getElementById(
+        "notificationsRecommendationsEnabled"
+    ).checked;
+
+    const frequency = document.querySelector(
+        'input[name="notificationRecommendationFrequency"]:checked'
+    );
+
+    localStorage.setItem(
+        "notificationsRecommendationsEnabled",
+        enabled
+    );
+
+    localStorage.setItem(
+        "notificationsRecommendationFrequency",
+        frequency ? frequency.value : ""
+    );
+
+    localStorage.setItem(
+        "recommendationPlansToday",
+        document.getElementById("recommendationPlansToday").checked
+    );
+
+    localStorage.setItem(
+        "recommendationGetaways",
+        document.getElementById("recommendationGetaways").checked
+    );
+
+    localStorage.setItem(
+        "recommendationFood",
+        document.getElementById("recommendationFood").checked
+    );
+
+    localStorage.setItem(
+        "recommendationNearbyEvents",
+        document.getElementById("recommendationNearbyEvents").checked
+    );
+
+    localStorage.setItem(
+    "notificationsRecommendationsLocation",
+    document.getElementById("notificationsRecommendationsLocation").checked
+);
+
+renderNotificationsRecommendationsSummary();
+
+closeNotificationsRecommendationsModal();
+}
+// =====================================================
+// NOTIFICACIONES - ALERTAS SOBRE PLANES GUARDADOS
+// =====================================================
+
+function renderNotificationsPlansSummary() {
+
+    const summary =
+        document.getElementById("notificationsPlansSummary");
+
+    if (!summary) return;
+
+    const language = currentLanguage || "es";
+
+    const texts = {
+        es: {
+            schedule: "Cambios de horario",
+            closure: "Cierres o cancelaciones",
+            weather: "Cambios importantes de clima",
+            availability: "Cambios de disponibilidad"
+        },
+        en: {
+            schedule: "Schedule changes",
+            closure: "Closures or cancellations",
+            weather: "Important weather changes",
+            availability: "Availability changes"
+        },
+        fr: {
+            schedule: "Changements d’horaire",
+            closure: "Fermetures ou annulations",
+            weather: "Changements météo importants",
+            availability: "Changements de disponibilité"
+        }
+    };
+
+    const t = texts[language] || texts.es;
+    const parts = [];
+
+    if (localStorage.getItem("notificationsPlansSchedule") === "true") {
+        parts.push(t.schedule);
+    }
+
+    if (localStorage.getItem("notificationsPlansClosure") === "true") {
+        parts.push(t.closure);
+    }
+
+    if (localStorage.getItem("notificationsPlansWeather") === "true") {
+        parts.push(t.weather);
+    }
+
+    if (localStorage.getItem("notificationsPlansAvailability") === "true") {
+        parts.push(t.availability);
+    }
+
+    summary.textContent = parts.join(" · ");
+}
+
+function openNotificationsPlansModal() {
+
+    document.getElementById("notificationsPlansEnabled").checked =
+        localStorage.getItem("notificationsPlansEnabled") === "true";
+
+    document.getElementById("notificationsPlansSchedule").checked =
+        localStorage.getItem("notificationsPlansSchedule") === "true";
+
+    document.getElementById("notificationsPlansClosure").checked =
+        localStorage.getItem("notificationsPlansClosure") === "true";
+
+    document.getElementById("notificationsPlansWeather").checked =
+        localStorage.getItem("notificationsPlansWeather") === "true";
+
+    document.getElementById("notificationsPlansAvailability").checked =
+        localStorage.getItem("notificationsPlansAvailability") === "true";
+
+    document.getElementById(
+        "notificationsPlansModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeNotificationsPlansModal() {
+
+    document.getElementById(
+        "notificationsPlansModal"
+    ).style.display = "none";
+}
+
+function saveNotificationsPlans() {
+
+    localStorage.setItem(
+        "notificationsPlansEnabled",
+        document.getElementById("notificationsPlansEnabled").checked
+    );
+
+    localStorage.setItem(
+        "notificationsPlansSchedule",
+        document.getElementById("notificationsPlansSchedule").checked
+    );
+
+    localStorage.setItem(
+        "notificationsPlansClosure",
+        document.getElementById("notificationsPlansClosure").checked
+    );
+
+    localStorage.setItem(
+        "notificationsPlansWeather",
+        document.getElementById("notificationsPlansWeather").checked
+    );
+
+    localStorage.setItem(
+        "notificationsPlansAvailability",
+        document.getElementById("notificationsPlansAvailability").checked
+    );
+
+    renderNotificationsPlansSummary();
+
+    closeNotificationsPlansModal();
+}
+// =====================================================
+// NOTIFICACIONES - RESÚMENES PERSONALIZADOS
+// =====================================================
+
+function renderNotificationsSummariesSummary() {
+
+    const summary =
+        document.getElementById("notificationsSummariesSummary");
+
+    if (!summary) return;
+
+    const language = currentLanguage || "es";
+
+    const texts = {
+        es: {
+            daily: "Diario",
+            weekly: "Semanal",
+            plans: "Próximos planes",
+            recommendations: "Recomendaciones",
+            alerts: "Alertas importantes"
+        },
+        en: {
+            daily: "Daily",
+            weekly: "Weekly",
+            plans: "Upcoming plans",
+            recommendations: "Recommendations",
+            alerts: "Important alerts"
+        },
+        fr: {
+            daily: "Quotidien",
+            weekly: "Hebdomadaire",
+            plans: "Prochains plans",
+            recommendations: "Recommandations",
+            alerts: "Alertes importantes"
+        }
+    };
+
+    const t = texts[language] || texts.es;
+    const parts = [];
+
+    const frequency =
+        localStorage.getItem("notificationSummaryFrequency") || "";
+
+    if (frequency && t[frequency]) {
+        parts.push(t[frequency]);
+    }
+
+    if (localStorage.getItem("notificationsSummariesPlans") === "true") {
+        parts.push(t.plans);
+    }
+
+    if (localStorage.getItem("notificationsSummariesRecommendations") === "true") {
+        parts.push(t.recommendations);
+    }
+
+    if (localStorage.getItem("notificationsSummariesAlerts") === "true") {
+        parts.push(t.alerts);
+    }
+
+    summary.textContent = parts.join(" · ");
+}
+
+function openNotificationsSummariesModal() {
+
+    document.getElementById("notificationsSummariesEnabled").checked =
+        localStorage.getItem("notificationsSummariesEnabled") === "true";
+
+    const frequency =
+        localStorage.getItem("notificationSummaryFrequency") || "";
+
+    document.querySelectorAll(
+        'input[name="notificationSummaryFrequency"]'
+    ).forEach(radio => {
+        radio.checked = radio.value === frequency;
+    });
+
+    document.getElementById("notificationsSummariesPlans").checked =
+        localStorage.getItem("notificationsSummariesPlans") === "true";
+
+    document.getElementById("notificationsSummariesRecommendations").checked =
+        localStorage.getItem("notificationsSummariesRecommendations") === "true";
+
+    document.getElementById("notificationsSummariesAlerts").checked =
+        localStorage.getItem("notificationsSummariesAlerts") === "true";
+
+    document.getElementById(
+        "notificationsSummariesModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeNotificationsSummariesModal() {
+
+    document.getElementById(
+        "notificationsSummariesModal"
+    ).style.display = "none";
+}
+
+function saveNotificationsSummaries() {
+
+    localStorage.setItem(
+        "notificationsSummariesEnabled",
+        document.getElementById("notificationsSummariesEnabled").checked
+    );
+
+    const frequency = document.querySelector(
+        'input[name="notificationSummaryFrequency"]:checked'
+    );
+
+    localStorage.setItem(
+        "notificationSummaryFrequency",
+        frequency ? frequency.value : ""
+    );
+
+    localStorage.setItem(
+        "notificationsSummariesPlans",
+        document.getElementById("notificationsSummariesPlans").checked
+    );
+
+    localStorage.setItem(
+        "notificationsSummariesRecommendations",
+        document.getElementById("notificationsSummariesRecommendations").checked
+    );
+
+    localStorage.setItem(
+        "notificationsSummariesAlerts",
+        document.getElementById("notificationsSummariesAlerts").checked
+    );
+
+    renderNotificationsSummariesSummary();
+
+    closeNotificationsSummariesModal();
+}
+// =====================================================
+// NOTIFICACIONES - HORARIO DE SILENCIO
+// =====================================================
+
+function renderNotificationsQuietHoursSummary() {
+
+    const summary =
+        document.getElementById("notificationsQuietHoursSummary");
+
+    if (!summary) return;
+
+    const start =
+        localStorage.getItem("notificationsQuietHoursStart") || "";
+
+    const end =
+        localStorage.getItem("notificationsQuietHoursEnd") || "";
+
+    if (start && end) {
+        summary.textContent = start + " - " + end;
+    } else {
+        summary.textContent = "";
+    }
+}
+
+function openNotificationsQuietHoursModal() {
+
+    document.getElementById("notificationsQuietHoursEnabled").checked =
+        localStorage.getItem("notificationsQuietHoursEnabled") === "true";
+
+    document.getElementById("notificationsQuietHoursStart").value =
+        localStorage.getItem("notificationsQuietHoursStart") || "23:00";
+
+    document.getElementById("notificationsQuietHoursEnd").value =
+        localStorage.getItem("notificationsQuietHoursEnd") || "08:00";
+
+    document.getElementById(
+        "notificationsQuietHoursModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeNotificationsQuietHoursModal() {
+
+    document.getElementById(
+        "notificationsQuietHoursModal"
+    ).style.display = "none";
+}
+
+function saveNotificationsQuietHours() {
+
+    localStorage.setItem(
+        "notificationsQuietHoursEnabled",
+        document.getElementById("notificationsQuietHoursEnabled").checked
+    );
+
+    localStorage.setItem(
+        "notificationsQuietHoursStart",
+        document.getElementById("notificationsQuietHoursStart").value
+    );
+
+    localStorage.setItem(
+        "notificationsQuietHoursEnd",
+        document.getElementById("notificationsQuietHoursEnd").value
+    );
+
+    renderNotificationsQuietHoursSummary();
+
+    closeNotificationsQuietHoursModal();
+}
 function openTravelModal() {
 
     travelStyleTemp = JSON.parse(
         localStorage.getItem("userTravelStyle") || "[]"
     );
+
 
     travelLeisureTemp = JSON.parse(
         localStorage.getItem("userTravelLeisure") || "[]"
@@ -5715,6 +6563,103 @@ if (memoryStatusText) {
 }
 loadMemorySettings();
 async function loadMemorySummary() {
+async function openMemoryHistory() {
+    const modal = document.getElementById("memoryHistoryModal");
+    const list = document.getElementById("memoryHistoryList");
+
+    if (!modal || !list) {
+        return;
+    }
+
+    modal.style.display = "flex";
+
+    list.innerHTML = `
+        <div style="
+            color:#8f96a3;
+            font-size:13px;
+            padding:20px 0;
+            text-align:center;
+        ">
+            Cargando historial...
+        </div>
+    `;
+
+    try {
+        const response = await fetch("/memory", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("No se pudo cargar el historial");
+        }
+
+        const data = await response.json();
+        const history = Array.isArray(data.history) ? data.history : [];
+
+        if (history.length === 0) {
+            list.innerHTML = `
+                <div style="
+                    color:#8f96a3;
+                    font-size:13px;
+                    padding:20px 0;
+                    text-align:center;
+                ">
+                    Todavía no hay conversaciones guardadas.
+                </div>
+            `;
+            return;
+        }
+
+        list.innerHTML = history.map(item => {
+            const role = item.role === "user" ? "Tú" : "BEAM AI";
+            const content = String(item.content || "");
+
+            return `
+                <div style="
+                    padding:14px 0;
+                    border-bottom:1px solid #292c33;
+                ">
+                    <div style="
+                        color:#4da3ff;
+                        font-size:12px;
+                        font-weight:600;
+                        margin-bottom:6px;
+                    ">${role}</div>
+
+                    <div style="
+                        color:#eeeeee;
+                        font-size:13px;
+                        line-height:1.5;
+                        white-space:pre-wrap;
+                    ">${content}</div>
+                </div>
+            `;
+        }).join("");
+
+    } catch (error) {
+        console.error("Error cargando el historial:", error);
+
+        list.innerHTML = `
+            <div style="
+                color:#8f96a3;
+                font-size:13px;
+                padding:20px 0;
+                text-align:center;
+            ">
+                No se ha podido cargar el historial.
+            </div>
+        `;
+    }
+}
+
+function closeMemoryHistory() {
+    const modal = document.getElementById("memoryHistoryModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
     try {
         const response = await fetch("/memory", {
             method: "GET",
@@ -5747,7 +6692,64 @@ async function loadMemorySummary() {
         }
     }
 }
+async function loadMemorySummary() {
+    try {
+        const response = await fetch("/memory", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("No se pudo cargar la memoria");
+        }
+
+        const data = await response.json();
+        const history = Array.isArray(data.history) ? data.history : [];
+
+        const historyCount = document.getElementById("memoryHistoryCount");
+
+        if (historyCount) {
+            const total = history.length;
+            historyCount.textContent =
+                total === 1
+                    ? "1 conversación"
+                    : `${total} conversaciones`;
+        }
+    } catch (error) {
+        console.error("Error cargando el resumen de memoria:", error);
+
+        const historyCount = document.getElementById("memoryHistoryCount");
+
+        if (historyCount) {
+            historyCount.textContent = "Historial no disponible";
+        }
+    }
+}
+
+
+/* AÑADIR AQUÍ */
+async function openMemoryHistory() {
+    const panel = document.getElementById("memoryHistoryModal");
+    if (!panel) {
+        return;
+    }
+    panel.style.display = "flex";
+}
+
+function closeMemoryHistory() {
+    const panel = document.getElementById("memoryHistoryModal");
+    if (!panel) {
+        return;
+    }
+    panel.style.display = "none";
+}
+
+
+/* ESTO YA LO TENEMOS */
 loadMemorySummary();
+
+</script>
+
     </script>
 <div id="toneModal" style="
     display:none;
@@ -6188,6 +7190,77 @@ loadMemorySummary();
     </div>
 
 </div>
+<!-- MODAL: Historial de conversaciones -->
+<div id="memoryHistoryModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(560px,92vw);
+        max-height:80vh;
+        overflow-y:auto;
+        background:#181b22;
+        border:1px solid #30343d;
+        border-radius:16px;
+        padding:24px;
+        box-sizing:border-box;
+        color:#eeeeee;
+    ">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:20px;
+            margin-bottom:20px;
+        ">
+            <div>
+                <h2 id="memoryHistoryTitle" style="margin:0 0 5px 0;">
+                    Historial de conversaciones
+                </h2>
+
+                <div id="memoryHistorySubtitle" style="
+                    color:#8f96a3;
+                    font-size:13px;
+                ">
+                    Conversaciones recordadas por tu agente
+                </div>
+            </div>
+
+            <button
+                type="button"
+                onclick="closeMemoryHistory()"
+                aria-label="Cerrar"
+                style="
+                    background:transparent;
+                    border:none;
+                    color:#dddddd;
+                    font-size:26px;
+                    cursor:pointer;
+                    padding:4px 8px;
+                "
+            >×</button>
+        </div>
+
+        <div id="memoryHistoryList">
+            <div style="
+                color:#8f96a3;
+                font-size:13px;
+                padding:20px 0;
+                text-align:center;
+            ">
+                Cargando historial...
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
 <div id="interestsModal" style="
     display:none;
     position:fixed;
@@ -6419,6 +7492,648 @@ loadMemorySummary();
 
     </div>
 
+</div>
+<!-- MODAL: Recordatorios y avisos -->
+<div id="notificationsRemindersModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;"
+            data-i18n="notificationsRemindersModalTitle">
+            Recordatorios y avisos
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="notificationsRemindersDescription">
+            Decide cuándo quieres recibir recordatorios de tus planes.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="notificationsRemindersEnabled">
+                Activar recordatorios
+            </span>
+
+            <input
+                id="notificationsRemindersEnabled"
+                type="checkbox"
+            >
+        </div>
+
+        <div style="margin-top:20px;">
+            <div style="margin-bottom:12px;"
+                 data-i18n="notificationsRemindersWhen">
+                Avisarme con antelación
+            </div>
+
+            <label style="display:block;margin-bottom:10px;">
+    <input
+        type="radio"
+        name="notificationReminderTime"
+        value="15minutes"
+    >
+    <span data-i18n="notificationsReminder15Minutes">
+        15 minutos antes
+    </span>
+</label>
+
+<label style="display:block;margin-bottom:10px;">
+    <input
+        type="radio"
+        name="notificationReminderTime"
+        value="1hour"
+    >
+    <span data-i18n="notificationsReminder1Hour">
+        1 hora antes
+    </span>
+</label>
+
+<label style="display:block;margin-bottom:10px;">
+    <input
+        type="radio"
+        name="notificationReminderTime"
+        value="1day"
+    >
+    <span data-i18n="notificationsReminder1Day">
+        1 día antes
+    </span>
+</label>
+        </div>
+
+        <div class="settings-option" style="margin-top:20px;">
+            <span data-i18n="notificationsLastMinute">
+                Avisos de última hora
+            </span>
+
+            <input
+                id="notificationsLastMinute"
+                type="checkbox"
+            >
+        </div>
+
+        <button
+            type="button"
+            onclick="saveNotificationsReminders()"
+            style="
+                width:100%;
+                margin-top:24px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="notificationsSave">
+                Guardar cambios
+            </span>
+        </button>
+
+        <button
+            type="button"
+            onclick="closeNotificationsRemindersModal()"
+            style="
+                width:100%;
+                margin-top:10px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Nuevas propuestas y recomendaciones -->
+<div id="notificationsRecommendationsModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92%,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#17191f;
+        border:1px solid #2b2f38;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;"
+            data-i18n="notificationsRecommendationsTitle">
+            Nuevas propuestas y recomendaciones
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="notificationsRecommendationsDescription">
+            Recibe nuevas ideas y recomendaciones adaptadas a ti.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="notificationsRecommendationsEnabled">
+                Recibir nuevas propuestas
+            </span>
+            <input id="notificationsRecommendationsEnabled" type="checkbox">
+        </div>
+
+        <div style="margin-top:20px;">
+            <div style="margin-bottom:12px;"
+                 data-i18n="notificationsRecommendationsFrequency">
+                Frecuencia
+            </div>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input type="radio"
+                       name="notificationRecommendationFrequency"
+                       value="daily">
+                <span data-i18n="notificationsRecommendationsDaily">
+                    Cada día
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input type="radio"
+                       name="notificationRecommendationFrequency"
+                       value="severalWeek">
+                <span data-i18n="notificationsRecommendationsSeveralWeek">
+                    Varias a la semana
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input type="radio"
+                       name="notificationRecommendationFrequency"
+                       value="weekly">
+                <span data-i18n="notificationsRecommendationsWeekly">
+                    Una a la semana
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input type="radio"
+                       name="notificationRecommendationFrequency"
+                       value="relevant">
+                <span data-i18n="notificationsRecommendationsRelevant">
+                    Solo si es muy relevante
+                </span>
+            </label>
+        </div>
+
+        <div style="margin-top:20px;">
+            <div style="margin-bottom:12px;"
+                 data-i18n="notificationsRecommendationsTypes">
+                Tipos de propuestas
+            </div>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="recommendationPlansToday" type="checkbox">
+                <span data-i18n="notificationsRecommendationsPlansToday">
+                    Planes del día
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="recommendationGetaways" type="checkbox">
+                <span data-i18n="notificationsRecommendationsGetaways">
+                    Escapadas
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="recommendationFood" type="checkbox">
+                <span data-i18n="notificationsRecommendationsFood">
+                    Dónde comer
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="recommendationNearbyEvents" type="checkbox">
+                <span data-i18n="notificationsRecommendationsNearbyEvents">
+                    Eventos cerca de mí
+                </span>
+            </label>
+        </div>
+
+        <div class="settings-option" style="margin-top:20px;">
+            <span data-i18n="notificationsRecommendationsLocation">
+                Usar mi ubicación
+            </span>
+            <input id="notificationsRecommendationsLocation" type="checkbox">
+        </div>
+
+        <button
+            type="button"
+            onclick="saveNotificationsRecommendations()"
+            style="
+                width:100%;
+                margin-top:24px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="notificationsSave">Guardar cambios</span>
+        </button>
+
+        <button
+            type="button"
+            onclick="closeNotificationsRecommendationsModal()"
+            style="
+                width:100%;
+                margin-top:10px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Alertas sobre planes guardados -->
+<div id="notificationsPlansModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92%,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#17191f;
+        border:1px solid #2b2f38;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;"
+            data-i18n="notificationsPlansTitle">
+            Alertas sobre planes guardados
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="notificationsPlansDescription">
+            Mantente informado sobre cambios importantes en tus planes guardados.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="notificationsPlansEnabled">
+                Recibir alertas
+            </span>
+            <input id="notificationsPlansEnabled" type="checkbox">
+        </div>
+
+        <div style="margin-top:20px;">
+            <div style="margin-bottom:12px;"
+                 data-i18n="notificationsPlansAlertTypes">
+                Avisarme cuando haya
+            </div>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="notificationsPlansSchedule" type="checkbox">
+                <span data-i18n="notificationsPlansSchedule">
+                    Cambios de horario
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="notificationsPlansClosure" type="checkbox">
+                <span data-i18n="notificationsPlansClosure">
+                    Cierres o cancelaciones
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="notificationsPlansWeather" type="checkbox">
+                <span data-i18n="notificationsPlansWeather">
+                    Cambios importantes de clima
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="notificationsPlansAvailability" type="checkbox">
+                <span data-i18n="notificationsPlansAvailability">
+                    Cambios de disponibilidad
+                </span>
+            </label>
+        </div>
+
+        <button
+            type="button"
+            onclick="saveNotificationsPlans()"
+            style="
+                width:100%;
+                margin-top:24px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="notificationsSave">Guardar cambios</span>
+        </button>
+
+        <button
+            type="button"
+            onclick="closeNotificationsPlansModal()"
+            style="
+                width:100%;
+                margin-top:10px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Resúmenes personalizados -->
+<div id="notificationsSummariesModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92%,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#17191f;
+        border:1px solid #2b2f38;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;"
+            data-i18n="notificationsSummariesTitle">
+            Resúmenes personalizados
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="notificationsSummariesDescription">
+            Recibe resúmenes personalizados con información relevante para ti.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="notificationsSummariesEnabled">
+                Recibir resúmenes
+            </span>
+            <input id="notificationsSummariesEnabled" type="checkbox">
+        </div>
+
+        <div style="margin-top:20px;">
+            <div style="margin-bottom:12px;"
+                 data-i18n="notificationsSummariesFrequency">
+                Frecuencia
+            </div>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input
+                    type="radio"
+                    name="notificationSummaryFrequency"
+                    value="daily"
+                >
+                <span data-i18n="notificationsSummariesDaily">
+                    Diario
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input
+                    type="radio"
+                    name="notificationSummaryFrequency"
+                    value="weekly"
+                >
+                <span data-i18n="notificationsSummariesWeekly">
+                    Semanal
+                </span>
+            </label>
+        </div>
+
+        <div style="margin-top:20px;">
+            <div style="margin-bottom:12px;"
+                 data-i18n="notificationsSummariesContent">
+                Incluir en el resumen
+            </div>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="notificationsSummariesPlans" type="checkbox">
+                <span data-i18n="notificationsSummariesPlans">
+                    Próximos planes
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="notificationsSummariesRecommendations" type="checkbox">
+                <span data-i18n="notificationsSummariesRecommendations">
+                    Recomendaciones
+                </span>
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <input id="notificationsSummariesAlerts" type="checkbox">
+                <span data-i18n="notificationsSummariesAlerts">
+                    Alertas importantes
+                </span>
+            </label>
+        </div>
+
+        <button
+            type="button"
+            onclick="saveNotificationsSummaries()"
+            style="
+                width:100%;
+                margin-top:24px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="notificationsSave">Guardar cambios</span>
+        </button>
+
+        <button
+            type="button"
+            onclick="closeNotificationsSummariesModal()"
+            style="
+                width:100%;
+                margin-top:10px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Horario de silencio -->
+<div id="notificationsQuietHoursModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92%,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#17191f;
+        border:1px solid #2b2f38;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;"
+            data-i18n="notificationsQuietHoursTitle">
+            Horario de silencio
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="notificationsQuietHoursDescription">
+            Elige cuándo no quieres recibir notificaciones.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="notificationsQuietHoursEnabled">
+                Activar horario de silencio
+            </span>
+
+            <input
+                id="notificationsQuietHoursEnabled"
+                type="checkbox"
+            >
+        </div>
+
+        <div style="margin-top:20px;">
+
+            <label style="display:block;margin-bottom:16px;">
+                <div
+                    style="margin-bottom:8px;"
+                    data-i18n="notificationsQuietHoursStart"
+                >
+                    Desde
+                </div>
+
+                <input
+                    id="notificationsQuietHoursStart"
+                    type="time"
+                    value="23:00"
+                    style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:10px;
+                        border-radius:10px;
+                        border:1px solid #343842;
+                        background:#111318;
+                        color:white;
+                    "
+                >
+            </label>
+
+            <label style="display:block;margin-bottom:10px;">
+                <div
+                    style="margin-bottom:8px;"
+                    data-i18n="notificationsQuietHoursEnd"
+                >
+                    Hasta
+                </div>
+
+                <input
+                    id="notificationsQuietHoursEnd"
+                    type="time"
+                    value="08:00"
+                    style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:10px;
+                        border-radius:10px;
+                        border:1px solid #343842;
+                        background:#111318;
+                        color:white;
+                    "
+                >
+            </label>
+
+        </div>
+
+        <button
+            type="button"
+            onclick="saveNotificationsQuietHours()"
+            style="
+                width:100%;
+                margin-top:24px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="notificationsSave">
+                Guardar cambios
+            </span>
+        </button>
+
+        <button
+            type="button"
+            onclick="closeNotificationsQuietHoursModal()"
+            style="
+                width:100%;
+                margin-top:10px;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
 </div>
 <!-- MODAL: Preferencias de viaje, ocio y gastronomía -->
 <div id="travelModal" style="
