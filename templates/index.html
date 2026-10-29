@@ -709,6 +709,56 @@ box-sizing: border-box;
     font-size: 26px;
     cursor: pointer;
 }
+/* TEMA CLARO */
+html[data-theme="light"] body {
+    background: #f5f7fa;
+    color: #111827;
+}
+
+html[data-theme="light"] .settings-panel {
+    background: #ffffff;
+    color: #111827;
+}
+
+html[data-theme="light"] .settings-section {
+    border-color: #e5e7eb;
+}
+
+html[data-theme="light"] .settings-section summary {
+    color: #111827;
+}
+
+html[data-theme="light"] .settings-option {
+    border-color: #e5e7eb;
+}
+
+html[data-theme="light"] .settings-close {
+    color: #111827;
+}
+/* ACCESIBILIDAD: TEXTO EN NEGRITA */
+html[data-accessibility-bold="true"] body {
+    font-weight: 700;
+}
+/* ACCESIBILIDAD: ALTO CONTRASTE */
+html[data-high-contrast="true"] body {
+    background: #000000;
+    color: #ffffff;
+}
+
+html[data-high-contrast="true"] .settings-panel {
+    background: #000000;
+    color: #ffffff;
+}
+
+html[data-high-contrast="true"] .settings-section,
+html[data-high-contrast="true"] .settings-option {
+    border-color: #ffffff;
+}
+
+html[data-high-contrast="true"] .settings-section summary,
+html[data-high-contrast="true"] .settings-close {
+    color: #ffffff;
+}
 </style>
 </head>
 
@@ -1708,30 +1758,98 @@ box-sizing: border-box;
 
  <div class="settings-content">
 
-    <div class="settings-option">
+<div class="settings-option">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;">
         <span data-i18n="languageInterface">Idioma de la interfaz</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+        <span
+            id="interfaceLanguageSummary"
+            style="color:#9ca3af;font-size:13px;margin-top:3px;"
+        ></span>
     </div>
 
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openInterfaceLanguageModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+</div>
     <div class="settings-option">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;">
         <span data-i18n="languageTheme">Tema claro, oscuro o automático</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+        <span
+            id="interfaceThemeSummary"
+            style="color:#9ca3af;font-size:13px;margin-top:3px;"
+        ></span>
     </div>
 
-    <div class="settings-option">
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openInterfaceThemeModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+</div>
+
+<div class="settings-option">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;">
         <span data-i18n="languageTextSize">Tamaño del texto</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+        <span
+            id="interfaceTextSizeSummary"
+            style="color:#9ca3af;font-size:13px;margin-top:3px;"
+        ></span>
     </div>
 
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openInterfaceTextSizeModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+</div>
+
     <div class="settings-option">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;">
         <span data-i18n="languageAccessibility">Contraste y accesibilidad</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+        <span
+            id="interfaceAccessibilitySummary"
+            style="color:#9ca3af;font-size:13px;margin-top:3px;"
+        ></span>
     </div>
 
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openInterfaceAccessibilityModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
+</div>
+
     <div class="settings-option">
-        <span data-i18n="languageFormats">Formato de fecha, hora y moneda</span>
-        <button class="settings-edit" type="button" data-i18n="edit">Editar</button>
+    <div style="display:flex;flex-direction:column;align-items:flex-start;">
+        <span data-i18n="languageFormats">Formato de fecha y hora</span>
+        <span
+            id="interfaceFormatsSummary"
+            style="color:#9ca3af;font-size:13px;margin-top:3px;"
+        ></span>
     </div>
+
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openInterfaceFormatsModal()"
+        data-i18n="edit"
+    >
+        Editar
+    </button>
 
 </div>
 </details>
@@ -1742,12 +1860,7 @@ box-sizing: border-box;
     </summary>
 
     <div class="settings-content">
-
-        <div class="settings-option">
-            <span data-i18n="planCurrent">Plan actual</span>
-            <button class="settings-edit" type="button" data-i18n="view">Ver</button>
-        </div>
-
+        
         <div class="settings-option">
             <span data-i18n="planFeatures">Funciones disponibles</span>
             <button class="settings-edit" type="button" data-i18n="view">Ver</button>
@@ -2171,10 +2284,48 @@ download:"Descargar",
 view:"Ver",
 settingsLanguage:"Idioma y apariencia",
 languageInterface:"Idioma de la interfaz",
+interfaceLanguageModalTitle:"Idioma de la interfaz",
+interfaceLanguageModalDescription:"Elige en qué idioma quieres ver BEAM AI.",
+interfaceLanguageAssistantNote:"Este ajuste cambia la interfaz, no el idioma en el que hablas con tu agente.",
 languageTheme:"Tema claro, oscuro o automático",
+interfaceThemeModalTitle:"Tema",
+interfaceThemeModalDescription:"Elige cómo quieres ver BEAM AI.",
+interfaceThemeLight:"Claro",
+interfaceThemeDark:"Oscuro",
+interfaceThemeAutomatic:"Automático",
+interfaceThemeAutomaticNote:"Automático sigue el modo claro u oscuro de tu dispositivo.",
 languageTextSize:"Tamaño del texto",
+interfaceTextSizeModalTitle:"Tamaño del texto",
+interfaceTextSizeModalDescription:"Ajusta el tamaño del texto de BEAM AI.",
+interfaceTextSizeSmall:"Pequeño",
+interfaceTextSizeNormal:"Normal",
+interfaceTextSizeLarge:"Grande",
+interfaceTextSizeVeryLarge:"Muy grande",
+interfaceTextSizePreviewTitle:"VISTA PREVIA",
+interfaceTextSizePreviewText:"Así se verá el texto en BEAM AI.",
 languageAccessibility:"Contraste y accesibilidad",
-languageFormats:"Formato de fecha, hora y moneda",
+interfaceAccessibilityModalTitle:"Contraste y accesibilidad",
+interfaceAccessibilityModalDescription:"Adapta la interfaz de BEAM AI a tus necesidades.",
+interfaceAccessibilityContrast:"Alto contraste",
+interfaceAccessibilityContrastDescription:"Colores con más diferencia",
+interfaceAccessibilityAnimations:"Reducir animaciones",
+interfaceAccessibilityAnimationsDescription:"Menos movimiento en pantalla",
+interfaceAccessibilityBold:"Texto en negrita",
+interfaceAccessibilityBoldDescription:"Letras más gruesas",
+interfaceAccessibilityScreenReader:"Compatibilidad con lector de pantalla",
+interfaceAccessibilityScreenReaderDescription:"Etiquetas descriptivas",
+languageFormats:"Formato de fecha y hora",
+interfaceFormatsModalTitle:"Formato de fecha y hora",
+interfaceFormatsModalDescription:"Elige cómo quieres ver las fechas, horas y números en BEAM AI.",
+interfaceFormatsDate:"Formato de fecha",
+interfaceFormatsTime:"Formato de hora",
+interfaceFormatsFirstDay:"Primer día de la semana",
+interfaceFormatsNumbers:"Separadores numéricos",
+interfaceFormats24Hours:"24 horas",
+interfaceFormats12Hours:"12 horas",
+interfaceFormatsMonday:"Lunes",
+interfaceFormatsSunday:"Domingo",
+interfaceFormatsPreviewTitle:"VISTA PREVIA",
 settingsPlan:"Plan y suscripción",
 planCurrent:"Plan actual",
 planFeatures:"Funciones disponibles",
@@ -2483,10 +2634,48 @@ download:"Download",
 view:"View",
 settingsLanguage:"Language and appearance",
 languageInterface:"Interface language",
+interfaceLanguageModalTitle:"Interface language",
+interfaceLanguageModalDescription:"Choose the language you want to use for BEAM AI.",
+interfaceLanguageAssistantNote:"This setting changes the interface, not the language you use to talk to your agent.",
 languageTheme:"Light, dark or automatic theme",
+interfaceThemeModalTitle:"Theme",
+interfaceThemeModalDescription:"Choose how you want BEAM AI to look.",
+interfaceThemeLight:"Light",
+interfaceThemeDark:"Dark",
+interfaceThemeAutomatic:"Automatic",
+interfaceThemeAutomaticNote:"Automatic follows your device's light or dark mode.",
 languageTextSize:"Text size",
+interfaceTextSizeModalTitle:"Text size",
+interfaceTextSizeModalDescription:"Adjust the text size in BEAM AI.",
+interfaceTextSizeSmall:"Small",
+interfaceTextSizeNormal:"Normal",
+interfaceTextSizeLarge:"Large",
+interfaceTextSizeVeryLarge:"Very large",
+interfaceTextSizePreviewTitle:"PREVIEW",
+interfaceTextSizePreviewText:"This is how text will look in BEAM AI.",
 languageAccessibility:"Contrast and accessibility",
-languageFormats:"Date, time and currency format",
+interfaceAccessibilityModalTitle:"Contrast and accessibility",
+interfaceAccessibilityModalDescription:"Adapt the BEAM AI interface to your needs.",
+interfaceAccessibilityContrast:"High contrast",
+interfaceAccessibilityContrastDescription:"Colors with greater contrast",
+interfaceAccessibilityAnimations:"Reduce animations",
+interfaceAccessibilityAnimationsDescription:"Less movement on screen",
+interfaceAccessibilityBold:"Bold text",
+interfaceAccessibilityBoldDescription:"Thicker text",
+interfaceAccessibilityScreenReader:"Screen reader compatibility",
+interfaceAccessibilityScreenReaderDescription:"Descriptive labels",
+languageFormats:"Date and time format",
+interfaceFormatsModalTitle:"Date and time format",
+interfaceFormatsModalDescription:"Choose how dates, times and numbers are displayed in BEAM AI.",
+interfaceFormatsDate:"Date format",
+interfaceFormatsTime:"Time format",
+interfaceFormatsFirstDay:"First day of the week",
+interfaceFormatsNumbers:"Number separators",
+interfaceFormats24Hours:"24-hour",
+interfaceFormats12Hours:"12-hour",
+interfaceFormatsMonday:"Monday",
+interfaceFormatsSunday:"Sunday",
+interfaceFormatsPreviewTitle:"PREVIEW",
 settingsPlan:"Plan and subscription",
 planCurrent:"Current plan",
 planFeatures:"Available features",
@@ -2788,10 +2977,48 @@ notificationsSave:"Enregistrer les modifications",
 notificationsRemindersModalTitle:"Rappels et alertes",
 settingsLanguage:"Langue et apparence",
 languageInterface:"Langue de l’interface",
+interfaceLanguageModalTitle:"Langue de l’interface",
+interfaceLanguageModalDescription:"Choisissez la langue dans laquelle vous souhaitez utiliser BEAM AI.",
+interfaceLanguageAssistantNote:"Ce paramètre modifie l’interface, pas la langue dans laquelle vous parlez à votre agent.",
 languageTheme:"Thème clair, sombre ou automatique",
+interfaceThemeModalTitle:"Thème",
+interfaceThemeModalDescription:"Choisissez l’apparence de BEAM AI.",
+interfaceThemeLight:"Clair",
+interfaceThemeDark:"Sombre",
+interfaceThemeAutomatic:"Automatique",
+interfaceThemeAutomaticNote:"Le mode automatique suit le thème clair ou sombre de votre appareil.",
 languageTextSize:"Taille du texte",
+interfaceTextSizeModalTitle:"Taille du texte",
+interfaceTextSizeModalDescription:"Ajustez la taille du texte dans BEAM AI.",
+interfaceTextSizeSmall:"Petit",
+interfaceTextSizeNormal:"Normal",
+interfaceTextSizeLarge:"Grand",
+interfaceTextSizeVeryLarge:"Très grand",
+interfaceTextSizePreviewTitle:"APERÇU",
+interfaceTextSizePreviewText:"Voici comment le texte apparaîtra dans BEAM AI.",
 languageAccessibility:"Contraste et accessibilité",
-languageFormats:"Format de date, heure et devise",
+interfaceAccessibilityModalTitle:"Contraste et accessibilité",
+interfaceAccessibilityModalDescription:"Adaptez l’interface de BEAM AI à vos besoins.",
+interfaceAccessibilityContrast:"Contraste élevé",
+interfaceAccessibilityContrastDescription:"Couleurs avec plus de contraste",
+interfaceAccessibilityAnimations:"Réduire les animations",
+interfaceAccessibilityAnimationsDescription:"Moins de mouvement à l’écran",
+interfaceFormats24Hours:"24 heures",
+interfaceFormats12Hours:"12 heures",
+interfaceFormatsMonday:"Lundi",
+interfaceFormatsSunday:"Dimanche",
+interfaceAccessibilityBold:"Texte en gras",
+interfaceAccessibilityBoldDescription:"Caractères plus épais",
+interfaceAccessibilityScreenReader:"Compatibilité avec les lecteurs d’écran",
+interfaceAccessibilityScreenReaderDescription:"Étiquettes descriptives",
+languageFormats:"Format de date et d’heure",
+interfaceFormatsModalTitle:"Format de date et d’heure",
+interfaceFormatsModalDescription:"Choisissez comment afficher les dates, les heures et les nombres dans BEAM AI.",
+interfaceFormatsDate:"Format de date",
+interfaceFormatsTime:"Format de l’heure",
+interfaceFormatsFirstDay:"Premier jour de la semaine",
+interfaceFormatsNumbers:"Séparateurs numériques",
+interfaceFormatsPreviewTitle:"APERÇU",
 settingsPlan:"Forfait et abonnement",
 planCurrent:"Forfait actuel",
 planFeatures:"Fonctionnalités disponibles",
@@ -3161,6 +3388,11 @@ if (messageInput) {
             showAgeStatus();
             renderShortcuts();
             renderAgentPreferences();
+            renderInterfaceLanguageSummary();
+            renderInterfaceThemeSummary();
+            renderInterfaceTextSizeSummary();
+            renderInterfaceAccessibilitySummary();
+            renderInterfaceFormatsSummary();
         }
 
         function parseBirthdate(birthdate) {
@@ -3286,6 +3518,7 @@ function updateAccountAvatar(profile) {
 
     if (language && translations[language]) {
         applyLanguage(language);
+        
     }
 
     updateAccountAvatar(profile);
@@ -4461,7 +4694,487 @@ function renderNotificationsRemindersSummary() {
 
     summary.textContent = parts.join(" · ");
 }
+function openInterfaceFormatsModal() {
 
+    document.getElementById("interfaceDateFormat").value =
+        localStorage.getItem("interfaceDateFormat") || "ddmmyyyy";
+
+    document.getElementById("interfaceTimeFormat").value =
+        localStorage.getItem("interfaceTimeFormat") || "24";
+
+    document.getElementById("interfaceFirstDay").value =
+        localStorage.getItem("interfaceFirstDay") || "monday";
+
+    document.getElementById("interfaceNumberFormat").value =
+        localStorage.getItem("interfaceNumberFormat") || "european";
+
+    document.getElementById(
+        "interfaceFormatsModal"
+    ).style.display = "flex";
+
+    updateInterfaceFormatsPreview();
+    applyLanguage(currentLanguage);
+}
+
+function closeInterfaceFormatsModal() {
+
+    document.getElementById(
+        "interfaceFormatsModal"
+    ).style.display = "none";
+}
+
+function changeInterfaceFormats() {
+
+    localStorage.setItem(
+        "interfaceDateFormat",
+        document.getElementById("interfaceDateFormat").value
+    );
+
+    localStorage.setItem(
+        "interfaceTimeFormat",
+        document.getElementById("interfaceTimeFormat").value
+    );
+
+    localStorage.setItem(
+        "interfaceFirstDay",
+        document.getElementById("interfaceFirstDay").value
+    );
+
+    localStorage.setItem(
+        "interfaceNumberFormat",
+        document.getElementById("interfaceNumberFormat").value
+    );
+
+    updateInterfaceFormatsPreview();
+    renderInterfaceFormatsSummary();
+}
+
+function updateInterfaceFormatsPreview() {
+
+    const preview =
+        document.getElementById("interfaceFormatsPreview");
+
+    if (!preview) return;
+
+    const dateFormat =
+        localStorage.getItem("interfaceDateFormat") || "ddmmyyyy";
+
+    const timeFormat =
+        localStorage.getItem("interfaceTimeFormat") || "24";
+
+    const numberFormat =
+        localStorage.getItem("interfaceNumberFormat") || "european";
+
+    const dates = {
+        ddmmyyyy: "20/10/2026",
+        mmddyyyy: "10/20/2026",
+        yyyymmdd: "2026-10-20"
+    };
+
+    const times = {
+        "24": "17:01",
+        "12": "5:01 PM"
+    };
+
+    const numbers = {
+        european: "1.234,56",
+        international: "1,234.56"
+    };
+
+    preview.textContent =
+        dates[dateFormat] + " · " +
+        times[timeFormat] + " · " +
+        numbers[numberFormat];
+}
+
+function renderInterfaceFormatsSummary() {
+
+    const summary =
+        document.getElementById("interfaceFormatsSummary");
+
+    if (!summary) return;
+
+    const dateFormat =
+        localStorage.getItem("interfaceDateFormat") || "ddmmyyyy";
+
+    const timeFormat =
+        localStorage.getItem("interfaceTimeFormat") || "24";
+
+    const dates = {
+        ddmmyyyy: "20/10/2026",
+        mmddyyyy: "10/20/2026",
+        yyyymmdd: "2026-10-20"
+    };
+
+    const timeNames = {
+        es: {
+            "24": "24 horas",
+            "12": "12 horas"
+        },
+        en: {
+            "24": "24-hour",
+            "12": "12-hour"
+        },
+        fr: {
+            "24": "24 heures",
+            "12": "12 heures"
+        }
+    };
+
+    summary.textContent =
+        dates[dateFormat] + " · " +
+        (timeNames[currentLanguage]?.[timeFormat]
+            || timeNames.es[timeFormat]);
+}
+function openInterfaceAccessibilityModal() {
+
+    document.getElementById("accessibilityHighContrast").checked =
+        localStorage.getItem("accessibilityHighContrast") === "true";
+
+    document.getElementById("accessibilityReduceAnimations").checked =
+        localStorage.getItem("accessibilityReduceAnimations") === "true";
+
+    document.getElementById("accessibilityBoldText").checked =
+        localStorage.getItem("accessibilityBoldText") === "true";
+
+    document.getElementById("accessibilityScreenReader").checked =
+        localStorage.getItem("accessibilityScreenReader") === "true";
+
+    document.getElementById(
+        "interfaceAccessibilityModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeInterfaceAccessibilityModal() {
+
+    document.getElementById(
+        "interfaceAccessibilityModal"
+    ).style.display = "none";
+}
+function applyInterfaceAccessibility() {
+
+    const boldText =
+        localStorage.getItem("accessibilityBoldText") === "true";
+
+    const reduceAnimations =
+        localStorage.getItem("accessibilityReduceAnimations") === "true";
+
+    const highContrast =
+        localStorage.getItem("accessibilityHighContrast") === "true";
+
+    document.documentElement.setAttribute(
+        "data-accessibility-bold",
+        boldText ? "true" : "false"
+    );
+
+    document.documentElement.setAttribute(
+        "data-reduce-animations",
+        reduceAnimations ? "true" : "false"
+    );
+
+    document.documentElement.setAttribute(
+        "data-high-contrast",
+        highContrast ? "true" : "false"
+    );
+}
+
+function changeInterfaceAccessibility() {
+
+    localStorage.setItem(
+        "accessibilityHighContrast",
+        document.getElementById("accessibilityHighContrast").checked
+    );
+
+    localStorage.setItem(
+        "accessibilityReduceAnimations",
+        document.getElementById("accessibilityReduceAnimations").checked
+    );
+
+    localStorage.setItem(
+        "accessibilityBoldText",
+        document.getElementById("accessibilityBoldText").checked
+    );
+
+    localStorage.setItem(
+        "accessibilityScreenReader",
+        document.getElementById("accessibilityScreenReader").checked
+    );
+  applyInterfaceAccessibility();
+    renderInterfaceAccessibilitySummary();
+ }
+
+function renderInterfaceAccessibilitySummary() {
+
+    const summary =
+        document.getElementById("interfaceAccessibilitySummary");
+
+    if (!summary) return;
+
+    const enabled = [
+        localStorage.getItem("accessibilityHighContrast") === "true",
+        localStorage.getItem("accessibilityReduceAnimations") === "true",
+        localStorage.getItem("accessibilityBoldText") === "true",
+        localStorage.getItem("accessibilityScreenReader") === "true"
+    ].filter(Boolean).length;
+
+    if (enabled === 0) {
+        summary.textContent = "";
+        return;
+    }
+
+    const texts = {
+        es: enabled === 1 ? "1 opción activada" : enabled + " opciones activadas",
+        en: enabled === 1 ? "1 option enabled" : enabled + " options enabled",
+        fr: enabled === 1 ? "1 option activée" : enabled + " options activées"
+    };
+
+    summary.textContent = texts[currentLanguage] || texts.es;
+}
+function openInterfaceTextSizeModal() {
+
+    const savedSize =
+        localStorage.getItem("beam_text_size") || "normal";
+
+    document.querySelectorAll(
+        'input[name="interfaceTextSize"]'
+    ).forEach(radio => {
+        radio.checked = radio.value === savedSize;
+    });
+
+    document.getElementById(
+        "interfaceTextSizeModal"
+    ).style.display = "flex";
+
+    updateInterfaceTextSizePreview(savedSize);
+    applyLanguage(currentLanguage);
+}
+
+function closeInterfaceTextSizeModal() {
+
+    document.getElementById(
+        "interfaceTextSizeModal"
+    ).style.display = "none";
+}
+
+function changeInterfaceTextSize(size) {
+
+    localStorage.setItem("beam_text_size", size);
+  applyInterfaceTextSize();
+
+    document.querySelectorAll(
+        'input[name="interfaceTextSize"]'
+    ).forEach(radio => {
+        radio.checked = radio.value === size;
+    });
+
+    updateInterfaceTextSizePreview(size);
+    renderInterfaceTextSizeSummary();
+}
+function applyInterfaceTextSize() {
+
+    const size =
+        localStorage.getItem("beam_text_size") || "normal";
+
+    const sizes = {
+        small: "14px",
+        normal: "16px",
+        large: "18px",
+        veryLarge: "20px"
+    };
+
+    document.documentElement.style.fontSize =
+        sizes[size] || sizes.normal;
+}
+function updateInterfaceTextSizePreview(size) {
+
+    const preview =
+        document.getElementById("interfaceTextSizePreview");
+
+    if (!preview) return;
+
+    const sizes = {
+        small: "13px",
+        normal: "16px",
+        large: "19px",
+        veryLarge: "22px"
+    };
+
+    preview.style.fontSize = sizes[size] || sizes.normal;
+}
+
+function renderInterfaceTextSizeSummary() {
+
+    const summary =
+        document.getElementById("interfaceTextSizeSummary");
+
+    if (!summary) return;
+
+    const size =
+        localStorage.getItem("beam_text_size") || "normal";
+
+    const names = {
+        es: {
+            small: "Pequeño",
+            normal: "Normal",
+            large: "Grande",
+            veryLarge: "Muy grande"
+        },
+        en: {
+            small: "Small",
+            normal: "Normal",
+            large: "Large",
+            veryLarge: "Very large"
+        },
+        fr: {
+            small: "Petit",
+            normal: "Normal",
+            large: "Grand",
+            veryLarge: "Très grand"
+        }
+    };
+
+    summary.textContent =
+        names[currentLanguage]?.[size]
+        || names.es[size]
+        || "Normal";
+}
+function applyInterfaceTheme() {
+
+    const savedTheme =
+        localStorage.getItem("beam_theme") || "auto";
+
+    let effectiveTheme = savedTheme;
+
+    if (savedTheme === "auto") {
+        effectiveTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+    }
+
+    document.documentElement.setAttribute(
+        "data-theme",
+        effectiveTheme
+    );
+}
+function openInterfaceThemeModal() {
+
+    const savedTheme =
+        localStorage.getItem("beam_theme") || "auto";
+
+    document.querySelectorAll(
+        'input[name="interfaceTheme"]'
+    ).forEach(radio => {
+        radio.checked = radio.value === savedTheme;
+    });
+
+    document.getElementById(
+        "interfaceThemeModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeInterfaceThemeModal() {
+
+    document.getElementById(
+        "interfaceThemeModal"
+    ).style.display = "none";
+}
+
+function changeInterfaceTheme(theme) {
+    localStorage.setItem("beam_theme", theme);
+    applyInterfaceTheme();
+
+    document.querySelectorAll(
+        'input[name="interfaceTheme"]'
+    ).forEach(radio => {
+        radio.checked = radio.value === theme;
+    });
+
+    renderInterfaceThemeSummary();
+}
+
+function renderInterfaceThemeSummary() {
+
+    const summary =
+        document.getElementById("interfaceThemeSummary");
+
+    if (!summary) return;
+
+    const theme =
+        localStorage.getItem("beam_theme") || "auto";
+
+    const themeNames = {
+        es: {
+            light: "Claro",
+            dark: "Oscuro",
+            auto: "Automático"
+        },
+        en: {
+            light: "Light",
+            dark: "Dark",
+            auto: "Automatic"
+        },
+        fr: {
+            light: "Clair",
+            dark: "Sombre",
+            auto: "Automatique"
+        }
+    };
+
+    summary.textContent =
+        themeNames[currentLanguage]?.[theme]
+        || themeNames.es[theme]
+        || "Automático";
+}
+function openInterfaceLanguageModal() {
+
+    document.querySelectorAll(
+        'input[name="interfaceLanguage"]'
+    ).forEach(radio => {
+        radio.checked = radio.value === currentLanguage;
+    });
+
+    document.getElementById(
+        "interfaceLanguageModal"
+    ).style.display = "flex";
+
+    applyLanguage(currentLanguage);
+}
+
+function closeInterfaceLanguageModal() {
+
+    document.getElementById(
+        "interfaceLanguageModal"
+    ).style.display = "none";
+}
+
+function changeInterfaceLanguage(language) {
+
+    applyLanguage(language);
+renderInterfaceLanguageSummary();
+
+    document.querySelectorAll(
+        'input[name="interfaceLanguage"]'
+    ).forEach(radio => {
+        radio.checked = radio.value === currentLanguage;
+    });
+}
+function renderInterfaceLanguageSummary() {
+    const summary = document.getElementById("interfaceLanguageSummary");
+
+    if (!summary) return;
+
+    const languageNames = {
+        es: "Español",
+        en: "English",
+        fr: "Français"
+    };
+
+    summary.textContent = languageNames[currentLanguage] || "Español";
+}
 function openNotificationsRemindersModal() {
 
     const enabled =
@@ -6523,6 +7236,12 @@ console.log("TOGGLE SETTINGS");
 }
 
 applyLanguage(currentLanguage);
+applyInterfaceTheme();
+renderInterfaceThemeSummary();
+renderInterfaceTextSizeSummary();
+applyInterfaceAccessibility();
+renderInterfaceAccessibilitySummary();
+renderInterfaceFormatsSummary();
 checkUser();
 async function loadMemorySettings() {
     try {
@@ -7493,6 +8212,538 @@ loadMemorySummary();
     </div>
 
 </div>
+<!-- MODAL: Formato de fecha y hora -->
+<div id="interfaceFormatsModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="interfaceFormatsModalTitle">
+            Formato de fecha y hora
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="interfaceFormatsModalDescription">
+            Elige cómo quieres ver las fechas, horas y números en BEAM AI.
+        </p>
+
+        <div style="margin-bottom:20px;">
+            <div style="margin-bottom:8px;"
+                 data-i18n="interfaceFormatsDate">
+                Formato de fecha
+            </div>
+
+            <select id="interfaceDateFormat" onchange="changeInterfaceFormats()" style="
+
+                width:100%;
+                padding:10px;
+                border-radius:10px;
+            ">
+                <option value="ddmmyyyy">20/10/2026</option>
+                <option value="mmddyyyy">10/20/2026</option>
+                <option value="yyyymmdd">2026-10-20</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom:20px;">
+            <div style="margin-bottom:8px;"
+                 data-i18n="interfaceFormatsTime">
+                Formato de hora
+            </div>
+
+            <select id="interfaceTimeFormat" onchange="changeInterfaceFormats()" style="
+                width:100%;
+                padding:10px;
+                border-radius:10px;
+            ">
+               <option value="24" data-i18n="interfaceFormats24Hours">24 horas</option>
+<option value="12" data-i18n="interfaceFormats12Hours">12 horas</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom:20px;">
+            <div style="margin-bottom:8px;"
+                 data-i18n="interfaceFormatsFirstDay">
+                Primer día de la semana
+            </div>
+
+            <select id="interfaceFirstDay" onchange="changeInterfaceFormats()" style="
+                width:100%;
+                padding:10px;
+                border-radius:10px;
+            ">
+                <option value="monday" data-i18n="interfaceFormatsMonday">Lunes</option>
+                <option value="sunday" data-i18n="interfaceFormatsSunday">Domingo</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom:20px;">
+            <div style="margin-bottom:8px;"
+                 data-i18n="interfaceFormatsNumbers">
+                Separadores numéricos
+            </div>
+
+            <select id="interfaceNumberFormat" onchange="changeInterfaceFormats()" style="
+                width:100%;
+                padding:10px;
+                border-radius:10px;
+            ">
+                <option value="european">1.234,56</option>
+                <option value="international">1,234.56</option>
+            </select>
+        </div>
+
+        <div style="
+            margin-top:20px;
+            padding:16px;
+            border:1px solid #374151;
+            border-radius:12px;
+        ">
+            <div style="
+                color:#9ca3af;
+                font-size:12px;
+                margin-bottom:8px;
+            " data-i18n="interfaceFormatsPreviewTitle">
+                VISTA PREVIA
+            </div>
+
+            <div id="interfaceFormatsPreview">
+                20/10/2026 · 17:01 · 1.234,56
+            </div>
+        </div>
+
+        <button
+            type="button"
+            onclick="closeInterfaceFormatsModal()"
+            style="
+                margin-top:20px;
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Contraste y accesibilidad -->
+<div id="interfaceAccessibilityModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="interfaceAccessibilityModalTitle">
+            Contraste y accesibilidad
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="interfaceAccessibilityModalDescription">
+            Adapta la interfaz de BEAM AI a tus necesidades.
+        </p>
+
+        <div class="settings-option">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+                <span data-i18n="interfaceAccessibilityContrast">
+                    Alto contraste
+                </span>
+                <span style="color:#9ca3af;font-size:13px;margin-top:3px;"
+                      data-i18n="interfaceAccessibilityContrastDescription">
+                    Colores con más diferencia
+                </span>
+            </div>
+
+            <input
+                id="accessibilityHighContrast"
+                type="checkbox"
+                onchange="changeInterfaceAccessibility()"
+            >
+        </div>
+
+        <div class="settings-option">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+                <span data-i18n="interfaceAccessibilityAnimations">
+                    Reducir animaciones
+                </span>
+                <span style="color:#9ca3af;font-size:13px;margin-top:3px;"
+                      data-i18n="interfaceAccessibilityAnimationsDescription">
+                    Menos movimiento en pantalla
+                </span>
+            </div>
+
+            <input
+                id="accessibilityReduceAnimations"
+                type="checkbox"
+                onchange="changeInterfaceAccessibility()"
+            >
+        </div>
+
+        <div class="settings-option">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+                <span data-i18n="interfaceAccessibilityBold">
+                    Texto en negrita
+                </span>
+                <span style="color:#9ca3af;font-size:13px;margin-top:3px;"
+                      data-i18n="interfaceAccessibilityBoldDescription">
+                    Letras más gruesas
+                </span>
+            </div>
+
+            <input
+                id="accessibilityBoldText"
+                type="checkbox"
+                onchange="changeInterfaceAccessibility()"
+            >
+        </div>
+
+        <div class="settings-option">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+                <span data-i18n="interfaceAccessibilityScreenReader">
+                    Compatibilidad con lector de pantalla
+                </span>
+                <span style="color:#9ca3af;font-size:13px;margin-top:3px;"
+                      data-i18n="interfaceAccessibilityScreenReaderDescription">
+                    Etiquetas descriptivas
+                </span>
+            </div>
+
+            <input
+                id="accessibilityScreenReader"
+                type="checkbox"
+                onchange="changeInterfaceAccessibility()"
+            >
+        </div>
+
+        <button
+            type="button"
+            onclick="closeInterfaceAccessibilityModal()"
+            style="
+                margin-top:20px;
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Tamaño del texto -->
+<div id="interfaceTextSizeModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="interfaceTextSizeModalTitle">
+            Tamaño del texto
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="interfaceTextSizeModalDescription">
+            Ajusta el tamaño del texto de BEAM AI.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="interfaceTextSizeSmall">Pequeño</span>
+            <input
+                type="radio"
+                name="interfaceTextSize"
+                value="small"
+                onclick="changeInterfaceTextSize(this.value)"
+            >
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="interfaceTextSizeNormal">Normal</span>
+            <input
+                type="radio"
+                name="interfaceTextSize"
+                value="normal"
+                onclick="changeInterfaceTextSize(this.value)"
+            >
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="interfaceTextSizeLarge">Grande</span>
+            <input
+                type="radio"
+                name="interfaceTextSize"
+                value="large"
+                onclick="changeInterfaceTextSize(this.value)"
+            >
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="interfaceTextSizeVeryLarge">Muy grande</span>
+            <input
+                type="radio"
+                name="interfaceTextSize"
+                value="veryLarge"
+                onclick="changeInterfaceTextSize(this.value)"
+            >
+        </div>
+
+        <div style="
+            margin-top:20px;
+            padding:16px;
+            border:1px solid #374151;
+            border-radius:12px;
+        ">
+            <div style="
+                color:#9ca3af;
+                font-size:12px;
+                margin-bottom:8px;
+            " data-i18n="interfaceTextSizePreviewTitle">
+                VISTA PREVIA
+            </div>
+
+            <div
+                id="interfaceTextSizePreview"
+                data-i18n="interfaceTextSizePreviewText"
+            >
+                Así se verá el texto en BEAM AI.
+            </div>
+        </div>
+
+        <button
+            type="button"
+            onclick="closeInterfaceTextSizeModal()"
+            style="
+                margin-top:20px;
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Tema de la interfaz -->
+<div id="interfaceThemeModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="interfaceThemeModalTitle">
+            Tema
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="interfaceThemeModalDescription">
+            Elige cómo quieres ver BEAM AI.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="interfaceThemeLight">Claro</span>
+            <input
+                type="radio"
+                name="interfaceTheme"
+                value="light"
+                onclick="changeInterfaceTheme(this.value)"
+            >
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="interfaceThemeDark">Oscuro</span>
+            <input
+                type="radio"
+                name="interfaceTheme"
+                value="dark"
+                onclick="changeInterfaceTheme(this.value)"
+            >
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="interfaceThemeAutomatic">Automático</span>
+            <input
+                type="radio"
+                name="interfaceTheme"
+                value="auto"
+                onclick="changeInterfaceTheme(this.value)"
+            >
+        </div>
+
+        <p style="
+            color:#9ca3af;
+            font-size:13px;
+            margin:18px 0 0 0;
+        " data-i18n="interfaceThemeAutomaticNote">
+            Automático sigue el modo claro u oscuro de tu dispositivo.
+        </p>
+
+        <button
+            type="button"
+            onclick="closeInterfaceThemeModal()"
+            style="
+                margin-top:20px;
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+
+<!-- MODAL: Idioma de la interfaz -->
+<div id="interfaceLanguageModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <h3 style="margin-top:0;" data-i18n="interfaceLanguageModalTitle">
+            Idioma de la interfaz
+        </h3>
+
+        <p style="color:#9ca3af;margin-bottom:20px;"
+           data-i18n="interfaceLanguageModalDescription">
+            Elige en qué idioma quieres ver BEAM AI.
+        </p>
+
+        <div class="settings-option">
+            <span>Español</span>
+            <input
+    type="radio"
+    name="interfaceLanguage"
+    value="es"
+    onclick="changeInterfaceLanguage(this.value)"
+>
+        </div>
+
+        <div class="settings-option">
+            <span>English</span>
+            <input
+    type="radio"
+    name="interfaceLanguage"
+    value="en"
+    onclick="changeInterfaceLanguage(this.value)"
+>
+        </div>
+
+        <div class="settings-option">
+            <span>Français</span>
+           <input
+    type="radio"
+    name="interfaceLanguage"
+    value="fr"
+    onclick="changeInterfaceLanguage(this.value)"
+>
+        </div>
+
+        <p style="
+            color:#9ca3af;
+            font-size:13px;
+            margin:18px 0 0 0;
+        " data-i18n="interfaceLanguageAssistantNote">
+            Este ajuste cambia la interfaz, no el idioma en el que hablas con tu agente.
+        </p>
+
+        <button
+            type="button"
+            onclick="closeInterfaceLanguageModal()"
+            style="
+                margin-top:20px;
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+
 <!-- MODAL: Recordatorios y avisos -->
 <div id="notificationsRemindersModal" style="
     display:none;
