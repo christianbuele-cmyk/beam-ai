@@ -400,6 +400,14 @@
     font-size: 13px;
 }
 
+.settings-option > div {
+    text-align: left;
+    flex: 1;
+}
+
+.settings-option > div .settings-description {
+    text-align: left;
+}
 .settings-option:last-child {
     border-bottom: none;
 }
@@ -1733,34 +1741,80 @@ html[data-high-contrast="true"] .settings-close {
 
 
 
-    <div class="settings-option">
-        <span data-i18n="privacyPermissions">Gestionar los permisos concedidos</span>
-        <button class="settings-edit" type="button" onclick="openPlanBillingModal()" data-i18n="manage">Gestionar</button>
-    </div>
+        <div class="settings-option">
+        <div>
+            <div data-i18n="privacyPermissions">Permisos concedidos</div>
+            <div class="settings-description" data-i18n="privacyPermissionsDescription">
+                Qué puede usar la app en tu dispositivo
+            </div>
+        </div>
 
-    <div class="settings-option">
-        <span data-i18n="privacyConnections">Gestionar conexiones con otras aplicaciones</span>
-        <button class="settings-edit" type="button" data-i18n="manage">Gestionar</button>
-    </div>
-
-    <div class="settings-option">
-        <span data-i18n="privacyDownload">Descargar los datos personales</span>
-        <button class="settings-edit" type="button" data-i18n="download">Descargar</button>
-    </div>
-
-    <div class="settings-option">
-        <span data-i18n="privacyDeleteAccount">Eliminar permanentemente la cuenta</span>
-        <button class="settings-edit" type="button" data-i18n="delete">Eliminar</button>
-    </div>
-
-    <div class="settings-option">
-        <span data-i18n="privacyPolicy">Política de privacidad y condiciones</span>
         <button
-    class="settings-edit"
-    type="button"
-    onclick="openPlanLimitsModal()"
-    data-i18n="view"
->Ver</button>
+            class="settings-edit"
+            type="button"
+            onclick="openPrivacyPermissionsModal()"
+            data-i18n="manage"
+        >Gestionar</button>
+    </div>
+
+    <div class="settings-option">
+        <div>
+            <div data-i18n="privacyConnections">Conexiones con otras aplicaciones</div>
+            <div class="settings-description" data-i18n="privacyConnectionsDescription">
+                2 conectadas
+            </div>
+        </div>
+
+        <button
+            class="settings-edit"
+            type="button"
+            data-i18n="manage"
+        >Gestionar</button>
+    </div>
+
+    <div class="settings-option">
+        <div>
+            <div data-i18n="privacyDownload">Descargar mis datos</div>
+            <div class="settings-description" data-i18n="privacyDownloadDescription">
+                Una copia de todo lo que guardamos
+            </div>
+        </div>
+
+        <button
+            class="settings-edit"
+            type="button"
+            data-i18n="download"
+        >Descargar</button>
+    </div>
+
+    <div class="settings-option">
+        <div>
+            <div data-i18n="privacyPolicy">Política de privacidad y condiciones</div>
+            <div class="settings-description" data-i18n="privacyPolicyDescription">
+                Los documentos legales de la app
+            </div>
+        </div>
+
+        <button
+            class="settings-edit"
+            type="button"
+            data-i18n="view"
+        >Ver</button>
+    </div>
+
+    <div class="settings-option">
+        <div>
+            <div data-i18n="privacyDeleteAccount">Eliminar cuenta permanentemente</div>
+            <div class="settings-description" data-i18n="privacyDeleteAccountDescription">
+                Esta acción no se puede deshacer
+            </div>
+        </div>
+
+        <button
+            class="settings-edit"
+            type="button"
+            data-i18n="delete"
+        >Eliminar</button>
     </div>
 
 </div>
@@ -1924,12 +1978,12 @@ html[data-high-contrast="true"] .settings-close {
 
         <div class="settings-option">
             <span data-i18n="helpCenter">Centro de ayuda</span>
-<button class="settings-edit" type="button" data-i18n="view">Ver</button>
+<button class="settings-edit" type="button" onclick="openHelpCenterModal()" data-i18n="view">Ver</button>
         </div>
 
         <div class="settings-option">
             <span data-i18n="helpFAQ">Preguntas frecuentes</span>
-<button class="settings-edit" type="button" data-i18n="view">Ver</button>
+<button class="settings-edit" type="button" onclick="openHelpFAQModal()" data-i18n="view">Ver</button>
         </div>
 
         <div class="settings-option">
@@ -2302,11 +2356,21 @@ notificationsReminder1Day:"1 día antes",
 notificationsLastMinute:"Avisos de última hora (clima, cierres o cambios de horario)",
 notificationsSave:"Guardar cambios",
 settingsPrivacy:"Privacidad y seguridad",
-privacyPermissions:"Gestionar los permisos concedidos",
+privacyPermissions:"Permisos concedidos",
 privacyConnections:"Gestionar conexiones con otras aplicaciones",
 privacyDownload:"Descargar los datos personales",
 privacyDeleteAccount:"Eliminar permanentemente la cuenta",
 privacyPolicy:"Política de privacidad y condiciones",
+privacyPermissionsDescription:"Qué puede usar la app en tu dispositivo",
+privacyConnectionsDescription:"2 conectadas",
+privacyDownloadDescription:"Una copia de todo lo que guardamos",
+privacyPolicyDescription:"Los documentos legales de la app",
+privacyDeleteAccountDescription:"Esta acción no se puede deshacer",
+privacyPermissionsModalTitle:"Permisos concedidos",
+privacyPermissionsModalDescription:"Revisa y gestiona los permisos que has concedido a BEAM AI.",
+privacyPermissionLocation:"Ubicación",
+privacyPermissionNotifications:"Notificaciones",
+privacyPermissionAllowed:"Permitido",
 download:"Descargar",
 view:"Ver",
 settingsLanguage:"Idioma y apariencia",
@@ -2392,7 +2456,22 @@ planBillingActive:"Activo",
 change:"Cambiar",
 settingsHelp:"Ayuda y soporte",
 helpCenter:"Centro de ayuda",
+helpCenterModalTitle:"Centro de ayuda",
+helpCenterModalDescription:"Guías para sacar partido a la app.",
+helpCenterSearchPlaceholder:"Busca un tema, por ejemplo: cambiar mi contraseña",
+helpCenterGettingStarted:"Primeros pasos",
+helpCenterAccount:"Cuenta y acceso",
+helpCenterBilling:"Plan y facturación",
+helpCenterPrivacy:"Privacidad y datos",
 helpFAQ:"Preguntas frecuentes",
+helpFAQModalTitle:"Preguntas frecuentes",
+helpFAQModalDescription:"Las dudas más habituales.",
+helpFAQPassword:"¿Cómo cambio mi contraseña?",
+helpFAQPasswordAnswer:"Ve a Idioma y apariencia > Contraseña y accesibilidad y elige Cambiar contraseña. Te enviaremos un código para confirmarlo.",
+helpFAQDownloadData:"¿Cómo descargo mis datos?",
+helpFAQDownloadDataAnswer:"Puedes gestionar la descarga de tus datos desde Privacidad y seguridad.",
+helpFAQCancelSubscription:"¿Puedo cancelar mi suscripción cuando quiera?",
+helpFAQConversationStorage:"¿El asistente guarda mis conversaciones?",
 helpContact:"Contactar con soporte",
 helpReport:"Informar de un error",
 helpSuggestions:"Enviar sugerencias",
@@ -2681,11 +2760,21 @@ notificationsReminder1Day:"1 day before",
 notificationsLastMinute:"Last-minute alerts",
 notificationsSave:"Save changes",
 settingsPrivacy:"Privacy and security",
-privacyPermissions:"Manage granted permissions",
+privacyPermissions:"Granted permissions",
 privacyConnections:"Manage connections with other applications",
 privacyDownload:"Download personal data",
 privacyDeleteAccount:"Permanently delete account",
 privacyPolicy:"Privacy policy and terms",
+privacyPermissionsDescription:"What the app can use on your device",
+privacyConnectionsDescription:"2 connected",
+privacyDownloadDescription:"A copy of everything we store",
+privacyPolicyDescription:"The app's legal documents",
+privacyDeleteAccountDescription:"This action cannot be undone",
+privacyPermissionsModalTitle:"Granted permissions",
+privacyPermissionsModalDescription:"Review and manage the permissions you have granted to BEAM AI.",
+privacyPermissionLocation:"Location",
+privacyPermissionNotifications:"Notifications",
+privacyPermissionAllowed:"Allowed",
 download:"Download",
 view:"View",
 settingsLanguage:"Language and appearance",
@@ -2775,7 +2864,22 @@ planBillingActive:"Active",
 change:"Change",
 settingsHelp:"Help and support",
 helpCenter:"Help center",
+helpCenterModalTitle:"Help center",
+helpCenterModalDescription:"Guides to help you get the most out of the app.",
+helpCenterSearchPlaceholder:"Search for a topic, for example: change my password",
+helpCenterGettingStarted:"Getting started",
+helpCenterAccount:"Account and access",
+helpCenterBilling:"Plan and billing",
+helpCenterPrivacy:"Privacy and data",
 helpFAQ:"Frequently asked questions",
+helpFAQModalTitle:"Frequently asked questions",
+helpFAQModalDescription:"The most common questions.",
+helpFAQPassword:"How do I change my password?",
+helpFAQPasswordAnswer:"Go to Language and appearance > Password and accessibility and select Change password. We will send you a code to confirm it.",
+helpFAQDownloadData:"How do I download my data?",
+helpFAQDownloadDataAnswer:"You can manage the download of your data from Privacy and security.",
+helpFAQCancelSubscription:"Can I cancel my subscription at any time?",
+helpFAQConversationStorage:"Does the assistant save my conversations?",
 helpContact:"Contact support",
 helpReport:"Report an error",
 helpSuggestions:"Send suggestions",
@@ -2787,6 +2891,22 @@ settingsLocation:"Location",
  deleteError:"Could not delete the shortcut.", chatThinking:"Thinking...", you:"You", chatError:"I couldn't process that request. Check that the BEAM AI server is running.", localChatError:"Your profile and shortcuts are saved on this device. To use chat, open BEAM AI from its server.", age:"Calculated age: {age}.", ageMinor:"Calculated age: {age}. BEAM AI will adapt plans and recommendations for minors.", fileProtocolError:"To save your profile to BEAM AI, open the app from its server, not from a local file. You can continue on this device, but your data will only be saved here."
             },
             fr: {
+settingsPrivacy:"Confidentialité et sécurité",
+privacyPermissions:"Autorisations accordées",
+privacyConnections:"Gérer les connexions avec d’autres applications",
+privacyDownload:"Télécharger mes données personnelles",
+privacyDeleteAccount:"Supprimer définitivement le compte",
+privacyPolicy:"Politique de confidentialité et conditions",
+privacyPermissionsDescription:"Ce que l’application peut utiliser sur votre appareil",
+privacyConnectionsDescription:"2 connectées",
+privacyDownloadDescription:"Une copie de toutes les données que nous conservons",
+privacyPolicyDescription:"Les documents juridiques de l’application",
+privacyDeleteAccountDescription:"Cette action est irréversible",
+privacyPermissionsModalTitle:"Autorisations accordées",
+privacyPermissionsModalDescription:"Consultez et gérez les autorisations que vous avez accordées à BEAM AI.",
+privacyPermissionLocation:"Localisation",
+privacyPermissionNotifications:"Notifications",
+privacyPermissionAllowed:"Autorisé",
 accountDescription:"Votre identité sur la plateforme.",
 accountName:"Nom et nom d’utilisateur",
 accountEmail:"Adresse e-mail",
@@ -3147,7 +3267,23 @@ planBillingActive:"Actif",
 change:"Changer",
 settingsHelp:"Aide et assistance",
 helpCenter:"Centre d’aide",
+helpCenter:"Centre d’aide",
+helpCenterModalTitle:"Centre d’aide",
+helpCenterModalDescription:"Des guides pour profiter pleinement de l’application.",
+helpCenterSearchPlaceholder:"Recherchez un sujet, par exemple : modifier mon mot de passe",
+helpCenterGettingStarted:"Premiers pas",
+helpCenterAccount:"Compte et accès",
+helpCenterBilling:"Forfait et facturation",
+helpCenterPrivacy:"Confidentialité et données",
 helpFAQ:"Questions fréquentes",
+helpFAQModalTitle:"Questions fréquentes",
+helpFAQModalDescription:"Les questions les plus fréquentes.",
+helpFAQPassword:"Comment modifier mon mot de passe ?",
+helpFAQPasswordAnswer:"Accédez à Langue et apparence > Mot de passe et accessibilité et sélectionnez Modifier le mot de passe. Nous vous enverrons un code pour confirmer.",
+helpFAQDownloadData:"Comment télécharger mes données ?",
+helpFAQDownloadDataAnswer:"Vous pouvez gérer le téléchargement de vos données depuis Confidentialité et sécurité.",
+helpFAQCancelSubscription:"Puis-je annuler mon abonnement à tout moment ?",
+helpFAQConversationStorage:"L’assistant conserve-t-il mes conversations ?",
 helpContact:"Contacter l’assistance",
 helpReport:"Signaler une erreur",
 helpSuggestions:"Envoyer des suggestions",
@@ -5281,6 +5417,33 @@ function openPlanBillingModal() {
 
 function closePlanBillingModal() {
     document.getElementById("planBillingModal").style.display = "none";
+}
+
+function openPrivacyPermissionsModal() {
+    document.getElementById("privacyPermissionsModal").style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closePrivacyPermissionsModal() {
+    document.getElementById("privacyPermissionsModal").style.display = "none";
+}
+
+function openHelpCenterModal() {
+    document.getElementById("helpCenterModal").style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closeHelpCenterModal() {
+    document.getElementById("helpCenterModal").style.display = "none";
+}
+
+function openHelpFAQModal() {
+    document.getElementById("helpFAQModal").style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closeHelpFAQModal() {
+    document.getElementById("helpFAQModal").style.display = "none";
 }
 
 function openPlanFeaturesModal() {
@@ -9189,6 +9352,297 @@ loadMemorySummary();
         <button
             type="button"
             onclick="closePlanBillingModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:20px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Gestionar permisos concedidos -->
+<div id="privacyPermissionsModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="privacyPermissionsModalTitle">
+                Gestionar permisos concedidos
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closePrivacyPermissionsModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="privacyPermissionsModalDescription"
+        >
+            Revisa y gestiona los permisos que has concedido a BEAM AI.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="privacyPermissionLocation">Ubicación</span>
+            <span data-i18n="privacyPermissionAllowed">Permitido</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="privacyPermissionNotifications">Notificaciones</span>
+            <span data-i18n="privacyPermissionAllowed">Permitido</span>
+        </div>
+
+        <button
+            type="button"
+            onclick="closePrivacyPermissionsModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:20px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Centro de ayuda -->
+<div id="helpCenterModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="helpCenterModalTitle">
+                Centro de ayuda
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closeHelpCenterModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="helpCenterModalDescription"
+        >
+            Guías para sacar partido a la app.
+        </p>
+
+        <input
+            type="text"
+            data-i18n-placeholder="helpCenterSearchPlaceholder"
+            placeholder="Busca un tema, por ejemplo: cambiar mi contraseña"
+            style="
+                width:100%;
+                box-sizing:border-box;
+                padding:11px 12px;
+                margin-bottom:20px;
+                border:1px solid #374151;
+                border-radius:10px;
+                background:#1f2937;
+                color:white;
+            "
+        >
+
+        <div class="settings-option">
+            <span data-i18n="helpCenterGettingStarted">Primeros pasos</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="helpCenterAccount">Cuenta y acceso</span>
+         </div>
+
+        <div class="settings-option">
+            <span data-i18n="helpCenterBilling">Plan y facturación</span>
+         </div>
+
+        <div class="settings-option">
+            <span data-i18n="helpCenterPrivacy">Privacidad y datos</span>
+         </div>
+
+        <button
+            type="button"
+            onclick="closeHelpCenterModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:20px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Preguntas frecuentes -->
+<div id="helpFAQModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="helpFAQModalTitle">
+                Preguntas frecuentes
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closeHelpFAQModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="helpFAQModalDescription"
+        >
+            Las dudas más habituales.
+        </p>
+
+        <details style="
+    border-bottom:1px solid #374151;
+    padding:12px 0;
+">
+    <summary style="
+        cursor:pointer;
+        list-style:none;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:12px;
+    ">
+        <span data-i18n="helpFAQPassword">¿Cómo cambio mi contraseña?</span>
+        <span>⌄</span>
+    </summary>
+
+    <p
+        style="color:#9ca3af;margin:12px 0 4px 0;line-height:1.5;"
+        data-i18n="helpFAQPasswordAnswer"
+    >
+        Ve a Idioma y apariencia > Contraseña y accesibilidad y elige Cambiar contraseña. Te enviaremos un código para confirmarlo.
+    </p>
+</details>
+
+       <details style="
+    border-bottom:1px solid #374151;
+    padding:12px 0;
+">
+    <summary style="
+        cursor:pointer;
+        list-style:none;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:12px;
+    ">
+        <span data-i18n="helpFAQDownloadData">¿Cómo descargo mis datos?</span>
+        <span>⌄</span>
+    </summary>
+
+    <p
+        style="color:#9ca3af;margin:12px 0 4px 0;line-height:1.5;"
+        data-i18n="helpFAQDownloadDataAnswer"
+    >
+        Puedes gestionar la descarga de tus datos desde Privacidad y seguridad.
+    </p>
+</details>
+
+
+        <div class="settings-option">
+            <span data-i18n="helpFAQCancelSubscription">¿Puedo cancelar mi suscripción cuando quiera?</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="helpFAQConversationStorage">¿El asistente guarda mis conversaciones?</span>
+        </div>
+
+        <button
+            type="button"
+            onclick="closeHelpFAQModal()"
             style="
                 width:100%;
                 padding:10px;
