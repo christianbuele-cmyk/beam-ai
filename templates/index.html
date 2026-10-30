@@ -518,6 +518,17 @@
             background: #1f1f1f;
             border: 1px solid #292929;
         }
+html[data-theme="light"] .bot-message {
+    background: #ffffff;
+    color: #111827;
+    border: 1px solid #d1d5db;
+}
+
+html[data-theme="light"][data-high-contrast="true"] .bot-message {
+    background: #ffffff;
+    color: #000000;
+    border: 2px solid #000000;
+}
 
         /* CAJA DE CHAT FIJA */
 
@@ -1724,7 +1735,7 @@ html[data-high-contrast="true"] .settings-close {
 
     <div class="settings-option">
         <span data-i18n="privacyPermissions">Gestionar los permisos concedidos</span>
-        <button class="settings-edit" type="button" data-i18n="manage">Gestionar</button>
+        <button class="settings-edit" type="button" onclick="openPlanBillingModal()" data-i18n="manage">Gestionar</button>
     </div>
 
     <div class="settings-option">
@@ -1744,7 +1755,12 @@ html[data-high-contrast="true"] .settings-close {
 
     <div class="settings-option">
         <span data-i18n="privacyPolicy">Política de privacidad y condiciones</span>
-        <button class="settings-edit" type="button" data-i18n="view">Ver</button>
+        <button
+    class="settings-edit"
+    type="button"
+    onclick="openPlanLimitsModal()"
+    data-i18n="view"
+>Ver</button>
     </div>
 
 </div>
@@ -1863,28 +1879,39 @@ html[data-high-contrast="true"] .settings-close {
         
         <div class="settings-option">
             <span data-i18n="planFeatures">Funciones disponibles</span>
-            <button class="settings-edit" type="button" data-i18n="view">Ver</button>
+            <button
+    class="settings-edit"
+    type="button"
+    onclick="openPlanFeaturesModal()"
+    data-i18n="view"
+> Ver</button>
+
         </div>
 
         <div class="settings-option">
-            <span data-i18n="planLimits">Límites de uso</span>
-            <button class="settings-edit" type="button" data-i18n="view">Ver</button>
-        </div>
+    <span data-i18n="planLimits">Límites de uso</span>
+    <button
+        class="settings-edit"
+        type="button"
+        onclick="openPlanLimitsModal()"
+        data-i18n="view"
+    >Ver</button>
+</div>
+
+<div class="settings-option">
+    <span data-i18n="planUsage">Consumo mensual</span>
+    <button class="settings-edit" type="button" onclick="openPlanUsageModal()" data-i18n="view">Ver</button>
+</div>
 
         <div class="settings-option">
-            <span data-i18n="planUsage">Consumo mensual</span>
-            <button class="settings-edit" type="button" data-i18n="view">Ver</button>
-        </div>
+    <span data-i18n="planChange">Cambiar de plan</span>
+    <button class="settings-edit" type="button" onclick="openPlanChangeModal()" data-i18n="change">Cambiar</button>
+</div>
 
-        <div class="settings-option">
-            <span data-i18n="planChange">Cambiar de plan</span>
-            <button class="settings-edit" type="button" data-i18n="change">Cambiar</button>
-        </div>
-
-        <div class="settings-option">
-            <span data-i18n="planBilling">Facturación y cancelación</span>
-            <button class="settings-edit" type="button" data-i18n="manage">Gestionar</button>
-        </div>
+<div class="settings-option">
+    <span data-i18n="planBilling">Facturación y cancelación</span>
+    <button class="settings-edit" type="button" onclick="openPlanBillingModal()" data-i18n="manage">Gestionar</button>
+</div>
 
     </div>
 </details>
@@ -2329,10 +2356,39 @@ interfaceFormatsPreviewTitle:"VISTA PREVIA",
 settingsPlan:"Plan y suscripción",
 planCurrent:"Plan actual",
 planFeatures:"Funciones disponibles",
+planFeaturesModalTitle:"Funciones disponibles",
+planFeaturesModalDescription:"Funciones incluidas actualmente en tu plan.",
+planFeatureChat:"Chat con BEAM AI",
+planFeatureMemory:"Memoria personalizada",
+planFeaturePreferences:"Preferencias personalizadas",
+planFeatureNotifications:"Notificaciones inteligentes",
 planLimits:"Límites de uso",
+planLimitsModalTitle:"Límites de uso",
+planLimitsModalDescription:"Consulta los límites incluidos actualmente en tu plan.",
+planLimitMessages:"Mensajes",
+planLimitIncluded:"Incluido",
+planLimitMemory:"Memoria",
+planLimitHistory:"Historial de conversaciones",
+planLimitUnlimited:"Ilimitados",
 planUsage:"Consumo mensual",
+planUsageModalTitle:"Consumo mensual",
+planUsageModalDescription:"Consulta el uso realizado durante el mes actual.",
+planUsageMessages:"Mensajes utilizados",
+planUsageUnlimited:"Ilimitados",
+planUsageMemory:"Memoria",
+planUsageActive:"Activo",
+planUsageHistory:"Historial de conversaciones",
 planChange:"Cambiar de plan",
+planChangeModalTitle:"Cambiar de plan",
+planChangeModalDescription:"Consulta las opciones disponibles para tu plan.",
+planCurrentPlan:"Plan actual",
+planFree:"Gratis",
 planBilling:"Facturación y cancelación",
+planBillingModalTitle:"Facturación y cancelación",
+planBillingModalDescription:"Consulta la información de facturación y las opciones de cancelación de tu plan.",
+planBillingCurrentPlan:"Plan actual",
+planBillingStatus:"Estado",
+planBillingActive:"Activo",
 change:"Cambiar",
 settingsHelp:"Ayuda y soporte",
 helpCenter:"Centro de ayuda",
@@ -2679,10 +2735,43 @@ interfaceFormatsPreviewTitle:"PREVIEW",
 settingsPlan:"Plan and subscription",
 planCurrent:"Current plan",
 planFeatures:"Available features",
+planFeaturesModalTitle:"Available features",
+planFeaturesModalDescription:"Features currently included in your plan.",
+planFeatureChat:"Chat with BEAM AI",
+planFeatureMemory:"Personalized memory",
+planFeaturePreferences:"Personalized preferences",
+planFeatureNotifications:"Smart notifications",
+planFeatureChat:"Chat with BEAM AI",
+planFeatureMemory:"Personalized memory",
+planFeaturePreferences:"Personalized preferences",
+planFeatureNotifications:"Smart notifications",
 planLimits:"Usage limits",
+planLimitsModalTitle:"Usage limits",
+planLimitsModalDescription:"Check the usage limits included in your current plan.",
+planLimitMessages:"Messages",
+planLimitIncluded:"Included",
+planLimitMemory:"Memory",
+planLimitHistory:"Conversation history",
+planLimitUnlimited:"Unlimited",
 planUsage:"Monthly usage",
+planUsageModalTitle:"Monthly usage",
+planUsageModalDescription:"Check your usage during the current month.",
+planUsageMessages:"Messages used",
+planUsageUnlimited:"Unlimited",
+planUsageMemory:"Memory",
+planUsageActive:"Active",
+planUsageHistory:"Conversation history",
 planChange:"Change plan",
+planChangeModalTitle:"Change plan",
+planChangeModalDescription:"Check the options available for your plan.",
+planCurrentPlan:"Current plan",
+planFree:"Free",
 planBilling:"Billing and cancellation",
+planBillingModalTitle:"Billing and cancellation",
+planBillingModalDescription:"Check your billing information and your plan cancellation options.",
+planBillingCurrentPlan:"Current plan",
+planBillingStatus:"Status",
+planBillingActive:"Active",
 change:"Change",
 settingsHelp:"Help and support",
 helpCenter:"Help center",
@@ -3022,10 +3111,39 @@ interfaceFormatsPreviewTitle:"APERÇU",
 settingsPlan:"Forfait et abonnement",
 planCurrent:"Forfait actuel",
 planFeatures:"Fonctionnalités disponibles",
+planFeaturesModalTitle:"Fonctionnalités disponibles",
+planFeaturesModalDescription:"Fonctionnalités actuellement incluses dans votre forfait.",
+planFeatureChat:"Chat avec BEAM AI",
+planFeatureMemory:"Mémoire personnalisée",
+planFeaturePreferences:"Préférences personnalisées",
+planFeatureNotifications:"Notifications intelligentes",
 planLimits:"Limites d’utilisation",
+planLimitsModalTitle:"Limites d’utilisation",
+planLimitsModalDescription:"Consultez les limites actuellement incluses dans votre forfait.",
+planLimitMessages:"Messages",
+planLimitIncluded:"Inclus",
+planLimitMemory:"Mémoire",
+planLimitHistory:"Historique des conversations",
+planLimitUnlimited:"Illimités",
 planUsage:"Utilisation mensuelle",
+planUsageModalTitle:"Utilisation mensuelle",
+planUsageModalDescription:"Consultez votre utilisation pendant le mois en cours.",
+planUsageMessages:"Messages utilisés",
+planUsageUnlimited:"Illimités",
+planUsageMemory:"Mémoire",
+planUsageActive:"Actif",
+planUsageHistory:"Historique des conversations",
 planChange:"Changer de forfait",
+planChangeModalTitle:"Changer de forfait",
+planChangeModalDescription:"Consultez les options disponibles pour votre forfait.",
+planCurrentPlan:"Forfait actuel",
+planFree:"Gratuit",
 planBilling:"Facturation et résiliation",
+planBillingModalTitle:"Facturation et résiliation",
+planBillingModalDescription:"Consultez les informations de facturation et les options de résiliation de votre forfait.",
+planBillingCurrentPlan:"Forfait actuel",
+planBillingStatus:"Statut",
+planBillingActive:"Actif",
 change:"Changer",
 settingsHelp:"Aide et assistance",
 helpCenter:"Centre d’aide",
@@ -3258,7 +3376,7 @@ function renderAgentPreferences() {
             );
         }
 
-        activitiesLabel.textContent = parts.join(" Â· ");
+        activitiesLabel.textContent = parts.join(" · ");
     }
 
 
@@ -5129,6 +5247,51 @@ function renderInterfaceThemeSummary() {
         || themeNames.es[theme]
         || "Automático";
 }
+
+function openPlanLimitsModal() {
+    document.getElementById("planLimitsModal").style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closePlanLimitsModal() {
+    document.getElementById("planLimitsModal").style.display = "none";
+}
+function openPlanUsageModal() {
+    document.getElementById("planUsageModal").style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closePlanUsageModal() {
+    document.getElementById("planUsageModal").style.display = "none";
+}
+
+function openPlanChangeModal() {
+    document.getElementById("planChangeModal").style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closePlanChangeModal() {
+    document.getElementById("planChangeModal").style.display = "none";
+}
+
+function openPlanBillingModal() {
+    document.getElementById("planBillingModal").style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closePlanBillingModal() {
+    document.getElementById("planBillingModal").style.display = "none";
+}
+
+function openPlanFeaturesModal() {
+    document.getElementById("planFeaturesModal").style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closePlanFeaturesModal() {
+    document.getElementById("planFeaturesModal").style.display = "none";
+}
+
 function openInterfaceLanguageModal() {
 
     document.querySelectorAll(
@@ -8657,7 +8820,389 @@ loadMemorySummary();
 
     </div>
 </div>
+<!-- MODAL: Funciones disponibles -->
+<div id="planFeaturesModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+  <div style="
+    width:90%;
+    max-width:520px;
+    max-height:85vh;
+    overflow-y:auto;
+    background:#111827;
+    border-radius:20px;
+    padding:24px;
+    color:white;
+">
 
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="planFeaturesModalTitle">
+                Funciones disponibles
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closePlanFeaturesModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p style="color:#9ca3af;margin:0 0 20px 0;"
+           data-i18n="planFeaturesModalDescription">
+            Funciones incluidas actualmente en tu plan.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="planFeatureChat">Chat con BEAM AI</span>
+            <span>✓</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="planFeatureMemory">Memoria personalizada</span>
+            <span>✓</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="planFeaturePreferences">Preferencias personalizadas</span>
+            <span>✓</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="planFeatureNotifications">Notificaciones inteligentes</span>
+            <span>✓</span>
+        </div>
+
+        <button
+            type="button"
+            onclick="closePlanFeaturesModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:20px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Límites de uso -->
+<div id="planLimitsModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+<div style="
+    width:90%;
+    max-width:520px;
+    background:#111827;
+    border-radius:20px;
+    padding:24px;
+    color:white;
+    max-height:85vh;
+    overflow-y:auto;
+">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="planLimitsModalTitle">
+                Límites de uso
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closePlanLimitsModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="planLimitsModalDescription"
+        >
+            Consulta los límites incluidos actualmente en tu plan.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="planLimitMessages">Mensajes</span>
+            <span data-i18n="planLimitUnlimited">Ilimitados</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="planLimitMemory">Memoria</span>
+            <span data-i18n="planLimitIncluded">Incluida</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="planLimitHistory">Historial de conversaciones</span>
+            <span data-i18n="planLimitIncluded">Incluido</span>
+        </div>
+
+        <button
+            type="button"
+            onclick="closePlanLimitsModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:20px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Consumo mensual -->
+<div id="planUsageModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+        <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="planUsageModalTitle">
+                Consumo mensual
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closePlanUsageModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="planUsageModalDescription"
+        >
+            Consulta el uso realizado durante el mes actual.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="planUsageMessages">Mensajes utilizados</span>
+            <span data-i18n="planUsageUnlimited">Ilimitados</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="planUsageMemory">Memoria</span>
+            <span data-i18n="planUsageActive">Activa</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="planUsageHistory">Historial de conversaciones</span>
+            <span data-i18n="planUsageActive">Activo</span>
+        </div>
+
+        <button
+            type="button"
+            onclick="closePlanUsageModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:20px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Cambiar de plan -->
+<div id="planChangeModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="planChangeModalTitle">
+                Cambiar de plan
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closePlanChangeModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="planChangeModalDescription"
+        >
+            Consulta las opciones disponibles para tu plan.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="planCurrentPlan">Plan actual</span>
+            <span data-i18n="planFree">Gratis</span>
+        </div>
+
+        <button
+            type="button"
+            onclick="closePlanChangeModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:20px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Facturación y cancelación -->
+<div id="planBillingModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="planBillingModalTitle">
+                Facturación y cancelación
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closePlanBillingModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="planBillingModalDescription"
+        >
+            Consulta la información de facturación y las opciones de cancelación de tu plan.
+        </p>
+
+        <div class="settings-option">
+            <span data-i18n="planBillingCurrentPlan">Plan actual</span>
+            <span data-i18n="planFree">Gratis</span>
+        </div>
+
+        <div class="settings-option">
+            <span data-i18n="planBillingStatus">Estado</span>
+            <span data-i18n="planBillingActive">Activo</span>
+        </div>
+
+        <button
+            type="button"
+            onclick="closePlanBillingModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:20px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
 <!-- MODAL: Idioma de la interfaz -->
 <div id="interfaceLanguageModal" style="
     display:none;
