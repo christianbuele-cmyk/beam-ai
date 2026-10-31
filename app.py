@@ -1,6 +1,7 @@
 from pathlib import Path
 from fastapi.responses import FileResponse
 import hashlib
+import hmac
 import json
 import re
 import secrets
@@ -19,6 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 PROFILE_DIR = DATA_DIR / "profiles"
 SHORTCUT_DIR = DATA_DIR / "shortcuts"
+ACCOUNT_DIR = DATA_DIR / "accounts"
+AUTH_SESSION_DIR = DATA_DIR / "auth_sessions"
 MEMORY_DIR = BASE_DIR / "memory" / "sessions"
 SESSION_COOKIE = "beam_session"
 SESSION_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{43}$")
@@ -101,7 +104,46 @@ def session_key(request: Request) -> str:
 
 def session_file(directory: Path, key: str) -> Path:
     return directory / f"{key}.json"
+def normalize_email(email: str) -> str:
+    return email.strip().lower()
 
+
+def account_key(email: str) -> str:
+    normalized_email = normalize_email(email)
+    return hashlib.sha256(normalized_email.encode("utf-8")).hexdigest()
+
+
+def hash_password(password: str, salt: bytes) -> str:
+    password_hash = hashlib.pbkdf2_hmac(
+        "sha256",
+        password.encode("utf-8"),
+        salt,
+        600_000
+    )
+    return password_hash.hex()
+
+
+def create_password_credentials(password: str) -> dict:
+    salt = secrets.token_bytes(32)
+
+    return {
+        "salt": salt.hex(),
+        "password_hash": hash_password(password, salt)
+    }
+
+
+def verify_password(password: str, salt_hex: str, expected_hash: str) -> bool:
+    try:
+        salt = bytes.fromhex(salt_hex)
+    except ValueError:
+        return False
+
+    calculated_hash = hash_password(password, salt)
+
+    return hmac.compare_digest(
+        calculated_hash,
+        expected_hash
+    )
 
 def read_json(path: Path, default):
     try:
@@ -226,43 +268,309 @@ async def save_user(request: Request):
     try:
         user = await request.json()
     except (json.JSONDecodeError, UnicodeDecodeError):
-        raise HTTPException(status_code=400, detail="El perfil debe ser JSON válido.")
+        raise HTTPException(
+            status_code=400,
+            detail="El perfil debe ser JSON válido."
+        )
 
     if not isinstance(user, dict) or not user:
-        raise HTTPException(status_code=400, detail="El perfil no es válido.")
+        raise HTTPException(
+            status_code=400,
+            detail="El perfil no es válido."
+        )
 
     name = str(user.get("name", "")).strip()
+    email = normalize_email(str(user.get("email", "")))
+    password = str(user.pop("password", ""))
     city = str(user.get("city", "")).strip()
     about = str(user.get("about", "")).strip()
     interests = user.get("interests", [])
 
     if len(name) < 2:
-        raise HTTPException(status_code=400, detail="El nombre debe tener al menos 2 caracteres.")
+        raise HTTPException(
+            status_code=400,
+            detail="El nombre debe tener al menos 2 caracteres."
+        )
 
     if len(name) > 50:
-        raise HTTPException(status_code=400, detail="El nombre es demasiado largo.")
+        raise HTTPException(
+            status_code=400,
+            detail="El nombre es demasiado largo."
+        )
+
+    if not email or "@" not in email:
+        raise HTTPException(
+            status_code=400,
+            detail="Introduce un correo electrónico válido."
+        )
 
     if len(city) > 50:
-        raise HTTPException(status_code=400, detail="La ciudad es demasiado larga.")
+        raise HTTPException(
+            status_code=400,
+            detail="La ciudad es demasiado larga."
+        )
 
     if len(about) > 500:
-        raise HTTPException(status_code=400, detail="La descripción es demasiado larga.")
+        raise HTTPException(
+            status_code=400,
+            detail="La descripción es demasiado larga."
+        )
 
     if not isinstance(interests, list):
-        raise HTTPException(status_code=400, detail="Los intereses no son válidos.")
+        raise HTTPException(
+            status_code=400,
+            detail="Los intereses no son válidos."
+        )
 
     if len(interests) > 10:
-        raise HTTPException(status_code=400, detail="Máximo 10 intereses.")
+        raise HTTPException(
+            status_code=400,
+            detail="Máximo 10 intereses."
+        )
+
+    key = session_key(request)
+    profile_path = session_file(PROFILE_DIR, key)
+    existing_profile = read_json(profile_path, None)
+
+    if not isinstance(existing_profile, dict) or not existing_profile:
+        if len(password) < 8:
+            raise HTTPException(
+                status_code=400,
+                detail="La contraseña debe tener al menos 8 caracteres."
+            )
+
+        email_key = account_key(email)
+        account_path = session_file(ACCOUNT_DIR, email_key)
+        existing_account = read_json(account_path, None)
+
+        if isinstance(existing_account, dict) and existing_account:
+            raise HTTPException(
+                status_code=409,
+                detail="Ya existe una cuenta con este correo electrónico."
+            )
+
+        credentials = create_password_credentials(password)
+
+        account = {
+            "email": email,
+            "session_id": request.state.session_id,
+            "salt": credentials["salt"],
+            "password_hash": credentials["password_hash"]
+        }
+
+        write_json(account_path, account)
 
     user["name"] = name
+    user["email"] = email
     user["city"] = city
     user["about"] = about
     user["interests"] = interests[:10]
 
-    key = session_key(request)
-    write_json(session_file(PROFILE_DIR, key), user)
+    write_json(profile_path, user)
 
     return {"saved": True}
+@app.post("/login")
+async def login(request: Request):
+    try:
+        data = await request.json()
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise HTTPException(
+            status_code=400,
+            detail="Los datos de acceso no son válidos."
+        )
+
+    email = normalize_email(str(data.get("email", "")))
+    password = str(data.get("password", ""))
+
+    if not email or not password:
+        raise HTTPException(
+            status_code=400,
+            detail="Introduce el correo electrónico y la contraseña."
+        )
+
+    email_key = account_key(email)
+    account_path = session_file(ACCOUNT_DIR, email_key)
+    account = read_json(account_path, None)
+
+    if not isinstance(account, dict) or not account:
+        raise HTTPException(
+            status_code=401,
+            detail="Correo electrónico o contraseña incorrectos."
+        )
+
+    if not verify_password(
+        password,
+        str(account.get("salt", "")),
+        str(account.get("password_hash", ""))
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Correo electrónico o contraseña incorrectos."
+        )
+
+    original_session_id = str(account.get("session_id", ""))
+
+    if not SESSION_ID_PATTERN.fullmatch(original_session_id):
+        raise HTTPException(
+            status_code=401,
+            detail="La cuenta no tiene una sesión válida asociada."
+        )
+
+    response = JSONResponse({
+        "logged_in": True
+    })
+
+    forwarded_proto = request.headers.get(
+        "x-forwarded-proto",
+        ""
+    ).split(",")[0].strip()
+
+    is_https = (
+        request.url.scheme == "https"
+        or forwarded_proto == "https"
+    )
+
+    response.set_cookie(
+        key=SESSION_COOKIE,
+        value=original_session_id,
+        httponly=True,
+        secure=is_https,
+        samesite="lax",
+        path="/",
+        max_age=60 * 60 * 24 * 365,
+    )
+
+    return response
+@app.post("/change-password")
+async def change_password(request: Request):
+    try:
+        data = await request.json()
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise HTTPException(
+            status_code=400,
+            detail="Los datos enviados no son válidos."
+        )
+
+    current_password = str(data.get("current_password", ""))
+    new_password = str(data.get("new_password", ""))
+
+    if not current_password or not new_password:
+        raise HTTPException(
+            status_code=400,
+            detail="Completa todos los campos."
+        )
+
+    if len(new_password) < 8:
+        raise HTTPException(
+            status_code=400,
+            detail="La nueva contraseña debe tener al menos 8 caracteres."
+        )
+
+    key = session_key(request)
+    profile = read_json(
+        session_file(PROFILE_DIR, key),
+        None
+    )
+
+    if not isinstance(profile, dict) or not profile:
+        raise HTTPException(
+            status_code=401,
+            detail="No se ha encontrado una sesión de usuario válida."
+        )
+
+    email = normalize_email(
+        str(profile.get("email", ""))
+    )
+
+    if not email:
+        raise HTTPException(
+            status_code=400,
+            detail="La cuenta no tiene un correo electrónico asociado."
+        )
+
+    email_key = account_key(email)
+    account_path = session_file(
+        ACCOUNT_DIR,
+        email_key
+    )
+
+    account = read_json(
+        account_path,
+        None
+    )
+
+    if not isinstance(account, dict) or not account:
+        raise HTTPException(
+            status_code=404,
+            detail="No se ha encontrado la cuenta."
+        )
+
+    if not verify_password(
+        current_password,
+        str(account.get("salt", "")),
+        str(account.get("password_hash", ""))
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="La contraseña actual no es correcta."
+        )
+
+    credentials = create_password_credentials(
+        new_password
+    )
+
+    account["salt"] = credentials["salt"]
+    account["password_hash"] = credentials["password_hash"]
+
+    write_json(
+        account_path,
+        account
+    )
+
+    return {
+        "password_changed": True
+    }
+@app.post("/logout")
+def logout(request: Request):
+    response = JSONResponse({
+        "logged_out": True
+    })
+
+    response.delete_cookie(
+        key=SESSION_COOKIE,
+        path="/",
+        samesite="lax"
+    )
+
+    return response
+
+@app.delete("/user")
+def delete_user(request: Request):
+    key = session_key(request)
+
+    user_files = [
+        session_file(PROFILE_DIR, key),
+        session_file(SHORTCUT_DIR, key),
+        session_file(MEMORY_DIR, key),
+    ]
+
+    for path in user_files:
+        try:
+            path.unlink()
+        except FileNotFoundError:
+            pass
+
+    response = JSONResponse({
+        "deleted": True
+    })
+
+    response.delete_cookie(
+        key=SESSION_COOKIE,
+        path="/",
+        samesite="lax"
+    )
+
+    return response
 @app.get("/memory")
 def get_memory(request: Request):
     key = session_key(request)
