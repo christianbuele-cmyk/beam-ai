@@ -9,7 +9,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
@@ -543,6 +543,54 @@ def logout(request: Request):
     )
 
     return response
+@app.get("/export-data")
+def export_user_data(request: Request):
+    key = session_key(request)
+
+    profile = read_json(
+        session_file(PROFILE_DIR, key),
+        {}
+    )
+
+    shortcuts = read_json(
+        session_file(SHORTCUT_DIR, key),
+        []
+    )
+
+    memory = read_json(
+        session_file(MEMORY_DIR, key),
+        {}
+    )
+
+    if not isinstance(profile, dict):
+        profile = {}
+
+    if not isinstance(shortcuts, list):
+        shortcuts = []
+
+    if not isinstance(memory, dict):
+        memory = {}
+
+    export_data = {
+        "profile": profile,
+        "shortcuts": shortcuts,
+        "memory": memory
+    }
+
+    content = json.dumps(
+        export_data,
+        ensure_ascii=False,
+        indent=2
+    )
+
+    return Response(
+        content=content,
+        media_type="application/json",
+        headers={
+            "Content-Disposition":
+                'attachment; filename="beam-ai-data.json"'
+        }
+    )
 
 @app.delete("/user")
 def delete_user(request: Request):
