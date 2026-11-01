@@ -844,15 +844,53 @@ html[data-high-contrast="true"] .settings-close {
         Contraseña
     </label>
 
-    <input
-        id="user-password"
-        type="password"
-        autocomplete="new-password"
-        minlength="8"
-        maxlength="128"
-        data-i18n-placeholder="passwordPlaceholder"
-        placeholder="Crea una contraseña"
-    >
+        <div style="position: relative;">
+        <input
+            id="user-password"
+            type="password"
+            autocomplete="new-password"
+            minlength="8"
+            maxlength="128"
+            data-i18n-placeholder="passwordPlaceholder"
+            placeholder="Crea una contraseña"
+            style="padding-right: 48px;"
+        >
+
+        <button
+            type="button"
+            id="toggleRegisterPassword"
+            onclick="toggleRegisterPasswordVisibility()"
+            aria-label="Mostrar contraseña"
+            title="Mostrar contraseña"
+            style="
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                border: 0;
+                background: transparent;
+                padding: 4px;
+                cursor: pointer;
+                font-size: 18px;
+                line-height: 1;
+            "
+               >
+            <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+        </button>
+    </div>
 
     <div
         class="privacy-text"
@@ -2752,6 +2790,19 @@ loginModalDescription:"Accede a tu cuenta de BEAM AI.",
 loginEmail:"Correo electrónico",
 loginPassword:"Contraseña",
 loginPasswordPlaceholder:"Introduce tu contraseña",
+forgotPassword:"¿Has olvidado tu contraseña?",
+forgotPasswordTitle:"Recuperar contraseña",
+forgotPasswordDescription:"Introduce el correo electrónico asociado a tu cuenta.",
+forgotPasswordEmail:"Correo electrónico",
+forgotPasswordEmailPlaceholder:"tu@email.com",
+forgotPasswordCancel:"Cancelar",
+forgotPasswordContinue:"Continuar",
+resetPasswordTitle:"Restablecer contraseña",
+resetPasswordDescription:"Introduce una nueva contraseña para tu cuenta.",
+resetPasswordNew:"Nueva contraseña",
+resetPasswordConfirm:"Confirmar contraseña",
+resetPasswordCancel:"Cancelar",
+resetPasswordSubmit:"Restablecer contraseña",
 loginCancel:"Cancelar",
 loginSubmit:"Iniciar sesión",loginFieldsRequired:"Introduce el correo electrónico y la contraseña.",
 loginInvalid:"Correo electrónico o contraseña incorrectos.",
@@ -3381,6 +3432,19 @@ loginModalDescription:"Sign in to your BEAM AI account.",
 loginEmail:"Email address",
 loginPassword:"Password",
 loginPasswordPlaceholder:"Enter your password",
+forgotPassword:"Forgot your password?",
+forgotPasswordTitle:"Reset password",
+forgotPasswordDescription:"Enter the email address associated with your account.",
+forgotPasswordEmail:"Email address",
+forgotPasswordEmailPlaceholder:"your@email.com",
+forgotPasswordCancel:"Cancel",
+forgotPasswordContinue:"Continue",
+resetPasswordTitle:"Reset password",
+resetPasswordDescription:"Enter a new password for your account.",
+resetPasswordNew:"New password",
+resetPasswordConfirm:"Confirm password",
+resetPasswordCancel:"Cancel",
+resetPasswordSubmit:"Reset password",
 loginCancel:"Cancel",
 loginSubmit:"Sign in",loginFieldsRequired:"Enter your email address and password.",
 loginInvalid:"Incorrect email address or password.",
@@ -4010,6 +4074,19 @@ loginModalDescription:"Connectez-vous à votre compte BEAM AI.",
 loginEmail:"Adresse e-mail",
 loginPassword:"Mot de passe",
 loginPasswordPlaceholder:"Saisissez votre mot de passe",
+forgotPassword:"Mot de passe oublié ?",
+forgotPasswordTitle:"Réinitialiser le mot de passe",
+forgotPasswordDescription:"Saisissez l’adresse e-mail associée à votre compte.",
+forgotPasswordEmail:"Adresse e-mail",
+forgotPasswordEmailPlaceholder:"votre@email.com",
+forgotPasswordCancel:"Annuler",
+forgotPasswordContinue:"Continuer",
+resetPasswordTitle:"Réinitialiser le mot de passe",
+resetPasswordDescription:"Saisissez un nouveau mot de passe pour votre compte.",
+resetPasswordNew:"Nouveau mot de passe",
+resetPasswordConfirm:"Confirmer le mot de passe",
+resetPasswordCancel:"Annuler",
+resetPasswordSubmit:"Réinitialiser le mot de passe",
 loginCancel:"Annuler",
 loginSubmit:"Se connecter",loginFieldsRequired:"Saisissez votre adresse e-mail et votre mot de passe.",
 loginInvalid:"Adresse e-mail ou mot de passe incorrect.",
@@ -4558,6 +4635,14 @@ document.querySelector(
                 document.getElementById("profile-error").textContent = t("profileCheckError");
             }
         }
+        function toggleRegisterPasswordVisibility() {
+            const passwordInput = document.getElementById("user-password");
+
+            if (!passwordInput) return;
+
+            passwordInput.type =
+                passwordInput.type === "password" ? "text" : "password";
+        }
 
         async function saveUserProfile() {
             const errorBox = document.getElementById("profile-error");
@@ -4868,6 +4953,219 @@ function closeLoginModal() {
 
     if (modal) {
         modal.style.display = "none";
+    }
+}
+function openForgotPasswordModal() {
+    const loginModal = document.getElementById("loginModal");
+    const forgotModal = document.getElementById("forgotPasswordModal");
+    const loginEmail = document.getElementById("loginEmail");
+    const forgotEmail = document.getElementById("forgotPasswordEmail");
+    const errorBox = document.getElementById("forgotPasswordError");
+
+    if (!forgotModal) return;
+
+    if (loginEmail && forgotEmail) {
+        forgotEmail.value = loginEmail.value.trim();
+    }
+
+    if (errorBox) {
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+    }
+
+    if (loginModal) {
+        loginModal.style.display = "none";
+    }
+
+    forgotModal.style.display = "flex";
+
+    if (forgotEmail) {
+        forgotEmail.focus();
+    }
+}
+
+function closeForgotPasswordModal() {
+    const forgotModal = document.getElementById("forgotPasswordModal");
+    const loginModal = document.getElementById("loginModal");
+
+    if (forgotModal) {
+        forgotModal.style.display = "none";
+    }
+
+    if (loginModal) {
+        loginModal.style.display = "flex";
+    }
+}
+async function startPasswordRecovery() {
+    const emailInput = document.getElementById("forgotPasswordEmail");
+    const errorBox = document.getElementById("forgotPasswordError");
+
+    if (!emailInput || !errorBox) return;
+
+    const email = emailInput.value.trim();
+
+    errorBox.textContent = "";
+    errorBox.style.display = "none";
+    errorBox.style.color = "#f87171";
+
+    if (!email) {
+        errorBox.textContent = "Introduce tu correo electrónico.";
+        errorBox.style.display = "block";
+        return;
+    }
+
+    try {
+        const response = await fetch("/forgot-password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail || "No se pudo iniciar la recuperación."
+            );
+        }
+
+        errorBox.style.color = "#9ca3af";
+        errorBox.textContent = data.message;
+        errorBox.style.display = "block";
+
+        if (data.development_reset_url) {
+            console.log(
+                "[BEAM AI] Enlace de recuperación:",
+                data.development_reset_url
+            );
+        }
+    } catch (error) {
+        console.error(error);
+
+        errorBox.style.color = "#f87171";
+        errorBox.textContent =
+            error.message || "No se pudo iniciar la recuperación.";
+        errorBox.style.display = "block";
+    }
+}
+function closeResetPasswordModal() {
+    const modal = document.getElementById("resetPasswordModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+    const cleanUrl =
+        window.location.pathname + window.location.hash;
+
+    window.history.replaceState(
+        {},
+        document.title,
+        cleanUrl
+    );
+}
+
+
+async function submitPasswordReset() {
+    const newPasswordInput =
+        document.getElementById("resetPasswordNew");
+
+    const confirmPasswordInput =
+        document.getElementById("resetPasswordConfirm");
+
+    const errorBox =
+        document.getElementById("resetPasswordError");
+
+    if (
+        !newPasswordInput ||
+        !confirmPasswordInput ||
+        !errorBox
+    ) {
+        return;
+    }
+
+    const newPassword = newPasswordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    errorBox.textContent = "";
+    errorBox.style.display = "none";
+    errorBox.style.color = "#f87171";
+
+    if (!resetPasswordToken) {
+        errorBox.textContent =
+            "El enlace de recuperación no es válido.";
+        errorBox.style.display = "block";
+        return;
+    }
+
+    if (!newPassword || !confirmPassword) {
+        errorBox.textContent =
+            "Completa los dos campos.";
+        errorBox.style.display = "block";
+        return;
+    }
+
+    if (newPassword.length < 8) {
+        errorBox.textContent =
+            "La contraseña debe tener al menos 8 caracteres.";
+        errorBox.style.display = "block";
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        errorBox.textContent =
+            "Las contraseñas no coinciden.";
+        errorBox.style.display = "block";
+        return;
+    }
+
+    try {
+        const response = await fetch("/reset-password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                token: resetPasswordToken,
+                new_password: newPassword
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail ||
+                "No se pudo restablecer la contraseña."
+            );
+        }
+
+        errorBox.style.color = "#86efac";
+        errorBox.textContent =
+            "Contraseña restablecida correctamente.";
+        errorBox.style.display = "block";
+
+        newPasswordInput.value = "";
+        confirmPasswordInput.value = "";
+
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+
+    } catch (error) {
+        console.error(error);
+
+        errorBox.style.color = "#f87171";
+        errorBox.textContent =
+            error.message ||
+            "No se pudo restablecer la contraseña.";
+        errorBox.style.display = "block";
     }
 }
 async function loginAccount() {
@@ -9048,6 +9346,28 @@ applyInterfaceAccessibility();
 renderInterfaceAccessibilitySummary();
 renderInterfaceFormatsSummary();
 checkUser();
+
+const resetPasswordParams = new URLSearchParams(window.location.search);
+const resetPasswordToken = resetPasswordParams.get("reset_token");
+
+if (resetPasswordToken) {
+    window.addEventListener("DOMContentLoaded", () => {
+        const resetPasswordModal =
+            document.getElementById("resetPasswordModal");
+
+        const newPasswordInput =
+            document.getElementById("resetPasswordNew");
+
+        if (resetPasswordModal) {
+            resetPasswordModal.style.display = "flex";
+        }
+
+        if (newPasswordInput) {
+            newPasswordInput.focus();
+        }
+    });
+}
+
 async function loadMemorySettings() {
     try {
         const response = await fetch("/memory", {
@@ -10789,7 +11109,27 @@ loadMemorySummary();
                 placeholder="Introduce tu contraseña"
             >
         </div>
-
+        <div style="
+            text-align:right;
+            margin-top:-4px;
+            margin-bottom:8px;
+        ">
+            <button
+                type="button"
+                onclick="openForgotPasswordModal()"
+                data-i18n="forgotPassword"
+                style="
+                    border:none;
+                    background:transparent;
+                    color:#3b82f6;
+                    padding:0;
+                    font-size:13px;
+                    cursor:pointer;
+                "
+            >
+                ¿Has olvidado tu contraseña?
+            </button>
+        </div>
         <div
             id="loginError"
             style="
@@ -10831,6 +11171,241 @@ loadMemorySummary();
                 "
             >
                 <span data-i18n="loginSubmit">Iniciar sesión</span>
+            </button>
+        </div>
+
+    </div>
+</div>
+<!-- MODAL: Recuperar contraseña -->
+<div id="forgotPasswordModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:100000;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:90%;
+        max-width:520px;
+        background:#111827;
+        border-radius:20px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="forgotPasswordTitle">
+                Recuperar contraseña
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closeForgotPasswordModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="forgotPasswordDescription"
+        >
+            Introduce el correo electrónico asociado a tu cuenta.
+        </p>
+
+        <div class="form-group">
+            <label
+                for="forgotPasswordEmail"
+                data-i18n="forgotPasswordEmail"
+            >
+                Correo electrónico
+            </label>
+
+            <input
+                id="forgotPasswordEmail"
+                type="email"
+                autocomplete="email"
+                data-i18n-placeholder="forgotPasswordEmailPlaceholder"
+                placeholder="tu@email.com"
+            >
+        </div>
+
+        <div
+            id="forgotPasswordError"
+            style="
+                display:none;
+                color:#f87171;
+                font-size:13px;
+                margin-top:8px;
+            "
+        ></div>
+
+        <div style="
+            display:flex;
+            gap:10px;
+            margin-top:20px;
+        ">
+            <button
+                type="button"
+                onclick="closeForgotPasswordModal()"
+                style="
+                    flex:1;
+                    padding:10px;
+                    border:none;
+                    border-radius:10px;
+                    cursor:pointer;
+                "
+            >
+                <span data-i18n="forgotPasswordCancel">Cancelar</span>
+            </button>
+
+            <button
+                type="button"
+                onclick="startPasswordRecovery()"
+                style="
+                    flex:1;
+                    padding:10px;
+                    border:none;
+                    border-radius:10px;
+                    cursor:pointer;
+                "
+            >
+                <span data-i18n="forgotPasswordContinue">Continuar</span>
+            </button>
+        </div>
+
+    </div>
+</div>
+<!-- MODAL: Restablecer contraseña -->
+<div id="resetPasswordModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:100001;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:90%;
+        max-width:520px;
+        background:#111827;
+        border-radius:20px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="resetPasswordTitle">
+                Restablecer contraseña
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closeResetPasswordModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="resetPasswordDescription"
+        >
+            Introduce una nueva contraseña para tu cuenta.
+        </p>
+
+        <div class="form-group">
+            <label
+                for="resetPasswordNew"
+                data-i18n="resetPasswordNew"
+            >
+                Nueva contraseña
+            </label>
+
+            <input
+                id="resetPasswordNew"
+                type="password"
+                autocomplete="new-password"
+                minlength="8"
+                maxlength="128"
+            >
+        </div>
+
+        <div class="form-group">
+            <label
+                for="resetPasswordConfirm"
+                data-i18n="resetPasswordConfirm"
+            >
+                Confirmar contraseña
+            </label>
+
+            <input
+                id="resetPasswordConfirm"
+                type="password"
+                autocomplete="new-password"
+                minlength="8"
+                maxlength="128"
+            >
+        </div>
+
+        <div
+            id="resetPasswordError"
+            style="
+                display:none;
+                color:#f87171;
+                font-size:13px;
+                margin-top:8px;
+            "
+        ></div>
+
+        <div style="
+            display:flex;
+            gap:10px;
+            margin-top:20px;
+        ">
+            <button
+                type="button"
+                onclick="closeResetPasswordModal()"
+                style="
+                    flex:1;
+                    padding:10px;
+                    border:none;
+                    border-radius:10px;
+                    cursor:pointer;
+                "
+            >
+                <span data-i18n="resetPasswordCancel">Cancelar</span>
+            </button>
+
+            <button
+                type="button"
+                onclick="submitPasswordReset()"
+                style="
+                    flex:1;
+                    padding:10px;
+                    border:none;
+                    border-radius:10px;
+                    cursor:pointer;
+                "
+            >
+                <span data-i18n="resetPasswordSubmit">
+                    Restablecer contraseña
+                </span>
             </button>
         </div>
 

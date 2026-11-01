@@ -5,6 +5,7 @@ import hmac
 import json
 import re
 import secrets
+import time
 from pathlib import Path
 from uuid import uuid4
 
@@ -22,6 +23,7 @@ PROFILE_DIR = DATA_DIR / "profiles"
 SHORTCUT_DIR = DATA_DIR / "shortcuts"
 ACCOUNT_DIR = DATA_DIR / "accounts"
 AUTH_SESSION_DIR = DATA_DIR / "auth_sessions"
+PASSWORD_RESET_DIR = DATA_DIR / "password_resets"
 MEMORY_DIR = BASE_DIR / "memory" / "sessions"
 SESSION_COOKIE = "beam_session"
 SESSION_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{43}$")
@@ -159,7 +161,32 @@ def write_json(path: Path, value):
     with temporary_path.open("w", encoding="utf-8") as file:
         json.dump(value, file, ensure_ascii=False, indent=2)
     temporary_path.replace(path)
+PASSWORD_RESET_TTL_SECONDS = 15 * 60
 
+
+def create_password_reset_token(email: str) -> str:
+    normalized_email = normalize_email(email)
+
+    token = secrets.token_urlsafe(32)
+    token_hash = hashlib.sha256(
+        token.encode("utf-8")
+    ).hexdigest()
+
+    reset_data = {
+        "email": normalized_email,
+        "token_hash": token_hash,
+        "expires_at": int(time.time()) + PASSWORD_RESET_TTL_SECONDS,
+        "used": False
+    }
+
+    reset_path = session_file(
+        PASSWORD_RESET_DIR,
+        token_hash
+    )
+
+    write_json(reset_path, reset_data)
+
+    return token
 
 def load_buttons(key: str):
     path = session_file(SHORTCUT_DIR, key)
@@ -441,6 +468,62 @@ async def login(request: Request):
     )
 
     return response
+@app.post("/forgot-password")
+async def forgot_password(request: Request):
+    generic_response = {
+        "requested": True,
+        "message": (
+            "Si existe una cuenta asociada a ese correo electrónico, "
+            "recibirás las instrucciones para restablecer tu contraseña."
+        )
+    }
+
+    try:
+        data = await request.json()
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise HTTPException(
+            status_code=400,
+            detail="Los datos enviados no son válidos."
+        )
+
+    email = normalize_email(str(data.get("email", "")))
+
+    if not email:
+        raise HTTPException(
+            status_code=400,
+            detail="Introduce un correo electrónico válido."
+        )
+
+    email_key = account_key(email)
+    account_path = session_file(ACCOUNT_DIR, email_key)
+    account = read_json(account_path, None)
+
+    if not isinstance(account, dict) or not account:
+        return generic_response
+
+    token = create_password_reset_token(email)
+
+    reset_url = str(
+        request.base_url.replace(
+            path="/",
+            query=None,
+            fragment=None
+        )
+    ).rstrip("/") + f"/?reset_token={token}"
+
+    response_data = dict(generic_response)
+
+    if request.client and request.client.host in {
+        "127.0.0.1",
+        "::1",
+        "localhost"
+    }:
+        response_data["development_reset_url"] = reset_url
+        print(f"[BEAM AI] Enlace local de recuperación: {reset_url}")
+
+    return response_data
+
+
 @app.post("/change-password")
 async def change_password(request: Request):
     try:
@@ -529,6 +612,126 @@ async def change_password(request: Request):
 
     return {
         "password_changed": True
+    }
+@app.post("/reset-password")
+async def reset_password(request: Request):
+    try:
+        data = await request.json()
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise HTTPException(
+            status_code=400,
+            detail="Los datos enviados no son válidos."
+        )
+
+    token = str(data.get("token", "")).strip()
+    new_password = str(data.get("new_password", ""))
+
+    if not token or not new_password:
+        raise HTTPException(
+            status_code=400,
+            detail="Completa todos los campos."
+        )
+
+    if len(new_password) < 8:
+        raise HTTPException(
+            status_code=400,
+            detail="La nueva contraseña debe tener al menos 8 caracteres."
+        )
+
+    token_hash = hashlib.sha256(
+        token.encode("utf-8")
+    ).hexdigest()
+
+    reset_path = session_file(
+        PASSWORD_RESET_DIR,
+        token_hash
+    )
+
+    reset_data = read_json(
+        reset_path,
+        None
+    )
+
+    if not isinstance(reset_data, dict) or not reset_data:
+        raise HTTPException(
+            status_code=400,
+            detail="El enlace de recuperación no es válido."
+        )
+
+    if reset_data.get("used") is True:
+        raise HTTPException(
+            status_code=400,
+            detail="Este enlace de recuperación ya se ha utilizado."
+        )
+
+    expires_at = int(reset_data.get("expires_at", 0))
+
+    if int(time.time()) > expires_at:
+        raise HTTPException(
+            status_code=400,
+            detail="El enlace de recuperación ha caducado."
+        )
+
+    stored_token_hash = str(
+        reset_data.get("token_hash", "")
+    )
+
+    if not hmac.compare_digest(
+        token_hash,
+        stored_token_hash
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="El enlace de recuperación no es válido."
+        )
+
+    email = normalize_email(
+        str(reset_data.get("email", ""))
+    )
+
+    if not email:
+        raise HTTPException(
+            status_code=400,
+            detail="El enlace de recuperación no es válido."
+        )
+
+    account_path = session_file(
+        ACCOUNT_DIR,
+        account_key(email)
+    )
+
+    account = read_json(
+        account_path,
+        None
+    )
+
+    if not isinstance(account, dict) or not account:
+        raise HTTPException(
+            status_code=400,
+            detail="No se ha encontrado la cuenta."
+        )
+
+    credentials = create_password_credentials(
+        new_password
+    )
+
+    account["salt"] = credentials["salt"]
+    account["password_hash"] = credentials["password_hash"]
+
+    write_json(
+        account_path,
+        account
+    )
+
+    reset_data["used"] = True
+
+    write_json(
+        reset_path,
+        reset_data
+    )
+
+    return {
+        "password_reset": True
     }
 @app.post("/logout")
 def logout(request: Request):
