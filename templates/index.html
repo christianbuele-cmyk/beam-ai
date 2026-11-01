@@ -2506,8 +2506,8 @@ privacyPolicyDocumentModalDescription:"Información sobre cómo BEAM AI trata y 
 privacyPolicyDataCollected:"Datos que utiliza BEAM AI",
 privacyPolicyDataCollectedDescription:"BEAM AI utiliza los datos que proporcionas en tu perfil, tus conversaciones, memoria, historial, accesos rápidos y las preferencias que configuras en la aplicación.",
 
-privacyPolicyPurpose:"Para qué utilizamos tus datos",
-privacyPolicyPurposeDescription:"Utilizamos estos datos para ofrecer las funciones de BEAM AI, mantener tu cuenta y personalizar la experiencia según tus preferencias.",
+privacyPolicyPurpose:"Para qué utiliza BEAM AI tus datos",
+privacyPolicyPurposeDescription:"BEAM AI utiliza estos datos para ofrecer sus funciones, mantener tu cuenta y personalizar la experiencia según tus preferencias.",
 
 privacyPolicyPermissions:"Permisos del dispositivo",
 privacyPolicyPermissionsDescription:"Algunas funciones pueden utilizar permisos del navegador, como ubicación y notificaciones. Puedes consultar y gestionar su estado desde Privacidad y seguridad.",
@@ -3145,8 +3145,8 @@ privacyPolicyDocumentModalDescription:"Information about how BEAM AI processes a
 privacyPolicyDataCollected:"Data used by BEAM AI",
 privacyPolicyDataCollectedDescription:"BEAM AI uses the data you provide in your profile, your conversations, memory, history, quick shortcuts and the preferences you configure in the application.",
 
-privacyPolicyPurpose:"How we use your data",
-privacyPolicyPurposeDescription:"We use this data to provide BEAM AI features, maintain your account and personalize the experience according to your preferences.",
+privacyPolicyPurpose:"How BEAM AI uses your data",
+privacyPolicyPurposeDescription:"BEAM AI uses this data to provide its features, maintain your account and personalize the experience according to your preferences.",
 
 privacyPolicyPermissions:"Device permissions",
 privacyPolicyPermissionsDescription:"Some features may use browser permissions, such as location and notifications. You can review and manage their status from Privacy and security.",
@@ -3480,8 +3480,8 @@ privacyPolicyDocumentModalDescription:"Informations sur la manière dont BEAM AI
 privacyPolicyDataCollected:"Données utilisées par BEAM AI",
 privacyPolicyDataCollectedDescription:"BEAM AI utilise les données que vous fournissez dans votre profil, vos conversations, la mémoire, l’historique, les raccourcis et les préférences que vous configurez dans l’application.",
 
-privacyPolicyPurpose:"Comment nous utilisons vos données",
-privacyPolicyPurposeDescription:"Nous utilisons ces données pour fournir les fonctionnalités de BEAM AI, gérer votre compte et personnaliser votre expérience selon vos préférences.",
+privacyPolicyPurpose:"Comment BEAM AI utilise vos données",
+privacyPolicyPurposeDescription:"BEAM AI utilise ces données pour fournir ses fonctionnalités, gérer votre compte et personnaliser votre expérience selon vos préférences.",
 
 privacyPolicyPermissions:"Autorisations de l’appareil",
 privacyPolicyPermissionsDescription:"Certaines fonctionnalités peuvent utiliser les autorisations du navigateur, comme la localisation et les notifications. Vous pouvez consulter et gérer leur état depuis Confidentialité et sécurité.",
@@ -5157,6 +5157,17 @@ async function submitPasswordReset() {
             document.title,
             window.location.pathname
         );
+
+               setTimeout(() => {
+            const resetModal =
+                document.getElementById("resetPasswordModal");
+
+            if (resetModal) {
+                resetModal.style.display = "none";
+            }
+
+         openLoginModal();
+        }, 1500);
 
     } catch (error) {
         console.error(error);
