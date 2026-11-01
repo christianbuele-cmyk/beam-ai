@@ -12,6 +12,7 @@ from uuid import uuid4
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, Response
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from agents.router import Router
@@ -24,12 +25,19 @@ SHORTCUT_DIR = DATA_DIR / "shortcuts"
 ACCOUNT_DIR = DATA_DIR / "accounts"
 AUTH_SESSION_DIR = DATA_DIR / "auth_sessions"
 PASSWORD_RESET_DIR = DATA_DIR / "password_resets"
+SUPPORT_REQUEST_DIR = DATA_DIR / "support_requests"
 MEMORY_DIR = BASE_DIR / "memory" / "sessions"
 SESSION_COOKIE = "beam_session"
 SESSION_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{43}$")
 
 app = FastAPI()
 BASE_DIR = Path(__file__).resolve().parent
+
+app.mount(
+    "/static",
+    StaticFiles(directory=str(BASE_DIR / "static")),
+    name="static"
+)
 
 
 @app.api_route("/", methods=["GET", "HEAD"], include_in_schema=False)
@@ -730,9 +738,17 @@ async def reset_password(request: Request):
         reset_data
     )
 
-    return {
+    response = JSONResponse({
         "password_reset": True
-    }
+    })
+
+    response.delete_cookie(
+        key=SESSION_COOKIE,
+        path="/",
+        samesite="lax"
+    )
+
+    return response
 @app.post("/logout")
 def logout(request: Request):
     response = JSONResponse({
@@ -881,3 +897,90 @@ def reset_memory(request: Request):
         raise HTTPException(status_code=500, detail="No se ha podido reiniciar la memoria.")
 
     return {"reset": True}
+@app.post("/support-request")
+async def create_support_request(request: Request):
+    try:
+        data = await request.json()
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise HTTPException(
+            status_code=400,
+            detail="La solicitud de soporte debe ser JSON válido."
+        )
+
+    request_type = str(data.get("type", "chat")).strip().lower()
+    subject = str(data.get("subject", "")).strip()
+    phone = str(data.get("phone", "")).strip()
+    message = str(data.get("message", "")).strip()
+
+    if request_type not in {"chat", "email", "callback"}:
+
+        raise HTTPException(
+            status_code=400,
+            detail="El tipo de solicitud de soporte no es válido."
+        )
+
+    if not message:
+        raise HTTPException(
+            status_code=400,
+            detail="Describe tu consulta antes de enviarla."
+        )
+
+    max_message_length = 2000 if request_type == "email" else 1000
+
+    if len(message) > max_message_length:
+        raise HTTPException(
+            status_code=400,
+            detail=f"La consulta no puede superar los {max_message_length} caracteres."
+        )
+
+    if request_type == "email":
+        if not subject:
+            raise HTTPException(
+                status_code=400,
+                detail="Introduce un asunto antes de enviar el mensaje."
+            )
+
+        if len(subject) > 120:
+            raise HTTPException(
+                status_code=400,
+                detail="El asunto no puede superar los 120 caracteres."
+            )
+
+    if request_type == "callback":
+        phone_digits = re.sub(r"\D", "", phone)
+
+        if not phone.startswith("+") or len(phone_digits) < 7 or len(phone_digits) > 15:
+            raise HTTPException(
+                status_code=400,
+                detail="Introduce un número de teléfono válido."
+            )
+
+    key = session_key(request)
+    path = session_file(SUPPORT_REQUEST_DIR, key)
+
+    requests = read_json(path, [])
+
+    if not isinstance(requests, list):
+        requests = []
+
+    support_request = {
+        "id": str(uuid4()),
+        "type": request_type,
+        "message": message,
+        "created_at": int(time.time()),
+        "status": "received"
+    }
+
+    if request_type == "email":
+        support_request["subject"] = subject
+
+    if request_type == "callback":
+        support_request["phone"] = phone
+
+    requests.append(support_request)
+    write_json(path, requests)
+
+    return {
+        "submitted": True,
+        "request_id": support_request["id"]
+    }

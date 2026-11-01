@@ -2077,10 +2077,9 @@ html[data-high-contrast="true"] .settings-close {
 <button class="settings-edit" type="button" onclick="openHelpFAQModal()" data-i18n="view">Ver</button>
         </div>
 
-        <div class="settings-option">
-           <span data-i18n="helpContact">Contactar con soporte</span>
-<button class="settings-edit" type="button" data-i18n="contact">Contactar</button>
-
+                <div class="settings-option">
+            <span data-i18n="helpContact">Contactar con soporte</span>
+            <button class="settings-edit" type="button" onclick="openHelpContactModal()" data-i18n="contact">Contactar</button>
         </div>
 
         <div class="settings-option">
@@ -2774,6 +2773,47 @@ helpFAQCancelSubscription:"¿Puedo cancelar mi suscripción cuando quiera?",
 helpFAQConversationStorage:"¿El asistente guarda mis conversaciones?",
 helpContact:"Contactar con soporte",
 helpReport:"Informar de un error",
+helpContactModalTitle:"Contactar con soporte",
+helpContactModalDescription:"Habla con una persona del equipo.",
+helpContactChatTitle:"Chat en directo",
+helpContactChatDescription:"Respuesta en menos de 5 minutos · L a V, 9:00 a 18:00",
+helpContactStartChat:"Iniciar chat",
+helpContactEmailTitle:"Escribir por correo",
+helpContactEmailDescription:"Contacta con el equipo de soporte de BEAM AI",
+helpContactWrite:"Escribir",
+helpContactCallTitle:"Pedir que te llamemos",
+helpContactCallDescription:"Déjanos tu teléfono y contactaremos contigo",
+helpContactRequestCall:"Solicitar",
+helpContactAvailability:"Soporte disponible de lunes a viernes, de 9:00 a 18:00.",
+helpSupportChatTitle:"Contactar por chat",
+helpSupportChatDescription:"Cuéntanos en qué podemos ayudarte.",
+helpSupportChatMessageLabel:"Describe tu consulta",
+helpSupportChatPlaceholder:"Escribe aquí los detalles de tu consulta...",
+helpSupportChatSend:"Enviar solicitud",
+helpSupportChatRequired:"Describe tu consulta antes de enviarla.",
+helpSupportChatSuccess:"Solicitud registrada correctamente.",
+helpSupportChatError:"No se ha podido registrar la solicitud. Inténtalo de nuevo.",
+helpSupportEmailTitle:"Escribir a soporte",
+helpSupportEmailDescription:"Envíanos tu consulta y quedará registrada para el equipo de soporte.",
+helpSupportEmailSubjectLabel:"Asunto",
+helpSupportEmailSubjectPlaceholder:"Resume brevemente tu consulta",
+helpSupportEmailMessageLabel:"Mensaje",
+helpSupportEmailMessagePlaceholder:"Escribe aquí tu mensaje...",
+helpSupportEmailSend:"Enviar",
+helpSupportEmailRequired:"Completa el asunto y el mensaje antes de enviarlos.",
+helpSupportEmailSuccess:"Mensaje registrado correctamente.",
+helpSupportEmailError:"No se ha podido registrar el mensaje. Inténtalo de nuevo.",
+helpSupportCallTitle:"Pedir que te llamemos",
+helpSupportCallDescription:"Déjanos tus datos y registraremos tu solicitud de llamada.",
+helpSupportCallPhoneLabel:"Número de teléfono",
+helpSupportCallPhonePlaceholder:"+34 600 000 000",
+helpSupportCallMessageLabel:"Motivo de la llamada",
+helpSupportCallMessagePlaceholder:"Cuéntanos brevemente en qué podemos ayudarte...",
+helpSupportCallSend:"Solicitar llamada",
+helpSupportCallRequired:"Introduce tu número de teléfono y el motivo de la llamada.",
+helpSupportCallInvalidPhone:"Introduce un número de teléfono válido.",
+helpSupportCallSuccess:"Solicitud de llamada registrada correctamente.",
+helpSupportCallError:"No se ha podido registrar la solicitud de llamada. Inténtalo de nuevo.",
 helpSuggestions:"Enviar sugerencias",
 helpVersion:"Versión de la aplicación",
 contact:"Contactar",
@@ -3418,6 +3458,47 @@ helpFAQCancelSubscription:"Can I cancel my subscription at any time?",
 helpFAQConversationStorage:"Does the assistant save my conversations?",
 helpContact:"Contact support",
 helpReport:"Report an error",
+helpContactModalTitle:"Contact support",
+helpContactModalDescription:"Talk to a member of the team.",
+helpContactChatTitle:"Live chat",
+helpContactChatDescription:"Response in under 5 minutes · Mon to Fri, 9:00 to 18:00",
+helpContactStartChat:"Start chat",
+helpContactEmailTitle:"Write by email",
+helpContactEmailDescription:"Contact the BEAM AI support team",
+helpContactWrite:"Write",
+helpContactCallTitle:"Request a call",
+helpContactCallDescription:"Leave us your phone number and we will contact you",
+helpContactRequestCall:"Request",
+helpContactAvailability:"Support available Monday to Friday, from 9:00 to 18:00.",
+helpSupportChatTitle:"Contact by chat",
+helpSupportChatDescription:"Tell us how we can help you.",
+helpSupportChatMessageLabel:"Describe your request",
+helpSupportChatPlaceholder:"Enter the details of your request here...",
+helpSupportChatSend:"Send request",
+helpSupportChatRequired:"Describe your request before sending it.",
+helpSupportChatSuccess:"Request registered successfully.",
+helpSupportChatError:"The request could not be registered. Please try again.",
+helpSupportEmailTitle:"Write to support",
+helpSupportEmailDescription:"Send us your request and it will be registered for the support team.",
+helpSupportEmailSubjectLabel:"Subject",
+helpSupportEmailSubjectPlaceholder:"Briefly summarize your request",
+helpSupportEmailMessageLabel:"Message",
+helpSupportEmailMessagePlaceholder:"Write your message here...",
+helpSupportEmailSend:"Send",
+helpSupportEmailRequired:"Complete the subject and message before sending.",
+helpSupportEmailSuccess:"Message registered successfully.",
+helpSupportEmailError:"The message could not be registered. Please try again.",
+helpSupportCallTitle:"Request a call",
+helpSupportCallDescription:"Leave us your details and we will register your call request.",
+helpSupportCallPhoneLabel:"Phone number",
+helpSupportCallPhonePlaceholder:"+34 600 000 000",
+helpSupportCallMessageLabel:"Reason for the call",
+helpSupportCallMessagePlaceholder:"Briefly tell us how we can help you...",
+helpSupportCallSend:"Request a call",
+helpSupportCallRequired:"Enter your phone number and the reason for the call.",
+helpSupportCallInvalidPhone:"Enter a valid phone number.",
+helpSupportCallSuccess:"Call request registered successfully.",
+helpSupportCallError:"The call request could not be registered. Please try again.",
 helpSuggestions:"Send suggestions",
 helpVersion:"Application version",
 contact:"Contact",
@@ -4060,6 +4141,47 @@ helpFAQCancelSubscription:"Puis-je annuler mon abonnement à tout moment ?",
 helpFAQConversationStorage:"L’assistant conserve-t-il mes conversations ?",
 helpContact:"Contacter l’assistance",
 helpReport:"Signaler une erreur",
+helpContactModalTitle:"Contacter l’assistance",
+helpContactModalDescription:"Échangez avec un membre de l’équipe.",
+helpContactChatTitle:"Chat en direct",
+helpContactChatDescription:"Réponse en moins de 5 minutes · Du lundi au vendredi, de 9 h à 18 h",
+helpContactStartChat:"Démarrer le chat",
+helpContactEmailTitle:"Écrire par e-mail",
+helpContactEmailDescription:"Contactez l’équipe d’assistance de BEAM AI",
+helpContactWrite:"Écrire",
+helpContactCallTitle:"Demander à être rappelé",
+helpContactCallDescription:"Laissez-nous votre numéro de téléphone et nous vous contacterons",
+helpContactRequestCall:"Demander",
+helpContactAvailability:"Assistance disponible du lundi au vendredi, de 9 h à 18 h.",
+helpSupportChatTitle:"Contacter par chat",
+helpSupportChatDescription:"Dites-nous comment nous pouvons vous aider.",
+helpSupportChatMessageLabel:"Décrivez votre demande",
+helpSupportChatPlaceholder:"Saisissez ici les détails de votre demande...",
+helpSupportChatSend:"Envoyer la demande",
+helpSupportChatRequired:"Décrivez votre demande avant de l’envoyer.",
+helpSupportChatSuccess:"Demande enregistrée avec succès.",
+helpSupportChatError:"La demande n’a pas pu être enregistrée. Veuillez réessayer.",
+helpSupportEmailTitle:"Écrire à l’assistance",
+helpSupportEmailDescription:"Envoyez-nous votre demande afin qu’elle soit enregistrée pour l’équipe d’assistance.",
+helpSupportEmailSubjectLabel:"Objet",
+helpSupportEmailSubjectPlaceholder:"Résumez brièvement votre demande",
+helpSupportEmailMessageLabel:"Message",
+helpSupportEmailMessagePlaceholder:"Écrivez votre message ici...",
+helpSupportEmailSend:"Envoyer",
+helpSupportEmailRequired:"Complétez l’objet et le message avant l’envoi.",
+helpSupportEmailSuccess:"Message enregistré avec succès.",
+helpSupportEmailError:"Le message n’a pas pu être enregistré. Veuillez réessayer.",
+helpSupportCallTitle:"Demander à être rappelé",
+helpSupportCallDescription:"Laissez-nous vos coordonnées et nous enregistrerons votre demande de rappel.",
+helpSupportCallPhoneLabel:"Numéro de téléphone",
+helpSupportCallPhonePlaceholder:"+34 600 000 000",
+helpSupportCallMessageLabel:"Motif de l’appel",
+helpSupportCallMessagePlaceholder:"Expliquez-nous brièvement comment nous pouvons vous aider...",
+helpSupportCallSend:"Demander un rappel",
+helpSupportCallRequired:"Saisissez votre numéro de téléphone et le motif de l’appel.",
+helpSupportCallInvalidPhone:"Saisissez un numéro de téléphone valide.",
+helpSupportCallSuccess:"Demande de rappel enregistrée avec succès.",
+helpSupportCallError:"La demande de rappel n’a pas pu être enregistrée. Veuillez réessayer.",
 helpSuggestions:"Envoyer des suggestions",
 helpVersion:"Version de l’application",
 contact:"Contacter",
@@ -7154,6 +7276,373 @@ function openHelpFAQModal() {
 
 function closeHelpFAQModal() {
     document.getElementById("helpFAQModal").style.display = "none";
+}
+
+function openHelpContactModal() {
+    document.getElementById("helpContactModal").style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closeHelpContactModal() {
+    document.getElementById("helpContactModal").style.display = "none";
+}
+
+function openHelpSupportChatModal() {
+    closeHelpContactModal();
+
+    const modal = document.getElementById("helpSupportChatModal");
+    const message = document.getElementById("helpSupportChatMessage");
+    const status = document.getElementById("helpSupportChatStatus");
+
+    message.value = "";
+    status.textContent = "";
+    status.style.display = "none";
+
+    modal.style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closeHelpSupportChatModal() {
+    document.getElementById("helpSupportChatModal").style.display = "none";
+}
+
+async function submitHelpSupportChat() {
+    const messageInput = document.getElementById("helpSupportChatMessage");
+    const status = document.getElementById("helpSupportChatStatus");
+    const message = messageInput.value.trim();
+
+    status.textContent = "";
+    status.style.display = "none";
+
+    if (!message) {
+        status.textContent = t("helpSupportChatRequired");
+        status.style.color = "#fca5a5";
+        status.style.display = "block";
+        return;
+    }
+
+    try {
+        const response = await fetch("/support-request", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.submitted) {
+            status.textContent =
+                data.detail || t("helpSupportChatError");
+            status.style.color = "#fca5a5";
+            status.style.display = "block";
+            return;
+        }
+
+        messageInput.value = "";
+
+        status.textContent = t("helpSupportChatSuccess");
+        status.style.color = "#86efac";
+        status.style.display = "block";
+
+    } catch (error) {
+        console.error(error);
+
+        status.textContent = t("helpSupportChatError");
+        status.style.color = "#fca5a5";
+        status.style.display = "block";
+    }
+}
+
+function openHelpSupportEmailModal() {
+    closeHelpContactModal();
+
+    const modal = document.getElementById("helpSupportEmailModal");
+    const subject = document.getElementById("helpSupportEmailSubject");
+    const message = document.getElementById("helpSupportEmailMessage");
+    const status = document.getElementById("helpSupportEmailStatus");
+
+    subject.value = "";
+    message.value = "";
+    status.textContent = "";
+    status.style.display = "none";
+
+    modal.style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closeHelpSupportEmailModal() {
+    document.getElementById("helpSupportEmailModal").style.display = "none";
+}
+
+async function submitHelpSupportEmail() {
+    const subjectInput = document.getElementById("helpSupportEmailSubject");
+    const messageInput = document.getElementById("helpSupportEmailMessage");
+    const status = document.getElementById("helpSupportEmailStatus");
+
+    const subject = subjectInput.value.trim();
+    const message = messageInput.value.trim();
+
+    status.textContent = "";
+    status.style.display = "none";
+
+    if (!subject || !message) {
+        status.textContent = t("helpSupportEmailRequired");
+        status.style.color = "#fca5a5";
+        status.style.display = "block";
+        return;
+    }
+
+    try {
+        const response = await fetch("/support-request", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                type: "email",
+                subject: subject,
+                message: message
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.submitted) {
+            status.textContent =
+                data.detail || t("helpSupportEmailError");
+            status.style.color = "#fca5a5";
+            status.style.display = "block";
+            return;
+        }
+
+        subjectInput.value = "";
+        messageInput.value = "";
+
+        status.textContent = t("helpSupportEmailSuccess");
+        status.style.color = "#86efac";
+        status.style.display = "block";
+
+    } catch (error) {
+        console.error(error);
+
+        status.textContent = t("helpSupportEmailError");
+        status.style.color = "#fca5a5";
+        status.style.display = "block";
+    }
+}
+function openHelpSupportCallModal() {
+    closeHelpContactModal();
+
+    const modal = document.getElementById("helpSupportCallModal");
+    const phone = document.getElementById("helpSupportCallPhone");
+    const message = document.getElementById("helpSupportCallMessage");
+    const status = document.getElementById("helpSupportCallStatus");
+
+selectHelpSupportCallCountry(helpSupportCallCountries[0]);
+
+    phone.value = "";
+    message.value = "";
+    status.textContent = "";
+    status.style.display = "none";
+
+    modal.style.display = "flex";
+    applyLanguage(currentLanguage);
+}
+
+function closeHelpSupportCallModal() {
+    document.getElementById("helpSupportCallModal").style.display = "none";
+}
+
+const helpSupportCallCountries = [
+    {name:"España", code:"+34", flag:"es", placeholder:"600 000 000"},
+    {name:"France", code:"+33", flag:"fr", placeholder:"6 12 34 56 78"},
+    {name:"United Kingdom", code:"+44", flag:"gb", placeholder:"7700 900000"},
+    {name:"Portugal", code:"+351", flag:"pt", placeholder:"912 345 678"},
+    {name:"Italia", code:"+39", flag:"it", placeholder:"312 345 6789"},
+    {name:"Deutschland", code:"+49", flag:"de", placeholder:"1512 3456789"},
+    {name:"USA", code:"+1", flag:"us", placeholder:"202 555 0123"},
+    {name:"Canada", code:"+1", flag:"ca", placeholder:"416 555 0123"},
+    {name:"México", code:"+52", flag:"mx", placeholder:"55 1234 5678"},
+    {name:"Cuba", code:"+53", flag:"cu", placeholder:"5 123 4567"},
+    {name:"Argentina", code:"+54", flag:"ar", placeholder:"11 2345 6789"},
+    {name:"Colombia", code:"+57", flag:"co", placeholder:"300 123 4567"},
+    {name:"Ecuador", code:"+593", flag:"ec", placeholder:"99 123 4567"},
+    {name:"Perú", code:"+51", flag:"pe", placeholder:"912 345 678"}
+];
+
+function renderHelpSupportCallCountries() {
+    const menu = document.getElementById("helpSupportCallCountryMenu");
+
+    menu.innerHTML = "";
+
+    helpSupportCallCountries.forEach(country => {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.style.cssText = `
+            width:100%;
+            display:flex;
+            align-items:center;
+            gap:10px;
+            padding:9px 10px;
+            box-sizing:border-box;
+            border:none;
+            border-radius:8px;
+            background:transparent;
+            color:#f9fafb;
+            cursor:pointer;
+            font-family:inherit;
+            text-align:left;
+        `;
+
+        button.onmouseenter = () => {
+            button.style.background = "#1f2937";
+        };
+
+        button.onmouseleave = () => {
+            button.style.background = "transparent";
+        };
+
+        const flag = document.createElement("img");
+        flag.src = `/static/flags/${country.flag}.svg`;
+        flag.alt = "";
+        flag.style.cssText = `
+            width:26px;
+            height:19px;
+            object-fit:cover;
+            border-radius:3px;
+            flex-shrink:0;
+        `;
+
+        const name = document.createElement("span");
+        name.textContent = country.name;
+        name.style.flex = "1";
+
+        const prefix = document.createElement("span");
+        prefix.textContent = country.code;
+        prefix.style.color = "#9ca3af";
+
+        button.appendChild(flag);
+        button.appendChild(name);
+        button.appendChild(prefix);
+
+        button.onclick = () => {
+            selectHelpSupportCallCountry(country);
+        };
+
+        menu.appendChild(button);
+    });
+}
+
+function toggleHelpSupportCallCountries() {
+    const menu = document.getElementById("helpSupportCallCountryMenu");
+
+    if (!menu.children.length) {
+        renderHelpSupportCallCountries();
+    }
+
+    menu.style.display =
+        menu.style.display === "block" ? "none" : "block";
+}
+
+function selectHelpSupportCallCountry(country) {
+    document.getElementById("helpSupportCallCountryFlag").src =
+        `/static/flags/${country.flag}.svg`;
+
+    document.getElementById("helpSupportCallCountryName").textContent =
+        country.name;
+
+    document.getElementById("helpSupportCallCountryPrefix").textContent =
+        country.code;
+
+    document.getElementById("helpSupportCallCountryCode").value =
+        country.code;
+
+    document.getElementById("helpSupportCallPhone").placeholder =
+        country.placeholder;
+
+    document.getElementById("helpSupportCallCountryMenu").style.display =
+        "none";
+}
+async function submitHelpSupportCall() {
+    const countryCode =
+        document.getElementById("helpSupportCallCountryCode").value;
+
+    const phoneInput =
+        document.getElementById("helpSupportCallPhone");
+
+    const messageInput =
+        document.getElementById("helpSupportCallMessage");
+
+    const status =
+        document.getElementById("helpSupportCallStatus");
+
+    const nationalPhone = phoneInput.value.trim();
+    const message = messageInput.value.trim();
+
+    status.textContent = "";
+    status.style.display = "none";
+
+    if (!nationalPhone || !message) {
+        status.textContent = t("helpSupportCallRequired");
+        status.style.color = "#fca5a5";
+        status.style.display = "block";
+        return;
+    }
+
+    const phoneDigits = nationalPhone.replace(/\D/g, "");
+
+    if (phoneDigits.length < 6 || phoneDigits.length > 14) {
+        status.textContent = t("helpSupportCallInvalidPhone");
+        status.style.color = "#fca5a5";
+        status.style.display = "block";
+        return;
+    }
+
+    const normalizedPhone = countryCode + phoneDigits;
+
+    try {
+        const response = await fetch("/support-request", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                type: "callback",
+                phone: normalizedPhone,
+                message: message
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.submitted) {
+            status.textContent =
+                data.detail || t("helpSupportCallError");
+
+            status.style.color = "#fca5a5";
+            status.style.display = "block";
+            return;
+        }
+
+        phoneInput.value = "";
+        messageInput.value = "";
+
+        status.textContent = t("helpSupportCallSuccess");
+        status.style.color = "#86efac";
+        status.style.display = "block";
+
+    } catch (error) {
+        console.error(error);
+
+        status.textContent = t("helpSupportCallError");
+        status.style.color = "#fca5a5";
+        status.style.display = "block";
+    }
 }
 
 function openPlanFeaturesModal() {
@@ -13851,6 +14340,693 @@ loadMemorySummary();
 
     </div>
 </div>
+<!-- MODAL: Contactar con soporte -->
+<div id="helpContactModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="helpContactModalTitle">
+                Contactar con soporte
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closeHelpContactModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="color:#9ca3af;margin:0 0 20px 0;"
+            data-i18n="helpContactModalDescription"
+        >
+            Habla con una persona del equipo.
+        </p>
+
+        <div class="settings-option">
+            <div>
+                <div data-i18n="helpContactChatTitle">
+                    Chat en directo
+                </div>
+                <div class="settings-description" data-i18n="helpContactChatDescription">
+                    Respuesta en menos de 5 minutos · L a V, 9:00 a 18:00
+                </div>
+            </div>
+
+                        <button
+                class="settings-edit"
+                type="button"
+                onclick="openHelpSupportChatModal()"
+                data-i18n="helpContactStartChat"
+            >
+                Iniciar chat
+            </button>
+        </div>
+
+        <div class="settings-option">
+            <div>
+                <div data-i18n="helpContactEmailTitle">
+                    Escribir por correo
+                </div>
+                <div class="settings-description" data-i18n="helpContactEmailDescription">
+                    Contacta con el equipo de soporte de BEAM AI
+                </div>
+            </div>
+
+            <button
+    class="settings-edit"
+    type="button"
+    onclick="openHelpSupportEmailModal()"
+    data-i18n="helpContactWrite"
+>
+    Escribir
+</button>
+        </div>
+
+        <div class="settings-option">
+            <div>
+                <div data-i18n="helpContactCallTitle">
+                    Pedir que te llamemos
+                </div>
+                <div class="settings-description" data-i18n="helpContactCallDescription">
+                    Déjanos tu teléfono y contactaremos contigo
+                </div>
+            </div>
+
+            <button
+    class="settings-edit"
+    type="button"
+    onclick="openHelpSupportCallModal()"
+    data-i18n="helpContactRequestCall"
+>
+    Solicitar
+</button>
+        </div>
+
+        <p style="
+            color:#9ca3af;
+            font-size:13px;
+            line-height:1.5;
+            margin:18px 0 0 0;
+        " data-i18n="helpContactAvailability">
+            Soporte disponible de lunes a viernes, de 9:00 a 18:00.
+        </p>
+
+        <button
+            type="button"
+            onclick="closeHelpContactModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:20px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Chat con soporte -->
+<div id="helpSupportChatModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:100000;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="helpSupportChatTitle">
+                Contactar por chat
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closeHelpSupportChatModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="
+                color:#9ca3af;
+                margin:0 0 20px 0;
+                line-height:1.5;
+            "
+            data-i18n="helpSupportChatDescription"
+        >
+            Cuéntanos en qué podemos ayudarte.
+        </p>
+
+        <div style="margin-bottom:18px;">
+            <label
+                for="helpSupportChatMessage"
+                style="
+                    display:block;
+                    color:#9ca3af;
+                    font-size:13px;
+                    margin-bottom:7px;
+                "
+                data-i18n="helpSupportChatMessageLabel"
+            >
+                Describe tu consulta
+            </label>
+
+            <textarea
+                id="helpSupportChatMessage"
+                maxlength="1000"
+                rows="5"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    resize:vertical;
+                    padding:11px 12px;
+                    border-radius:10px;
+                    border:1px solid #374151;
+                    background:#f9fafb;
+                    color:#111827;
+                    outline:none;
+                    font-family:inherit;
+                "
+                data-i18n-placeholder="helpSupportChatPlaceholder"
+                placeholder="Escribe aquí los detalles de tu consulta..."
+            ></textarea>
+        </div>
+
+        <div
+            id="helpSupportChatStatus"
+            style="
+                display:none;
+                color:#9ca3af;
+                font-size:13px;
+                line-height:1.5;
+                margin-bottom:14px;
+            "
+        ></div>
+
+        <button
+            type="button"
+            onclick="submitHelpSupportChat()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="helpSupportChatSend">
+                Enviar solicitud
+            </span>
+        </button>
+
+        <button
+            type="button"
+            onclick="closeHelpSupportChatModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:10px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Escribir a soporte -->
+<div id="helpSupportEmailModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:100000;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="helpSupportEmailTitle">
+                Escribir a soporte
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closeHelpSupportEmailModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="
+                color:#9ca3af;
+                margin:0 0 20px 0;
+                line-height:1.5;
+            "
+            data-i18n="helpSupportEmailDescription"
+        >
+            Envíanos tu consulta y quedará registrada para el equipo de soporte.
+        </p>
+
+        <div style="margin-bottom:16px;">
+            <label
+                for="helpSupportEmailSubject"
+                style="
+                    display:block;
+                    color:#9ca3af;
+                    font-size:13px;
+                    margin-bottom:7px;
+                "
+                data-i18n="helpSupportEmailSubjectLabel"
+            >
+                Asunto
+            </label>
+
+            <input
+                id="helpSupportEmailSubject"
+                type="text"
+                maxlength="120"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:11px 12px;
+                    border-radius:10px;
+                    border:1px solid #374151;
+                    background:#f9fafb;
+                    color:#111827;
+                    outline:none;
+                    font-family:inherit;
+                "
+                data-i18n-placeholder="helpSupportEmailSubjectPlaceholder"
+                placeholder="Resume brevemente tu consulta"
+            >
+        </div>
+
+        <div style="margin-bottom:18px;">
+            <label
+                for="helpSupportEmailMessage"
+                style="
+                    display:block;
+                    color:#9ca3af;
+                    font-size:13px;
+                    margin-bottom:7px;
+                "
+                data-i18n="helpSupportEmailMessageLabel"
+            >
+                Mensaje
+            </label>
+
+            <textarea
+                id="helpSupportEmailMessage"
+                maxlength="2000"
+                rows="5"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    resize:vertical;
+                    padding:11px 12px;
+                    border-radius:10px;
+                    border:1px solid #374151;
+                    background:#f9fafb;
+                    color:#111827;
+                    outline:none;
+                    font-family:inherit;
+                "
+                data-i18n-placeholder="helpSupportEmailMessagePlaceholder"
+                placeholder="Escribe aquí tu mensaje..."
+            ></textarea>
+        </div>
+
+        <div
+            id="helpSupportEmailStatus"
+            style="
+                display:none;
+                color:#9ca3af;
+                font-size:13px;
+                line-height:1.5;
+                margin-bottom:14px;
+            "
+        ></div>
+
+        <button
+            type="button"
+            onclick="submitHelpSupportEmail()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="helpSupportEmailSend">
+                Enviar
+            </span>
+        </button>
+
+        <button
+            type="button"
+            onclick="closeHelpSupportEmailModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:10px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+<!-- MODAL: Solicitar llamada de soporte -->
+<div id="helpSupportCallModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:100000;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(92vw,520px);
+        max-height:85vh;
+        overflow-y:auto;
+        background:#111827;
+        border:1px solid #374151;
+        border-radius:16px;
+        padding:24px;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        ">
+            <h3 style="margin:0;" data-i18n="helpSupportCallTitle">
+                Pedir que te llamemos
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closeHelpSupportCallModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="
+                color:#9ca3af;
+                margin:0 0 20px 0;
+                line-height:1.5;
+            "
+            data-i18n="helpSupportCallDescription"
+        >
+            Déjanos tus datos y registraremos tu solicitud de llamada.
+        </p>
+
+        <div style="margin-bottom:16px;">
+            <label
+                for="helpSupportCallPhone"
+                style="
+                    display:block;
+                    color:#9ca3af;
+                    font-size:13px;
+                    margin-bottom:7px;
+                "
+                data-i18n="helpSupportCallPhoneLabel"
+            >
+                Número de teléfono
+            </label>
+
+           <div style="
+    display:flex;
+    gap:8px;
+    width:100%;
+    position:relative;
+">
+    <div
+        id="helpSupportCallCountrySelector"
+        style="
+            width:205px;
+            position:relative;
+            flex-shrink:0;
+        "
+    >
+        <button
+            id="helpSupportCallCountryButton"
+            type="button"
+            onclick="toggleHelpSupportCallCountries()"
+            style="
+                width:100%;
+                height:42px;
+                display:flex;
+                align-items:center;
+                gap:9px;
+                padding:0 10px;
+                box-sizing:border-box;
+                border-radius:10px;
+                border:1px solid #374151;
+                background:#f9fafb;
+                color:#111827;
+                cursor:pointer;
+                font-family:inherit;
+            "
+        >
+            <img
+                id="helpSupportCallCountryFlag"
+                src="/static/flags/es.svg"
+                alt=""
+                style="
+                    width:24px;
+                    height:18px;
+                    object-fit:cover;
+                    border-radius:3px;
+                    flex-shrink:0;
+                "
+            >
+
+            <span
+                id="helpSupportCallCountryName"
+                style="
+                    flex:1;
+                    text-align:left;
+                    white-space:nowrap;
+                "
+            >España</span>
+
+            <span
+                id="helpSupportCallCountryPrefix"
+                style="color:#4b5563;"
+            >+34</span>
+
+            <span style="font-size:11px;color:#6b7280;">▼</span>
+        </button>
+
+        <div
+            id="helpSupportCallCountryMenu"
+            style="
+                display:none;
+                position:absolute;
+                top:48px;
+                left:0;
+                width:245px;
+                max-height:260px;
+                overflow-y:auto;
+                padding:6px;
+                box-sizing:border-box;
+                background:#111827;
+                border:1px solid #374151;
+                border-radius:12px;
+                box-shadow:0 14px 32px rgba(0,0,0,.45);
+                z-index:100010;
+            "
+        ></div>
+
+        <input
+            id="helpSupportCallCountryCode"
+            type="hidden"
+            value="+34"
+        >
+    </div>
+
+    <input
+        id="helpSupportCallPhone"
+        type="tel"
+        maxlength="20"
+        autocomplete="tel-national"
+        inputmode="tel"
+        style="
+            flex:1;
+            min-width:0;
+            height:42px;
+            box-sizing:border-box;
+            padding:11px 12px;
+            border-radius:10px;
+            border:1px solid #374151;
+            background:#f9fafb;
+            color:#111827;
+            outline:none;
+            font-family:inherit;
+        "
+        placeholder="600 000 000"
+    >
+</div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+            <label
+                for="helpSupportCallMessage"
+                style="
+                    display:block;
+                    color:#9ca3af;
+                    font-size:13px;
+                    margin-bottom:7px;
+                "
+                data-i18n="helpSupportCallMessageLabel"
+            >
+                Motivo de la llamada
+            </label>
+
+            <textarea
+                id="helpSupportCallMessage"
+                maxlength="1000"
+                rows="4"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    resize:vertical;
+                    padding:11px 12px;
+                    border-radius:10px;
+                    border:1px solid #374151;
+                    background:#f9fafb;
+                    color:#111827;
+                    outline:none;
+                    font-family:inherit;
+                "
+                data-i18n-placeholder="helpSupportCallMessagePlaceholder"
+                placeholder="Cuéntanos brevemente en qué podemos ayudarte..."
+            ></textarea>
+        </div>
+
+        <div
+            id="helpSupportCallStatus"
+            style="
+                display:none;
+                color:#9ca3af;
+                font-size:13px;
+                line-height:1.5;
+                margin-bottom:14px;
+            "
+        ></div>
+
+        <button
+            type="button"
+            onclick="submitHelpSupportCall()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+            "
+        >
+            <span data-i18n="helpSupportCallSend">
+                Solicitar llamada
+            </span>
+        </button>
+
+        <button
+            type="button"
+            onclick="closeHelpSupportCallModal()"
+            style="
+                width:100%;
+                padding:10px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                margin-top:10px;
+            "
+        >
+            <span data-i18n="modalClose">Cerrar</span>
+        </button>
+
+    </div>
+</div>
+
 <!-- MODAL: Idioma de la interfaz -->
 <div id="interfaceLanguageModal" style="
     display:none;
