@@ -4,6 +4,7 @@ import hashlib
 import hmac
 import json
 import re
+import sqlite3
 import secrets
 import time
 from pathlib import Path
@@ -20,6 +21,7 @@ from agents.router import Router
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
+DATABASE_PATH = DATA_DIR / "beam.db"
 PROFILE_DIR = DATA_DIR / "profiles"
 SHORTCUT_DIR = DATA_DIR / "shortcuts"
 ACCOUNT_DIR = DATA_DIR / "accounts"
@@ -114,8 +116,80 @@ def session_key(request: Request) -> str:
 
 def session_file(directory: Path, key: str) -> Path:
     return directory / f"{key}.json"
+
+def get_db_connection():
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    connection = sqlite3.connect(DATABASE_PATH)
+    connection.row_factory = sqlite3.Row
+
+    return connection
+
+def initialize_database():
+    with get_db_connection() as connection:
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS accounts (
+                email TEXT PRIMARY KEY,
+                session_id TEXT NOT NULL,
+                salt TEXT NOT NULL,
+                password_hash TEXT NOT NULL,
+                created_at INTEGER NOT NULL
+            )
+            """
+        )
+        connection.commit()
+
+
+initialize_database()
+
+
 def normalize_email(email: str) -> str:
     return email.strip().lower()
+
+def get_account_from_db(email: str):
+    normalized_email = normalize_email(email)
+
+    with get_db_connection() as connection:
+        return connection.execute(
+            """
+            SELECT email, session_id, salt, password_hash, created_at
+            FROM accounts
+            WHERE email = ?
+            """,
+            (normalized_email,)
+        ).fetchone()
+
+
+def create_account_in_db(
+    email: str,
+    session_id: str,
+    salt: str,
+    password_hash: str
+):
+    normalized_email = normalize_email(email)
+
+    with get_db_connection() as connection:
+        connection.execute(
+            """
+            INSERT INTO accounts (
+                email,
+                session_id,
+                salt,
+                password_hash,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                normalized_email,
+                session_id,
+                salt,
+                password_hash,
+                int(time.time())
+            )
+        )
+        connection.commit()
 
 
 def account_key(email: str) -> str:
@@ -378,7 +452,12 @@ async def save_user(request: Request):
         account_path = session_file(ACCOUNT_DIR, email_key)
         existing_account = read_json(account_path, None)
 
-        if isinstance(existing_account, dict) and existing_account:
+        existing_db_account = get_account_from_db(email)
+
+        if (
+            (isinstance(existing_account, dict) and existing_account)
+            or existing_db_account is not None
+        ):
             raise HTTPException(
                 status_code=409,
                 detail="Ya existe una cuenta con este correo electrónico."
@@ -392,6 +471,13 @@ async def save_user(request: Request):
             "salt": credentials["salt"],
             "password_hash": credentials["password_hash"]
         }
+
+        create_account_in_db(
+            email=email,
+            session_id=request.state.session_id,
+            salt=credentials["salt"],
+            password_hash=credentials["password_hash"]
+        )
 
         write_json(account_path, account)
 
@@ -423,11 +509,9 @@ async def login(request: Request):
             detail="Introduce el correo electrónico y la contraseña."
         )
 
-    email_key = account_key(email)
-    account_path = session_file(ACCOUNT_DIR, email_key)
-    account = read_json(account_path, None)
+        account = get_account_from_db(email)
 
-    if not isinstance(account, dict) or not account:
+    if account is None:
         raise HTTPException(
             status_code=401,
             detail="Correo electrónico o contraseña incorrectos."
@@ -435,15 +519,15 @@ async def login(request: Request):
 
     if not verify_password(
         password,
-        str(account.get("salt", "")),
-        str(account.get("password_hash", ""))
+        str(account["salt"]),
+        str(account["password_hash"])
     ):
         raise HTTPException(
             status_code=401,
             detail="Correo electrónico o contraseña incorrectos."
         )
 
-    original_session_id = str(account.get("session_id", ""))
+    original_session_id = str(account["session_id"])
 
     if not SESSION_ID_PATTERN.fullmatch(original_session_id):
         raise HTTPException(

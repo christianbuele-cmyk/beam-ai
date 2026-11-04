@@ -11,3 +11,4 @@ data/profil*s/
 .env.local
 
 backup**/
+data/beam.db
