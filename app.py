@@ -995,14 +995,14 @@ async def create_support_request(request: Request):
     subject = str(data.get("subject", "")).strip()
     phone = str(data.get("phone", "")).strip()
     message = str(data.get("message", "")).strip()
+    category = str(data.get("category", "")).strip()
+    details = str(data.get("details", "")).strip()
 
-    if request_type not in {"chat", "email", "callback"}:
-
+    if request_type not in {"chat", "email", "callback", "error", "suggestion"}:
         raise HTTPException(
             status_code=400,
             detail="El tipo de solicitud de soporte no es válido."
         )
-
     if not message:
         raise HTTPException(
             status_code=400,
@@ -1017,6 +1017,25 @@ async def create_support_request(request: Request):
             detail=f"La consulta no puede superar los {max_message_length} caracteres."
         )
 
+    if request_type == "error":
+        if not category:
+            raise HTTPException(
+                status_code=400,
+                detail="Selecciona el tipo de problema."
+            )
+
+        if len(category) > 80:
+            raise HTTPException(
+                status_code=400,
+                detail="El tipo de problema no es válido."
+            )
+
+        if len(details) > 1000:
+            raise HTTPException(
+                status_code=400,
+                detail="Los detalles adicionales no pueden superar los 1000 caracteres."
+            )
+   
     if request_type == "email":
         if not subject:
             raise HTTPException(
@@ -1054,6 +1073,12 @@ async def create_support_request(request: Request):
         "created_at": int(time.time()),
         "status": "received"
     }
+
+    if request_type == "error":
+        support_request["category"] = category
+
+    if request_type in {"error", "suggestion"} and details:
+        support_request["details"] = details
 
     if request_type == "email":
         support_request["subject"] = subject
