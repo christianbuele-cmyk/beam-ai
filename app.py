@@ -3,10 +3,13 @@ from fastapi.responses import FileResponse
 import hashlib
 import hmac
 import json
+import os
 import re
 import sqlite3
 import secrets
 import time
+import psycopg
+from psycopg.rows import dict_row
 from pathlib import Path
 from uuid import uuid4
 
@@ -118,6 +121,14 @@ def session_file(directory: Path, key: str) -> Path:
     return directory / f"{key}.json"
 
 def get_db_connection():
+    database_url = os.getenv("DATABASE_URL")
+
+    if database_url:
+        return psycopg.connect(
+            database_url,
+            row_factory=dict_row
+        )
+
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     connection = sqlite3.connect(DATABASE_PATH)
@@ -149,17 +160,17 @@ def normalize_email(email: str) -> str:
 
 def get_account_from_db(email: str):
     normalized_email = normalize_email(email)
+    placeholder = "%s" if os.getenv("DATABASE_URL") else "?"
 
     with get_db_connection() as connection:
         return connection.execute(
-            """
+            f"""
             SELECT email, session_id, salt, password_hash, created_at
             FROM accounts
-            WHERE email = ?
+            WHERE email = {placeholder}
             """,
             (normalized_email,)
         ).fetchone()
-
 
 def create_account_in_db(
     email: str,
@@ -168,10 +179,11 @@ def create_account_in_db(
     password_hash: str
 ):
     normalized_email = normalize_email(email)
+    placeholders = "%s, %s, %s, %s, %s" if os.getenv("DATABASE_URL") else "?, ?, ?, ?, ?"
 
     with get_db_connection() as connection:
         connection.execute(
-            """
+            f"""
             INSERT INTO accounts (
                 email,
                 session_id,
@@ -179,7 +191,7 @@ def create_account_in_db(
                 password_hash,
                 created_at
             )
-            VALUES (?, ?, ?, ?, ?)
+            VALUES ({placeholders})
             """,
             (
                 normalized_email,
@@ -187,6 +199,30 @@ def create_account_in_db(
                 salt,
                 password_hash,
                 int(time.time())
+            )
+        )
+        connection.commit()
+
+def update_account_password_in_db(
+    email: str,
+    salt: str,
+    password_hash: str
+):
+    normalized_email = normalize_email(email)
+    placeholder = "%s" if os.getenv("DATABASE_URL") else "?"
+
+    with get_db_connection() as connection:
+        connection.execute(
+            f"""
+            UPDATE accounts
+            SET salt = {placeholder},
+                password_hash = {placeholder}
+            WHERE email = {placeholder}
+            """,
+            (
+                salt,
+                password_hash,
+                normalized_email
             )
         )
         connection.commit()
@@ -509,7 +545,7 @@ async def login(request: Request):
             detail="Introduce el correo electrónico y la contraseña."
         )
 
-        account = get_account_from_db(email)
+    account = get_account_from_db(email)
 
     if account is None:
         raise HTTPException(
@@ -663,18 +699,9 @@ async def change_password(request: Request):
             detail="La cuenta no tiene un correo electrónico asociado."
         )
 
-    email_key = account_key(email)
-    account_path = session_file(
-        ACCOUNT_DIR,
-        email_key
-    )
+    account = get_account_from_db(email)
 
-    account = read_json(
-        account_path,
-        None
-    )
-
-    if not isinstance(account, dict) or not account:
+    if account is None:
         raise HTTPException(
             status_code=404,
             detail="No se ha encontrado la cuenta."
@@ -682,8 +709,8 @@ async def change_password(request: Request):
 
     if not verify_password(
         current_password,
-        str(account.get("salt", "")),
-        str(account.get("password_hash", ""))
+        str(account["salt"]),
+        str(account["password_hash"])
     ):
         raise HTTPException(
             status_code=401,
@@ -694,13 +721,12 @@ async def change_password(request: Request):
         new_password
     )
 
-    account["salt"] = credentials["salt"]
-    account["password_hash"] = credentials["password_hash"]
-
-    write_json(
-        account_path,
-        account
+    update_account_password_in_db(
+        email=email,
+        salt=credentials["salt"],
+        password_hash=credentials["password_hash"]
     )
+
 
     return {
         "password_changed": True
@@ -787,17 +813,9 @@ async def reset_password(request: Request):
             detail="El enlace de recuperación no es válido."
         )
 
-    account_path = session_file(
-        ACCOUNT_DIR,
-        account_key(email)
-    )
+    account = get_account_from_db(email)
 
-    account = read_json(
-        account_path,
-        None
-    )
-
-    if not isinstance(account, dict) or not account:
+    if account is None:
         raise HTTPException(
             status_code=400,
             detail="No se ha encontrado la cuenta."
@@ -807,12 +825,10 @@ async def reset_password(request: Request):
         new_password
     )
 
-    account["salt"] = credentials["salt"]
-    account["password_hash"] = credentials["password_hash"]
-
-    write_json(
-        account_path,
-        account
+    update_account_password_in_db(
+        email=email,
+        salt=credentials["salt"],
+        password_hash=credentials["password_hash"]
     )
 
     reset_data["used"] = True

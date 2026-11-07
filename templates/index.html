@@ -5549,15 +5549,9 @@ async function submitPasswordReset() {
             window.location.pathname
         );
 
-               setTimeout(() => {
-            const resetModal =
-                document.getElementById("resetPasswordModal");
-
-            if (resetModal) {
-                resetModal.style.display = "none";
-            }
-
-         openLoginModal();
+        setTimeout(() => {
+            closeResetPasswordModal();
+            openLoginModal();
         }, 1500);
 
     } catch (error) {
