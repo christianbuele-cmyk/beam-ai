@@ -149,8 +149,20 @@ def initialize_database():
             )
             """
         )
-        connection.commit()
 
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS profiles (
+                session_id TEXT PRIMARY KEY,
+                email TEXT NOT NULL,
+                profile_json TEXT NOT NULL,
+                created_at INTEGER NOT NULL,
+                updated_at INTEGER NOT NULL
+            )
+            """
+        )
+
+        connection.commit()
 
 initialize_database()
 
@@ -227,6 +239,89 @@ def update_account_password_in_db(
         )
         connection.commit()
 
+def get_profile_from_db(session_id: str):
+    placeholder = "%s" if os.getenv("DATABASE_URL") else "?"
+
+    with get_db_connection() as connection:
+        row = connection.execute(
+            f"""
+            SELECT profile_json
+            FROM profiles
+            WHERE session_id = {placeholder}
+            """,
+            (session_id,)
+        ).fetchone()
+
+    if row is None:
+        return None
+
+    try:
+        return json.loads(row["profile_json"])
+    except (json.JSONDecodeError, TypeError):
+        return None
+
+
+def save_profile_to_db(
+    session_id: str,
+    email: str,
+    profile: dict
+):
+    normalized_email = normalize_email(email)
+    profile_json = json.dumps(
+        profile,
+        ensure_ascii=False
+    )
+    now = int(time.time())
+
+    existing_profile = get_profile_from_db(session_id)
+
+    with get_db_connection() as connection:
+        if existing_profile is None:
+            placeholders = (
+                "%s, %s, %s, %s, %s"
+                if os.getenv("DATABASE_URL")
+                else "?, ?, ?, ?, ?"
+            )
+
+            connection.execute(
+                f"""
+                INSERT INTO profiles (
+                    session_id,
+                    email,
+                    profile_json,
+                    created_at,
+                    updated_at
+                )
+                VALUES ({placeholders})
+                """,
+                (
+                    session_id,
+                    normalized_email,
+                    profile_json,
+                    now,
+                    now
+                )
+            )
+        else:
+            placeholder = "%s" if os.getenv("DATABASE_URL") else "?"
+
+            connection.execute(
+                f"""
+                UPDATE profiles
+                SET email = {placeholder},
+                    profile_json = {placeholder},
+                    updated_at = {placeholder}
+                WHERE session_id = {placeholder}
+                """,
+                (
+                    normalized_email,
+                    profile_json,
+                    now,
+                    session_id
+                )
+            )
+
+        connection.commit()
 
 def account_key(email: str) -> str:
     normalized_email = normalize_email(email)
@@ -401,11 +496,34 @@ def delete_shortcut(request: Request, shortcut_id: str):
 
 @app.get("/user")
 def get_user(request: Request):
-    key = session_key(request)
-    user = read_json(session_file(PROFILE_DIR, key), None)
+    session_id = request.state.session_id
+
+    user = get_profile_from_db(session_id)
+
     if not isinstance(user, dict) or not user:
-        return JSONResponse({"exists": False}, headers={"Cache-Control": "no-store"})
-    return JSONResponse({"exists": True, "user": user}, headers={"Cache-Control": "no-store"})
+        key = session_key(request)
+        user = read_json(session_file(PROFILE_DIR, key), None)
+
+        if isinstance(user, dict) and user:
+            email = normalize_email(str(user.get("email", "")))
+
+            if email:
+                save_profile_to_db(
+                    session_id=session_id,
+                    email=email,
+                    profile=user
+                )
+
+    if not isinstance(user, dict) or not user:
+        return JSONResponse(
+            {"exists": False},
+            headers={"Cache-Control": "no-store"}
+        )
+
+    return JSONResponse(
+        {"exists": True, "user": user},
+        headers={"Cache-Control": "no-store"}
+    )
 
 
 @app.post("/user")
@@ -473,49 +591,60 @@ async def save_user(request: Request):
             detail="Máximo 10 intereses."
         )
 
+    session_id = request.state.session_id
     key = session_key(request)
     profile_path = session_file(PROFILE_DIR, key)
-    existing_profile = read_json(profile_path, None)
+
+    existing_profile = get_profile_from_db(session_id)
 
     if not isinstance(existing_profile, dict) or not existing_profile:
-        if len(password) < 8:
-            raise HTTPException(
-                status_code=400,
-                detail="La contraseña debe tener al menos 8 caracteres."
+        existing_profile = read_json(profile_path, None)
+
+    existing_db_account = get_account_from_db(email)
+
+    if not isinstance(existing_profile, dict) or not existing_profile:
+        if existing_db_account is not None:
+            account_session_id = str(existing_db_account["session_id"])
+
+            if account_session_id != session_id:
+                raise HTTPException(
+                    status_code=409,
+                    detail="Ya existe una cuenta con este correo electrónico."
+                )
+        else:
+            if len(password) < 8:
+                raise HTTPException(
+                    status_code=400,
+                    detail="La contraseña debe tener al menos 8 caracteres."
+                )
+
+            email_key = account_key(email)
+            account_path = session_file(ACCOUNT_DIR, email_key)
+            existing_account = read_json(account_path, None)
+
+            if isinstance(existing_account, dict) and existing_account:
+                raise HTTPException(
+                    status_code=409,
+                    detail="Ya existe una cuenta con este correo electrónico."
+                )
+
+            credentials = create_password_credentials(password)
+
+            account = {
+                "email": email,
+                "session_id": session_id,
+                "salt": credentials["salt"],
+                "password_hash": credentials["password_hash"]
+            }
+
+            create_account_in_db(
+                email=email,
+                session_id=session_id,
+                salt=credentials["salt"],
+                password_hash=credentials["password_hash"]
             )
 
-        email_key = account_key(email)
-        account_path = session_file(ACCOUNT_DIR, email_key)
-        existing_account = read_json(account_path, None)
-
-        existing_db_account = get_account_from_db(email)
-
-        if (
-            (isinstance(existing_account, dict) and existing_account)
-            or existing_db_account is not None
-        ):
-            raise HTTPException(
-                status_code=409,
-                detail="Ya existe una cuenta con este correo electrónico."
-            )
-
-        credentials = create_password_credentials(password)
-
-        account = {
-            "email": email,
-            "session_id": request.state.session_id,
-            "salt": credentials["salt"],
-            "password_hash": credentials["password_hash"]
-        }
-
-        create_account_in_db(
-            email=email,
-            session_id=request.state.session_id,
-            salt=credentials["salt"],
-            password_hash=credentials["password_hash"]
-        )
-
-        write_json(account_path, account)
+            write_json(account_path, account)
 
     user["name"] = name
     user["email"] = email
@@ -523,8 +652,14 @@ async def save_user(request: Request):
     user["about"] = about
     user["interests"] = interests[:10]
 
-    write_json(profile_path, user)
+    save_profile_to_db(
+        session_id=session_id,
+        email=email,
+        profile=user
+    )
 
+    write_json(profile_path, user)
+  
     return {"saved": True}
 @app.post("/login")
 async def login(request: Request):
