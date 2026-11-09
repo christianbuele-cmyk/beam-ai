@@ -567,6 +567,16 @@ html[data-theme="light"] .input-row {
             background: #1f1f1f;
             border: 1px solid #292929;
         }
+
+        .chat-message-time {
+            margin-top: 6px;
+            font-size: 11px;
+            line-height: 1;
+            opacity: 0.65;
+            text-align: right;
+            user-select: none;
+        }
+
 html[data-theme="light"] .bot-message {
     background: #ffffff;
     color: #111827;
@@ -10175,17 +10185,31 @@ function openEditModal(shortcut) {
             }
         }
 
-        function addChatMessage(role, text, className) {
+         function addChatMessage(role, text, className) {
             const message = document.createElement("div");
             message.className = className;
+
             const heading = document.createElement("strong");
             heading.textContent = role;
+
             const content = document.createElement("div");
             content.style.marginTop = "10px";
             content.textContent = text;
-            message.append(heading, content);
+
+            const timestamp = document.createElement("div");
+            timestamp.className = "chat-message-time";
+            timestamp.textContent = new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+
+            message.append(heading, content, timestamp);
             document.getElementById("chat").appendChild(message);
-            return content;
+
+            return {
+                content: content,
+                timestamp: timestamp
+            };
         }
 
         async function sendMessage() {
@@ -10202,7 +10226,7 @@ const agentDisplayName =
 const selectedAgentName =
     (localStorage.getItem("agentName") || "").trim() || "BEAM AI";
 
-const botContent = addChatMessage(
+const botMessage = addChatMessage(
     selectedAgentName,
     location.protocol === "file:"
         ? t("localChatError")
@@ -10256,10 +10280,18 @@ const response = await fetch(
 );
                 if (!response.ok) throw new Error("Chat request failed");
                 const data = await response.json();
-                botContent.textContent = data.assistant;
+                botMessage.content.textContent = data.assistant;
+botMessage.timestamp.textContent = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+});
             } catch (error) {
                 console.error(error);
-                botContent.textContent = t("chatError");
+                botMessage.content.textContent = t("chatError");
+botMessage.timestamp.textContent = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+});
             }
             messageInput.focus();
         }
