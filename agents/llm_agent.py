@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 import google.generativeai as genai
+from openai import OpenAI
 
 genai.configure(
     api_key=os.getenv("GEMINI_API_KEY")
@@ -11,6 +12,18 @@ model = genai.GenerativeModel(
     "gemini-3.8-flash"
 )
 
+grok_client = OpenAI(
+    api_key=os.getenv("XAI_API_KEY"),
+    base_url="https://api.x.ai/v1"
+)
+
+def ask_grok(prompt: str) -> str:
+    response = grok_client.responses.create(
+        model="grok-4.7",
+        input=prompt
+    )
+
+    return response.output_text
 
 def ask_llm(prompt, tone="profesional", agent_name="BEAM AI"):
     tone_key = str(tone or "profesional").strip().lower()
@@ -108,35 +121,29 @@ Pregunta:
     try:
 
         response = model.generate_content(
-            system_prompt
+            system_prompt,
+            request_options={"timeout": 15}
         )
 
         return response.text
 
     except Exception as e:
         error_text = str(e)
-        error_text_lower = error_text.lower()
 
         print("ERROR REAL DE GEMINI:", repr(error_text))
+        print("GEMINI NO DISPONIBLE - INTENTANDO GROK")
 
-        quota_error_markers = (
-            "429",
-            "resourceexhausted",
-            "resource_exhausted",
-            "quota",
-            "rate limit",
-            "rate_limit",
-            "too many requests",
-            "exceeded your current quota"
-        )
+        try:
+            grok_response = ask_grok(system_prompt)
 
-        if any(marker in error_text_lower for marker in quota_error_markers):
+            print("RESPUESTA OBTENIDA DESDE GROK")
+
+            return grok_response
+
+        except Exception as grok_error:
+            print("ERROR REAL DE GROK:", repr(str(grok_error)))
+
             return (
-                "Has alcanzado tu límite de consultas de BEAM AI FREE por ahora.\n\n"
-                "¡Volveré a estar disponible pronto!"
+                "BEAM AI no puede procesar tu consulta en este momento.\n\n"
+                "Se ha producido un error temporal. Inténtalo de nuevo más tarde."
             )
-
-        return (
-            "BEAM AI FREE no puede procesar tu consulta en este momento.\n\n"
-            "Se ha producido un error temporal. Inténtalo de nuevo más tarde."
-        )

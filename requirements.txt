@@ -8,6 +8,7 @@ lxml
 primp
 click
 google-generativeai
+openai==3.48.0
 psycopg[binary]==3.3.8
 opentelemetry-distro[otlp]==0.66b2
 opentelemetry-instrumentation-fastapi==0.66b2
