@@ -1792,21 +1792,21 @@ html[data-high-contrast="true"] .settings-close {
     <span class="memory-option-arrow">›</span>
 </button>
 
-        <button class="memory-option" type="button">
-            <span class="memory-option-text">
-                <span class="memory-option-title">Activar o desactivar la memoria</span>
-                <span class="memory-option-description" id="memoryStatusText">Activada</span>
-            </span>
-            <span class="memory-option-arrow">›</span>
-        </button>
+<button class="memory-option" type="button" onclick="toggleMemory()">
+    <span class="memory-option-text">
+        <span class="memory-option-title">Activar o desactivar la memoria</span>
+        <span class="memory-option-description" id="memoryStatusText">Activada</span>
+    </span>
+    <span class="memory-option-arrow">›</span>
+</button>
 
-        <button class="memory-option" type="button">
-            <span class="memory-option-text">
-                <span class="memory-option-title">Reiniciar personalización</span>
-                <span class="memory-option-description">Restablece lo aprendido y tus ajustes</span>
-            </span>
-            <span class="memory-option-arrow">›</span>
-        </button>
+<button class="memory-option" type="button">
+    <span class="memory-option-text">
+        <span class="memory-option-title">Reiniciar personalización</span>
+        <span class="memory-option-description">Restablece lo aprendido y tus ajustes</span>
+    </span>
+    <span class="memory-option-arrow">›</span>
+</button>
 
     </div>
 <div id="memoryHistoryPanel" class="memory-history-panel" hidden>
@@ -1819,7 +1819,8 @@ html[data-high-contrast="true"] .settings-close {
         </div>
     </div>
 
-    <div id="memoryHistoryList" class="memory-history-list"></div>
+    <div id="memoryHistoryListLegacy" class="memory-history-list"></div>
+
 </div>
 </details>
 <details class="settings-section" name="settings-accordion">
@@ -10464,8 +10465,43 @@ if (memoryStatusText) {
         }
     }
 }
+
 loadMemorySettings();
+
 async function loadMemorySummary() {
+    try {
+        const response = await fetch("/memory", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("No se pudo cargar la memoria");
+        }
+
+        const data = await response.json();
+        const history = Array.isArray(data.history) ? data.history : [];
+
+        const historyCount = document.getElementById("memoryHistoryCount");
+
+        if (historyCount) {
+            const total = history.length;
+            historyCount.textContent =
+                total === 1
+                    ? "1 conversación"
+                    : `${total} conversaciones`;
+        }
+    } catch (error) {
+        console.error("Error cargando el resumen de memoria:", error);
+
+        const historyCount = document.getElementById("memoryHistoryCount");
+
+        if (historyCount) {
+            historyCount.textContent = "Historial no disponible";
+        }
+    }
+}
+
 async function openMemoryHistory() {
     const modal = document.getElementById("memoryHistoryModal");
     const list = document.getElementById("memoryHistoryList");
@@ -10563,92 +10599,55 @@ function closeMemoryHistory() {
         modal.style.display = "none";
     }
 }
+
+async function toggleMemory() {
+    const statusText = document.getElementById("memoryStatusText");
+
     try {
-        const response = await fetch("/memory", {
+        const currentResponse = await fetch("/memory", {
             method: "GET",
             cache: "no-store"
         });
 
-        if (!response.ok) {
-            throw new Error("No se pudo cargar la memoria");
+        if (!currentResponse.ok) {
+            throw new Error("No se pudo consultar la memoria");
         }
 
-        const data = await response.json();
-        const history = Array.isArray(data.history) ? data.history : [];
+        const currentData = await currentResponse.json();
+        const newEnabled = currentData.enabled === false;
 
-        const historyCount = document.getElementById("memoryHistoryCount");
-
-        if (historyCount) {
-            const total = history.length;
-            historyCount.textContent =
-                total === 1
-                    ? "1 conversación"
-                    : `${total} conversaciones`;
-        }
-    } catch (error) {
-        console.error("Error cargando el resumen de memoria:", error);
-
-        const historyCount = document.getElementById("memoryHistoryCount");
-
-        if (historyCount) {
-            historyCount.textContent = "Historial no disponible";
-        }
-    }
-}
-async function loadMemorySummary() {
-    try {
         const response = await fetch("/memory", {
-            method: "GET",
-            cache: "no-store"
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                enabled: newEnabled
+            })
         });
 
         if (!response.ok) {
-            throw new Error("No se pudo cargar la memoria");
+            throw new Error("No se pudo actualizar la memoria");
         }
 
         const data = await response.json();
-        const history = Array.isArray(data.history) ? data.history : [];
 
-        const historyCount = document.getElementById("memoryHistoryCount");
-
-        if (historyCount) {
-            const total = history.length;
-            historyCount.textContent =
-                total === 1
-                    ? "1 conversación"
-                    : `${total} conversaciones`;
+        if (statusText) {
+            statusText.textContent =
+                data.enabled !== false ? "Activada" : "Desactivada";
         }
+
+        await loadMemorySummary();
+
     } catch (error) {
-        console.error("Error cargando el resumen de memoria:", error);
+        console.error("Error actualizando la memoria:", error);
 
-        const historyCount = document.getElementById("memoryHistoryCount");
-
-        if (historyCount) {
-            historyCount.textContent = "Historial no disponible";
+        if (statusText) {
+            statusText.textContent = "No disponible";
         }
     }
 }
 
-
-/* AÑADIR AQUÍ */
-async function openMemoryHistory() {
-    const panel = document.getElementById("memoryHistoryModal");
-    if (!panel) {
-        return;
-    }
-    panel.style.display = "flex";
-}
-
-function closeMemoryHistory() {
-    const panel = document.getElementById("memoryHistoryModal");
-    if (!panel) {
-        return;
-    }
-    panel.style.display = "none";
-}
-
-
-/* ESTO YA LO TENEMOS */
 loadMemorySummary();
 
 </script>

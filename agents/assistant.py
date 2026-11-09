@@ -54,7 +54,7 @@ Usuario:
                 "content": response
             })
 
-            memory["history"] = history[-20:]
+            memory["history"] = history
 
             print("NOMBRE DEL AGENTE EN ASSISTANT:", agent_name)
             print("GUARDANDO MEMORIA")

@@ -20,6 +20,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from agents.router import Router
+from memory.memory_store import load_memory, save_memory
 from database import get_db_connection
 
 
@@ -1072,7 +1073,7 @@ def delete_user(request: Request):
 @app.get("/memory")
 def get_memory(request: Request):
     key = session_key(request)
-    memory = read_json(session_file(MEMORY_DIR, key), {})
+    memory = load_memory(key)
 
     if not isinstance(memory, dict):
         memory = {}
@@ -1089,31 +1090,34 @@ def get_memory(request: Request):
         headers={"Cache-Control": "no-store"}
     )
 
-
 @app.put("/memory")
 async def update_memory(request: Request):
     try:
         data = await request.json()
     except (json.JSONDecodeError, UnicodeDecodeError):
-        raise HTTPException(status_code=400, detail="La configuración de memoria debe ser JSON válido.")
+        raise HTTPException(
+            status_code=400,
+            detail="La configuración de memoria debe ser JSON válido."
+        )
 
     enabled = data.get("enabled")
 
     if not isinstance(enabled, bool):
-        raise HTTPException(status_code=400, detail="El estado de memoria debe ser true o false.")
+        raise HTTPException(
+            status_code=400,
+            detail="El estado de memoria debe ser true o false."
+        )
 
     key = session_key(request)
-    path = session_file(MEMORY_DIR, key)
-    memory = read_json(path, {})
+    memory = load_memory(key)
 
     if not isinstance(memory, dict):
         memory = {}
 
     memory["enabled"] = enabled
-    write_json(path, memory)
+    save_memory(memory, key)
 
     return {"saved": True, "enabled": enabled}
-
 
 @app.delete("/memory")
 def reset_memory(request: Request):
