@@ -1,32 +1,106 @@
 import json
+import os
 import re
-from pathlib import Path
+
+from database import get_db_connection
 
 
-MEMORY_DIR = Path(__file__).resolve().parent / "sessions"
 SESSION_KEY_PATTERN = re.compile(r"^[a-f0-9]{64}$")
 
 
-def _memory_file(session_key: str) -> Path:
+def _validate_session_key(session_key: str) -> None:
     if not SESSION_KEY_PATTERN.fullmatch(session_key):
         raise ValueError("A valid per-session key is required for memory storage.")
-    return MEMORY_DIR / f"{session_key}.json"
 
 
 def load_memory(session_key: str) -> dict:
-    path = _memory_file(session_key)
+    _validate_session_key(session_key)
+
+    placeholder = "%s" if os.getenv("DATABASE_URL") else "?"
+
+    with get_db_connection() as connection:
+        row = connection.execute(
+            f"""
+            SELECT memory_json
+            FROM memories
+            WHERE session_key = {placeholder}
+            """,
+            (session_key,)
+        ).fetchone()
+
+    if row is None:
+        return {}
+
     try:
-        with path.open("r", encoding="utf-8") as file:
-            memory = json.load(file)
-            return memory if isinstance(memory, dict) else {}
-    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        memory = json.loads(row["memory_json"])
+        return memory if isinstance(memory, dict) else {}
+    except (json.JSONDecodeError, TypeError):
         return {}
 
 
 def save_memory(data: dict, session_key: str) -> None:
-    path = _memory_file(session_key)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary_path = path.with_suffix(".json.tmp")
-    with temporary_path.open("w", encoding="utf-8") as file:
-        json.dump(data, file, ensure_ascii=False, indent=2)
-    temporary_path.replace(path)
+    _validate_session_key(session_key)
+
+    memory_json = json.dumps(
+        data,
+        ensure_ascii=False
+    )
+
+    placeholder = "%s" if os.getenv("DATABASE_URL") else "?"
+
+    with get_db_connection() as connection:
+        existing = connection.execute(
+            f"""
+            SELECT session_key
+            FROM memories
+            WHERE session_key = {placeholder}
+            """,
+            (session_key,)
+        ).fetchone()
+
+        if existing is None:
+            placeholders = (
+                "%s, %s, %s, %s"
+                if os.getenv("DATABASE_URL")
+                else "?, ?, ?, ?"
+            )
+
+            import time
+            now = int(time.time())
+
+            connection.execute(
+                f"""
+                INSERT INTO memories (
+                    session_key,
+                    memory_json,
+                    created_at,
+                    updated_at
+                )
+                VALUES ({placeholders})
+                """,
+                (
+                    session_key,
+                    memory_json,
+                    now,
+                    now
+                )
+            )
+        else:
+            import time
+            now = int(time.time())
+
+            connection.execute(
+                f"""
+                UPDATE memories
+                SET memory_json = {placeholder},
+                    updated_at = {placeholder}
+                WHERE session_key = {placeholder}
+                """,
+                (
+                    memory_json,
+                    now,
+                    session_key
+                )
+            )
+
+        connection.commit()

@@ -20,6 +20,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from agents.router import Router
+from database import get_db_connection
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -120,22 +121,6 @@ def session_key(request: Request) -> str:
 def session_file(directory: Path, key: str) -> Path:
     return directory / f"{key}.json"
 
-def get_db_connection():
-    database_url = os.getenv("DATABASE_URL")
-
-    if database_url:
-        return psycopg.connect(
-            database_url,
-            row_factory=dict_row
-        )
-
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-
-    connection = sqlite3.connect(DATABASE_PATH)
-    connection.row_factory = sqlite3.Row
-
-    return connection
-
 def initialize_database():
     with get_db_connection() as connection:
         connection.execute(
@@ -146,6 +131,17 @@ def initialize_database():
                 salt TEXT NOT NULL,
                 password_hash TEXT NOT NULL,
                 created_at INTEGER NOT NULL
+            )
+            """
+        )
+
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS memories (
+                session_key TEXT PRIMARY KEY,
+                memory_json TEXT NOT NULL,
+                created_at INTEGER NOT NULL,
+                updated_at INTEGER NOT NULL
             )
             """
         )
