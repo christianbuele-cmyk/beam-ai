@@ -7,22 +7,34 @@ if (-not (Test-Path $envFile)) {
     exit 1
 }
 
-$databaseLine = Get-Content $envFile |
-    Where-Object { $_ -match '^DATABASE_URL=' } |
-    Select-Object -First 1
+$requiredVariables = @(
+    "DATABASE_URL",
+    "XAI_API_KEY",
+    "OTEL_SERVICE_NAME",
+    "OTEL_EXPORTER_OTLP_ENDPOINT",
+    "OTEL_EXPORTER_OTLP_PROTOCOL",
+    "OTEL_EXPORTER_OTLP_HEADERS"
+)
 
-if (-not $databaseLine) {
-    Write-Host "ERROR: DATABASE_URL no existe en .env" -ForegroundColor Red
-    exit 1
+foreach ($variableName in $requiredVariables) {
+    $line = Get-Content $envFile |
+        Where-Object { $_ -match "^$variableName=" } |
+        Select-Object -First 1
+
+    if (-not $line) {
+        Write-Host "ERROR: $variableName no existe en .env" -ForegroundColor Red
+        exit 1
+    }
+
+    $value = $line.Substring($variableName.Length + 1).Trim()
+
+    if ([string]::IsNullOrWhiteSpace($value)) {
+        Write-Host "ERROR: $variableName esta vacia" -ForegroundColor Red
+        exit 1
+    }
+
+    Set-Item -Path "Env:$variableName" -Value $value
 }
-
-$env:DATABASE_URL = $databaseLine.Substring("DATABASE_URL=".Length).Trim()
-
-if ([string]::IsNullOrWhiteSpace($env:DATABASE_URL)) {
-    Write-Host "ERROR: DATABASE_URL esta vacia" -ForegroundColor Red
-    exit 1
-}
-
 $existingServer = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue
 
 if ($existingServer) {
@@ -38,4 +50,8 @@ Write-Host "Entorno virtual: OK"
 Write-Host "PostgreSQL: configurado"
 Write-Host ""
 
-& ".\venv\Scripts\python.exe" -m uvicorn app:app --host 127.0.0.1 --port 8000
+& ".\venv\Scripts\opentelemetry-instrument.exe" `
+    ".\venv\Scripts\python.exe" `
+    -m uvicorn app:app `
+    --host 127.0.0.1 `
+    --port 8000

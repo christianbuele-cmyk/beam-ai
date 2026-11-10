@@ -9,8 +9,10 @@ class AssistantAgent:
         message: str,
         session_key: str,
         tone: str = "Profesional",
-        agent_name: str = "BEAM AI"
+        agent_name: str = "BEAM AI",
+        about: str = ""
     ):
+
         memory = load_memory(session_key)
         memory_enabled = memory.get("enabled", True)
 
@@ -33,7 +35,23 @@ class AssistantAgent:
         for item in history[-10:]:
             context += f"{item['role']}: {item['content']}\n"
 
+        personal_context = ""
+
+        if about.strip():
+            personal_context = f"""
+Información personal proporcionada por el usuario:
+{about.strip()}
+
+Utiliza esta información para personalizar la respuesta cuando sea relevante.
+No menciones estos datos innecesariamente.
+No inventes información adicional sobre el usuario.
+Si una recomendación pudiera entrar en conflicto con esta información personal,
+tenla en cuenta y adapta la respuesta.
+"""
+
         prompt = f"""
+{personal_context}
+
 Historial de conversación:
 
 {context}
@@ -41,7 +59,6 @@ Historial de conversación:
 Usuario:
 {message}
 """
-
         response = ask_llm(
             prompt,
             tone=tone,

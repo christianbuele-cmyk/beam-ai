@@ -420,22 +420,32 @@ def chat(
 ):
     clean_agent_name = agent_name.strip() or "BEAM AI"
 
-    print("SESSION:", session_key(request))
+    session_id = request.state.session_id
+    key = session_key(request)
+
+    profile = get_profile_from_db(session_id)
+
+    if not isinstance(profile, dict):
+        profile = {}
+
+    about = str(profile.get("about", "")).strip()
+
+    print("SESSION:", key)
     print("TONO SELECCIONADO:", tone)
     print("NOMBRE AGENTE:", clean_agent_name)
 
     response = router.process(
         message,
-        session_key(request),
+        key,
         tone,
-        clean_agent_name
+        clean_agent_name,
+        about
     )
 
     return {
         "user": message,
         "assistant": response
     }
-
 
 @app.get("/shortcuts")
 def get_shortcuts(request: Request):
