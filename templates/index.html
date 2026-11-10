@@ -10385,6 +10385,18 @@ function openEditModal(shortcut) {
             }
         }
 
+let activeConversationId =
+    localStorage.getItem("activeConversationId");
+
+if (!activeConversationId) {
+    activeConversationId = crypto.randomUUID();
+
+    localStorage.setItem(
+        "activeConversationId",
+        activeConversationId
+    );
+}
+
          function addChatMessage(role, text, className) {
             const message = document.createElement("div");
             message.className = className;
@@ -10476,7 +10488,8 @@ const response = await fetch(
     `/chat?message=${encodeURIComponent(languageInstruction + finalMessage)}` +
     `&language=${encodeURIComponent(currentLanguage)}` +
     `&tone=${encodeURIComponent(selectedTone)}` +
-    `&agent_name=${encodeURIComponent(selectedAgentName)}`
+    `&agent_name=${encodeURIComponent(selectedAgentName)}` +
+    `&conversation_id=${encodeURIComponent(activeConversationId)}`
 );
                 if (!response.ok) throw new Error("Chat request failed");
                 const data = await response.json();
@@ -10678,18 +10691,23 @@ async function loadMemorySummary() {
             throw new Error("No se pudo cargar la memoria");
         }
 
-        const data = await response.json();
-        const history = Array.isArray(data.history) ? data.history : [];
+const data = await response.json();
 
-        const historyCount = document.getElementById("memoryHistoryCount");
+const conversations =
+    Array.isArray(data.conversations)
+        ? data.conversations
+        : [];
 
-        if (historyCount) {
-            const total = history.length;
-            historyCount.textContent =
-                total === 1
-                    ? "1 conversación"
-                    : `${total} conversaciones`;
-        }
+const historyCount = document.getElementById("memoryHistoryCount");
+
+if (historyCount) {
+    const total = conversations.length;
+
+    historyCount.textContent =
+        total === 1
+            ? "1 conversación"
+            : `${total} conversaciones`;
+}
     } catch (error) {
         console.error("Error cargando el resumen de memoria:", error);
 
@@ -10733,9 +10751,13 @@ async function openMemoryHistory() {
         }
 
         const data = await response.json();
-        const history = Array.isArray(data.history) ? data.history : [];
 
-        if (history.length === 0) {
+        const conversations =
+            Array.isArray(data.conversations)
+                ? data.conversations
+                : [];
+
+        if (conversations.length === 0) {
             list.innerHTML = `
                 <div style="
                     color:#8f96a3;
@@ -10749,34 +10771,98 @@ async function openMemoryHistory() {
             return;
         }
 
-        list.innerHTML = history.map(item => {
-            const role = item.role === "user" ? "Tú" : "BEAM AI";
-            const content = String(item.content || "");
+        const sortedConversations = [...conversations].sort(
+            (a, b) =>
+                Number(b.updated_at || 0) -
+                Number(a.updated_at || 0)
+        );
+
+        list.innerHTML = sortedConversations.map(conversation => {
+
+            const messages =
+                Array.isArray(conversation.messages)
+                    ? conversation.messages
+                    : [];
+
+            const firstUserMessage = messages.find(
+                item => item.role === "user"
+            );
+
+            let title =
+                firstUserMessage &&
+                firstUserMessage.content
+                    ? String(firstUserMessage.content)
+                    : String(
+                        conversation.title ||
+                        "Conversación"
+                    );
+
+            title = title.replace(
+                /^Reply entirely in the same language used by the user\. Do not mix languages\.\s*/i,
+                ""
+            );
+
+            if (title.length > 70) {
+                title = title.substring(0, 67) + "...";
+            }
+
+            const updatedAt =
+                Number(conversation.updated_at || 0);
+
+            const dateText = updatedAt
+                ? new Date(updatedAt * 1000)
+                    .toLocaleString([], {
+                        day: "2-digit",
+                        month: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })
+                : "";
+
+            const messageCount = messages.length;
 
             return `
                 <div style="
-                    padding:14px 0;
-                    border-bottom:1px solid #292c33;
+                    padding:16px;
+                    margin-bottom:10px;
+                    background:#1d2027;
+                    border:1px solid #292c33;
+                    border-radius:12px;
                 ">
                     <div style="
-                        color:#4da3ff;
-                        font-size:12px;
+                        color:#eeeeee;
+                        font-size:14px;
                         font-weight:600;
-                        margin-bottom:6px;
-                    ">${role}</div>
+                        line-height:1.4;
+                        margin-bottom:8px;
+                    ">
+                        ${title}
+                    </div>
 
                     <div style="
-                        color:#eeeeee;
-                        font-size:13px;
-                        line-height:1.5;
-                        white-space:pre-wrap;
-                    ">${content}</div>
+                        display:flex;
+                        justify-content:space-between;
+                        gap:12px;
+                        color:#8f96a3;
+                        font-size:12px;
+                    ">
+                        <span>
+                            ${messageCount === 1
+                                ? "1 mensaje"
+                                : `${messageCount} mensajes`}
+                        </span>
+
+                        <span>${dateText}</span>
+                    </div>
                 </div>
             `;
         }).join("");
 
     } catch (error) {
-        console.error("Error cargando el historial:", error);
+        console.error(
+            "Error cargando el historial:",
+            error
+        );
 
         list.innerHTML = `
             <div style="
@@ -10790,7 +10876,6 @@ async function openMemoryHistory() {
         `;
     }
 }
-
 function closeMemoryHistory() {
     const modal = document.getElementById("memoryHistoryModal");
 

@@ -412,12 +412,15 @@ def save_buttons(key: str, buttons):
 
 
 @app.get("/chat")
+
 def chat(
     request: Request,
     message: str,
     tone: str = "Profesional",
-    agent_name: str = "BEAM AI"
+    agent_name: str = "BEAM AI",
+    conversation_id: str = ""
 ):
+    
     clean_agent_name = agent_name.strip() or "BEAM AI"
 
     session_id = request.state.session_id
@@ -437,8 +440,10 @@ def chat(
         key,
         tone,
         clean_agent_name,
-        profile
+        profile,
+        conversation_id
     )
+
     return {
         "user": message,
         "assistant": response
@@ -1088,11 +1093,16 @@ def get_memory(request: Request):
     history = memory.get("history", [])
     if not isinstance(history, list):
         history = []
+    conversations = memory.get("conversations", [])
+
+    if not isinstance(conversations, list):
+        conversations = []
 
     return JSONResponse(
         {
             "enabled": memory.get("enabled", True),
-            "history": history
+            "history": history,
+            "conversations": conversations
         },
         headers={"Cache-Control": "no-store"}
     )

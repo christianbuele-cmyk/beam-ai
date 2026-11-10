@@ -1,6 +1,8 @@
 from memory.memory_store import load_memory, save_memory
 from agents.llm_agent import ask_llm
 
+import time
+from uuid import uuid4
 
 class AssistantAgent:
 
@@ -10,7 +12,8 @@ class AssistantAgent:
         session_key: str,
         tone: str = "Profesional",
         agent_name: str = "BEAM AI",
-        profile=None
+        profile=None,
+        conversation_id: str = ""
     ):
 
         memory = load_memory(session_key)
@@ -20,6 +23,63 @@ class AssistantAgent:
 
         if not isinstance(history, list):
             history = []
+        conversations = (
+            memory.get("conversations", [])
+            if memory_enabled
+            else []
+        )
+
+        if not isinstance(conversations, list):
+            conversations = []
+
+        clean_conversation_id = str(
+            conversation_id or ""
+        ).strip()
+
+        if not clean_conversation_id:
+            clean_conversation_id = str(uuid4())
+
+        active_conversation = next(
+            (
+                item
+                for item in conversations
+                if isinstance(item, dict)
+                and item.get("id") == clean_conversation_id
+            ),
+            None
+        )
+
+        now = int(time.time())
+
+        if active_conversation is None:
+            active_conversation = {
+                "id": clean_conversation_id,
+                "title": message[:60].strip() or "Nueva conversación",
+                "created_at": now,
+                "updated_at": now,
+                "messages": []
+            }
+
+            conversations.append(active_conversation)
+
+        messages = active_conversation.get(
+            "messages",
+            []
+        )
+
+        if not isinstance(messages, list):
+            messages = []
+            active_conversation["messages"] = messages
+
+        user_message = {
+            "id": str(uuid4()),
+            "role": "user",
+            "content": message,
+            "created_at": now
+        }
+
+        messages.append(user_message)
+        active_conversation["updated_at"] = now
 
         if memory_enabled and message.lower().startswith("me llamo"):
             name = message[8:].strip()
@@ -177,7 +237,20 @@ Usuario:
                 "content": response
             })
 
+            assistant_message = {
+                "id": str(uuid4()),
+                "role": "assistant",
+                "content": response,
+                "created_at": int(time.time())
+            }
+
+            messages.append(assistant_message)
+
+            active_conversation["messages"] = messages
+            active_conversation["updated_at"] = int(time.time())
+
             memory["history"] = history
+            memory["conversations"] = conversations
 
             print("NOMBRE DEL AGENTE EN ASSISTANT:", agent_name)
             print("GUARDANDO MEMORIA")
