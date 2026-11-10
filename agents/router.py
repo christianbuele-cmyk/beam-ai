@@ -16,7 +16,7 @@ class Router:
         session_key,
         tone="Profesional",
         agent_name="BEAM AI",
-        about=""
+        profile=None
     ):
         message_lower = message.lower()
 
@@ -31,5 +31,5 @@ class Router:
             session_key,
             tone,
             agent_name,
-            about
+            profile
         )

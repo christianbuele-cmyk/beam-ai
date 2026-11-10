@@ -6402,16 +6402,62 @@ function removeCustomInterest(value) {
     renderInterests();
 }
 
-function saveInterests() {
+async function saveInterests() {
 
     localStorage.setItem(
         "userInterests",
         JSON.stringify(interestsTemp)
     );
 
-    renderAgentPreferences();
+    try {
 
-    closeInterestsModal();
+        if (location.protocol !== "file:") {
+
+            const profileResponse = await fetch("/user", {
+                method: "GET",
+                cache: "no-store"
+            });
+
+            if (!profileResponse.ok) {
+                throw new Error("No se pudo cargar el perfil");
+            }
+
+            const profileData = await profileResponse.json();
+
+            if (!profileData.exists || !profileData.user) {
+                throw new Error("No se encontró el perfil");
+            }
+
+            const profile = {
+                ...profileData.user,
+                interests: [...interestsTemp]
+            };
+
+            const saveResponse = await fetch("/user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(profile)
+            });
+
+            if (!saveResponse.ok) {
+                throw new Error("No se pudieron guardar los intereses");
+            }
+        }
+
+        renderAgentPreferences();
+        closeInterestsModal();
+
+    } catch (error) {
+
+        console.error(
+            "Error guardando intereses:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+    }
 }
 
 function renderInterests() {
@@ -6534,7 +6580,7 @@ function selectActivitiesTime(value) {
     renderActivities();
 }
 
-function saveActivities() {
+async function saveActivities() {
 
     localStorage.setItem(
         "userFavoriteActivities",
@@ -6559,9 +6605,59 @@ function saveActivities() {
         localStorage.removeItem("userActivitiesTime");
     }
 
-    renderAgentPreferences();
+    try {
 
-    closeActivitiesModal();
+        if (location.protocol !== "file:") {
+
+            const profileResponse = await fetch("/user", {
+                method: "GET",
+                cache: "no-store"
+            });
+
+            if (!profileResponse.ok) {
+                throw new Error("No se pudo cargar el perfil");
+            }
+
+            const profileData = await profileResponse.json();
+
+            if (!profileData.exists || !profileData.user) {
+                throw new Error("No se encontró el perfil");
+            }
+
+            const profile = {
+                ...profileData.user,
+                favorite_activities: [...activitiesTemp],
+                activities_companion: activitiesCompanionTemp,
+                activities_time: activitiesTimeTemp
+            };
+
+            const saveResponse = await fetch("/user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(profile)
+            });
+
+            if (!saveResponse.ok) {
+                throw new Error(
+                    "No se pudieron guardar las actividades"
+                );
+            }
+        }
+
+        renderAgentPreferences();
+        closeActivitiesModal();
+
+    } catch (error) {
+
+        console.error(
+            "Error guardando actividades:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+    }
 }
 
 function renderActivities() {
@@ -8896,7 +8992,7 @@ function toggleTravelFood(value) {
     renderTravelPreferences();
 }
 
-function saveTravelPreferences() {
+async function saveTravelPreferences() {
 
     localStorage.setItem(
         "userTravelStyle",
@@ -8913,9 +9009,59 @@ function saveTravelPreferences() {
         JSON.stringify(travelFoodTemp)
     );
 
-    renderAgentPreferences();
+    try {
 
-    closeTravelModal();
+        if (location.protocol !== "file:") {
+
+            const profileResponse = await fetch("/user", {
+                method: "GET",
+                cache: "no-store"
+            });
+
+            if (!profileResponse.ok) {
+                throw new Error("No se pudo cargar el perfil");
+            }
+
+            const profileData = await profileResponse.json();
+
+            if (!profileData.exists || !profileData.user) {
+                throw new Error("No se encontró el perfil");
+            }
+
+            const profile = {
+                ...profileData.user,
+                travel_style: [...travelStyleTemp],
+                travel_leisure: [...travelLeisureTemp],
+                travel_food: [...travelFoodTemp]
+            };
+
+            const saveResponse = await fetch("/user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(profile)
+            });
+
+            if (!saveResponse.ok) {
+                throw new Error(
+                    "No se pudieron guardar las preferencias de viaje"
+                );
+            }
+        }
+
+        renderAgentPreferences();
+        closeTravelModal();
+
+    } catch (error) {
+
+        console.error(
+            "Error guardando preferencias de viaje:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+    }
 }
 
 function renderTravelPreferences() {
@@ -9092,7 +9238,7 @@ function toggleRestrictionAccessibility(value) {
     renderRestrictions();
 }
 
-function saveRestrictions() {
+async function saveRestrictions() {
 
     localStorage.setItem(
         "userRestrictionsFood",
@@ -9109,8 +9255,61 @@ function saveRestrictions() {
         JSON.stringify(restrictionsAccessibilityTemp)
     );
 
-    renderAgentPreferences();
-    closeRestrictionsModal();
+    try {
+
+        if (location.protocol !== "file:") {
+
+            const profileResponse = await fetch("/user", {
+                method: "GET",
+                cache: "no-store"
+            });
+
+            if (!profileResponse.ok) {
+                throw new Error("No se pudo cargar el perfil");
+            }
+
+            const profileData = await profileResponse.json();
+
+            if (!profileData.exists || !profileData.user) {
+                throw new Error("No se encontró el perfil");
+            }
+
+            const profile = {
+                ...profileData.user,
+                restrictions_food: [...restrictionsFoodTemp],
+                restrictions_avoid: [...restrictionsAvoidTemp],
+                restrictions_accessibility: {
+                    ...restrictionsAccessibilityTemp
+                }
+            };
+
+            const saveResponse = await fetch("/user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(profile)
+            });
+
+            if (!saveResponse.ok) {
+                throw new Error(
+                    "No se pudieron guardar las restricciones"
+                );
+            }
+        }
+
+        renderAgentPreferences();
+        closeRestrictionsModal();
+
+    } catch (error) {
+
+        console.error(
+            "Error guardando restricciones:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+    }
 }
 
 function getRestrictionsSelectedCount() {

@@ -10,7 +10,7 @@ class AssistantAgent:
         session_key: str,
         tone: str = "Profesional",
         agent_name: str = "BEAM AI",
-        about: str = ""
+        profile=None
     ):
 
         memory = load_memory(session_key)
@@ -37,18 +37,124 @@ class AssistantAgent:
 
         personal_context = ""
 
-        if about.strip():
-            personal_context = f"""
-Información personal proporcionada por el usuario:
-{about.strip()}
+        if isinstance(profile, dict) and profile.get("personalization_enabled", True):
 
-Utiliza esta información para personalizar la respuesta cuando sea relevante.
-No menciones estos datos innecesariamente.
-No inventes información adicional sobre el usuario.
-Si una recomendación pudiera entrar en conflicto con esta información personal,
-tenla en cuenta y adapta la respuesta.
+            profile_parts = []
+
+            about = str(profile.get("about", "")).strip()
+            age_range = str(profile.get("age_range", "")).strip()
+
+            interests = profile.get("interests", [])
+            favorite_activities = profile.get("favorite_activities", [])
+            activities_companion = str(
+                profile.get("activities_companion", "")
+            ).strip()
+            activities_time = str(
+                profile.get("activities_time", "")
+            ).strip()
+
+            travel_style = profile.get("travel_style", [])
+            travel_leisure = profile.get("travel_leisure", [])
+            travel_food = profile.get("travel_food", [])
+
+            restrictions_food = profile.get("restrictions_food", [])
+            restrictions_avoid = profile.get("restrictions_avoid", [])
+            restrictions_accessibility = profile.get(
+                "restrictions_accessibility",
+                {}
+            )
+
+            if about:
+                profile_parts.append(
+                    f"Información proporcionada por el usuario: {about}"
+                )
+
+            if age_range:
+                profile_parts.append(
+                    f"Rango de edad: {age_range}"
+                )
+
+            if isinstance(interests, list) and interests:
+                clean_interests = [
+                    str(item).replace("custom:", "", 1)
+                    for item in interests
+                ]
+                profile_parts.append(
+                    "Intereses y aficiones: "
+                    + ", ".join(clean_interests)
+                )
+
+            if isinstance(favorite_activities, list) and favorite_activities:
+                profile_parts.append(
+                    "Actividades favoritas: "
+                    + ", ".join(map(str, favorite_activities))
+                )
+
+            if activities_companion:
+                profile_parts.append(
+                    f"Suele hacer planes con: {activities_companion}"
+                )
+
+            if activities_time:
+                profile_parts.append(
+                    f"Momento del día preferido: {activities_time}"
+                )
+
+            if isinstance(travel_style, list) and travel_style:
+                profile_parts.append(
+                    "Estilo de viaje preferido: "
+                    + ", ".join(map(str, travel_style))
+                )
+
+            if isinstance(travel_leisure, list) and travel_leisure:
+                profile_parts.append(
+                    "Planes y ocio preferidos: "
+                    + ", ".join(map(str, travel_leisure))
+                )
+
+            if isinstance(travel_food, list) and travel_food:
+                profile_parts.append(
+                    "Preferencias gastronómicas: "
+                    + ", ".join(map(str, travel_food))
+                )
+
+            if isinstance(restrictions_food, list) and restrictions_food:
+                profile_parts.append(
+                    "Restricciones alimentarias: "
+                    + ", ".join(map(str, restrictions_food))
+                )
+
+            if isinstance(restrictions_avoid, list) and restrictions_avoid:
+                profile_parts.append(
+                    "Prefiere evitar: "
+                    + ", ".join(map(str, restrictions_avoid))
+                )
+
+            if isinstance(restrictions_accessibility, dict):
+                enabled_accessibility = [
+                    str(key)
+                    for key, enabled
+                    in restrictions_accessibility.items()
+                    if enabled is True
+                ]
+
+                if enabled_accessibility:
+                    profile_parts.append(
+                        "Necesidades de accesibilidad o viaje: "
+                        + ", ".join(enabled_accessibility)
+                    )
+
+            if profile_parts:
+                personal_context = """
+Perfil y preferencias proporcionadas por el usuario:
+- """ + "\n- ".join(profile_parts) + """
+
+Utiliza estos datos cuando sean relevantes para personalizar recomendaciones y respuestas.
+Respeta especialmente las restricciones alimentarias, necesidades de accesibilidad y cosas que el usuario prefiere evitar.
+No menciones datos personales innecesariamente.
+No inventes preferencias ni atribuyas al usuario opciones que no estén guardadas.
+Cuando el usuario pregunte qué sabes sobre él, puedes resumir la información que haya decidido proporcionar.
 """
-
         prompt = f"""
 {personal_context}
 

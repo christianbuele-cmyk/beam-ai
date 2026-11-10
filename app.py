@@ -428,8 +428,6 @@ def chat(
     if not isinstance(profile, dict):
         profile = {}
 
-    about = str(profile.get("about", "")).strip()
-
     print("SESSION:", key)
     print("TONO SELECCIONADO:", tone)
     print("NOMBRE AGENTE:", clean_agent_name)
@@ -439,9 +437,8 @@ def chat(
         key,
         tone,
         clean_agent_name,
-        about
+        profile
     )
-
     return {
         "user": message,
         "assistant": response
@@ -592,11 +589,11 @@ async def save_user(request: Request):
             detail="Los intereses no son válidos."
         )
 
-    if len(interests) > 10:
+    if len(interests) > 30:
         raise HTTPException(
             status_code=400,
-            detail="Máximo 10 intereses."
-        )
+            detail="Máximo 30 intereses."
+    )
 
     session_id = request.state.session_id
     key = session_key(request)
@@ -657,7 +654,7 @@ async def save_user(request: Request):
     user["email"] = email
     user["city"] = city
     user["about"] = about
-    user["interests"] = interests[:10]
+    user["interests"] = interests[:30]
 
     save_profile_to_db(
         session_id=session_id,
