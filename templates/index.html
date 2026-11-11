@@ -4943,7 +4943,7 @@ function updateAccountAvatar(profile) {
 updateAccountDetails(profile);
 }
 
-        function showMain(profile) {
+function showMain(profile) {
 
     document.getElementById("welcome-screen").style.display = "none";
 
@@ -4964,16 +4964,95 @@ updateAccountDetails(profile);
     ).classList.remove(
         "settings-open"
     );
-document.querySelector(
-    ".settings-toggle"
-).classList.remove(
-    "open"
-);
+
+    document.querySelector(
+        ".settings-toggle"
+    ).classList.remove(
+        "open"
+    );
+
+    if (profile && typeof profile === "object") {
+
+        if (Array.isArray(profile.interests)) {
+            localStorage.setItem(
+                "userInterests",
+                JSON.stringify(profile.interests)
+            );
+        }
+
+        if (Array.isArray(profile.favorite_activities)) {
+            localStorage.setItem(
+                "userFavoriteActivities",
+                JSON.stringify(profile.favorite_activities)
+            );
+        }
+
+        if (typeof profile.activities_companion === "string") {
+            localStorage.setItem(
+                "userActivitiesCompanion",
+                profile.activities_companion
+            );
+        }
+
+        if (typeof profile.activities_time === "string") {
+            localStorage.setItem(
+                "userActivitiesTime",
+                profile.activities_time
+            );
+        }
+
+        if (Array.isArray(profile.travel_style)) {
+            localStorage.setItem(
+                "userTravelStyle",
+                JSON.stringify(profile.travel_style)
+            );
+        }
+
+        if (Array.isArray(profile.travel_leisure)) {
+            localStorage.setItem(
+                "userTravelLeisure",
+                JSON.stringify(profile.travel_leisure)
+            );
+        }
+
+        if (Array.isArray(profile.travel_food)) {
+            localStorage.setItem(
+                "userTravelFood",
+                JSON.stringify(profile.travel_food)
+            );
+        }
+
+        if (Array.isArray(profile.restrictions_food)) {
+            localStorage.setItem(
+                "userRestrictionsFood",
+                JSON.stringify(profile.restrictions_food)
+            );
+        }
+
+        if (Array.isArray(profile.restrictions_avoid)) {
+            localStorage.setItem(
+                "userRestrictionsAvoid",
+                JSON.stringify(profile.restrictions_avoid)
+            );
+        }
+
+        if (
+            profile.restrictions_accessibility &&
+            typeof profile.restrictions_accessibility === "object"
+        ) {
+            localStorage.setItem(
+                "userRestrictionsAccessibility",
+                JSON.stringify(profile.restrictions_accessibility)
+            );
+        }
+    }
+
     updateWelcomeUser(profile);
+
+    renderAgentPreferences();
 
     loadShortcuts();
 }
-
         async function checkUser() {
             applyLanguage(currentLanguage);
             if (location.protocol === "file:") {
@@ -10652,7 +10731,10 @@ async function loadMemorySettings() {
         }
 
         const data = await response.json();
-        const history = Array.isArray(data.history) ? data.history : [];
+        const conversations =
+    Array.isArray(data.conversations)
+        ? data.conversations
+        : [];
 
         const historyCount = document.getElementById("memoryHistoryCount");
    const memoryStatusText = document.getElementById("memoryStatusText");
@@ -10660,13 +10742,12 @@ if (memoryStatusText) {
     memoryStatusText.textContent = data.enabled !== false ? "Activada" : "Desactivada";
 }
 
-        if (historyCount) {
-            historyCount.textContent =
-                history.length === 1
-                    ? "1 conversación"
-                    : `${history.length} conversaciones`;
-        }
-
+if (historyCount) {
+    historyCount.textContent =
+        conversations.length === 1
+            ? "1 conversación"
+            : `${conversations.length} conversaciones`;
+}
     } catch (error) {
         console.error("Error cargando la memoria:", error);
 
