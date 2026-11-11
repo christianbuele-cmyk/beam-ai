@@ -10464,15 +10464,32 @@ function openEditModal(shortcut) {
             }
         }
 
+const CONVERSATION_TIMEOUT_MS = 30 * 60 * 1000;
+
 let activeConversationId =
     localStorage.getItem("activeConversationId");
 
-if (!activeConversationId) {
+const lastConversationActivity =
+    Number(
+        localStorage.getItem("lastConversationActivity") || "0"
+    );
+
+const conversationExpired =
+    lastConversationActivity > 0 &&
+    Date.now() - lastConversationActivity > CONVERSATION_TIMEOUT_MS;
+
+if (!activeConversationId || conversationExpired) {
+
     activeConversationId = crypto.randomUUID();
 
     localStorage.setItem(
         "activeConversationId",
         activeConversationId
+    );
+
+    localStorage.setItem(
+        "lastConversationActivity",
+        String(Date.now())
     );
 }
 
@@ -10577,7 +10594,13 @@ botMessage.timestamp.textContent = new Date().toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit"
 });
-            } catch (error) {
+
+localStorage.setItem(
+    "lastConversationActivity",
+    String(Date.now())
+);
+
+} catch (error) {
                 console.error(error);
                 botMessage.content.textContent = t("chatError");
 botMessage.timestamp.textContent = new Date().toLocaleTimeString([], {
