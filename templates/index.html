@@ -4466,6 +4466,7 @@ passwordRequired:"Le mot de passe doit contenir au moins 8 caractères.", passwo
         }
 function renderAgentPreferences() {
 
+    const name = localStorage.getItem("agentName");
     const tone = localStorage.getItem("agentTone");
     const detail = localStorage.getItem("agentDetail");
     const language = localStorage.getItem("agentLanguage");
@@ -4552,10 +4553,15 @@ function renderAgentPreferences() {
         }
     };
 
+    const nameLabel = document.getElementById("agentNameValue");
     const toneLabel = document.getElementById("agentToneValue");
     const detailLabel = document.getElementById("agentDetailValue");
     const languageLabel = document.getElementById("agentLanguageValue");
     const initiativeLabel = document.getElementById("agentInitiativeValue");
+
+if (nameLabel) {
+    nameLabel.textContent = name || "";
+}
 
     if (toneLabel) {
         toneLabel.textContent =
@@ -4972,6 +4978,28 @@ function showMain(profile) {
     );
 
     if (profile && typeof profile === "object") {
+
+        if (typeof profile.agent_name === "string") {
+            localStorage.setItem(
+                "agentName",
+                profile.agent_name
+            );
+        }
+
+        if (typeof profile.agent_tone === "string") {
+            localStorage.setItem(
+                "agentTone",
+                profile.agent_tone
+            );
+        }
+
+        if (typeof profile.agent_language === "string") {
+            localStorage.setItem(
+                "agentLanguage",
+                profile.agent_language
+            );
+        }
+
 
         if (Array.isArray(profile.interests)) {
             localStorage.setItem(
@@ -5891,6 +5919,60 @@ async function saveAccountName() {
         }
     }
 }
+
+async function saveAgentSetting(field, value) {
+
+    if (location.protocol === "file:") {
+        return;
+    }
+
+    try {
+
+        const profileResponse = await fetch("/user", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!profileResponse.ok) {
+            throw new Error("No se pudo cargar el perfil");
+        }
+
+        const profileData = await profileResponse.json();
+
+        if (!profileData.exists || !profileData.user) {
+            throw new Error("No se encontró el perfil");
+        }
+
+        const profile = {
+            ...profileData.user,
+            [field]: value
+        };
+
+        const saveResponse = await fetch("/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(profile)
+        });
+
+        if (!saveResponse.ok) {
+            throw new Error(
+                "No se pudo guardar la configuración del agente"
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Error guardando configuración del agente:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+    }
+}
+
 function editAgentName() {
     const modal = document.getElementById("agentNameModal");
     const input = document.getElementById("agentNameInput");
@@ -5922,7 +6004,7 @@ function closeAgentNameModal() {
     }
 }
 
-function saveAgentName() {
+async function saveAgentName() {
     const input = document.getElementById("agentNameInput");
     const error = document.getElementById("agentNameError");
 
@@ -5944,6 +6026,10 @@ function saveAgentName() {
     }
 
     localStorage.setItem("agentName", cleanName);
+await saveAgentSetting(
+    "agent_name",
+    cleanName
+);
 
     const agentLabel = document.getElementById("agentNameValue");
 
@@ -5975,10 +6061,15 @@ function closeToneModal() {
 
 }
 
-function setAgentTone(tone) {
+async function setAgentTone(tone) {
 
     localStorage.setItem(
         "agentTone",
+        tone
+    );
+
+    await saveAgentSetting(
+        "agent_tone",
         tone
     );
 
@@ -5986,6 +6077,7 @@ function setAgentTone(tone) {
         document.getElementById(
             "agentToneValue"
         );
+
 
     if (toneLabel) {
 
@@ -6042,12 +6134,17 @@ function closeLanguageModal() {
 
 }
 
-function setAgentLanguage(language) {
+async function setAgentLanguage(language) {
 
     localStorage.setItem(
         "agentLanguage",
         language
     );
+
+await saveAgentSetting(
+    "agent_language",
+    language
+);
 
     const languageLabel =
         document.getElementById(
