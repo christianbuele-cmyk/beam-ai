@@ -11082,13 +11082,17 @@ async function openMemoryHistory() {
             const messageCount = messages.length;
 
             return `
-                <div style="
-                    padding:16px;
-                    margin-bottom:10px;
-                    background:#1d2027;
-                    border:1px solid #292c33;
-                    border-radius:12px;
-                ">
+<div
+    onclick="selectMemoryConversation('${conversation.id}')"
+    style="
+        padding:16px;
+        margin-bottom:10px;
+        background:#1d2027;
+        border:1px solid #292c33;
+        border-radius:12px;
+        cursor:pointer;
+    "
+>
                     <div style="
                         color:#eeeeee;
                         font-size:14px;
@@ -11136,6 +11140,117 @@ async function openMemoryHistory() {
         `;
     }
 }
+
+async function selectMemoryConversation(conversationId) {
+    try {
+        const response = await fetch("/memory", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("No se pudo recuperar la conversación");
+        }
+
+        const data = await response.json();
+
+        const conversations =
+            Array.isArray(data.conversations)
+                ? data.conversations
+                : [];
+
+        const selectedConversation = conversations.find(
+            conversation =>
+                conversation &&
+                conversation.id === conversationId
+        );
+
+        if (!selectedConversation) {
+            throw new Error("La conversación seleccionada no existe");
+        }
+
+        const messages =
+            Array.isArray(selectedConversation.messages)
+                ? selectedConversation.messages
+                : [];
+
+        activeConversationId = selectedConversation.id;
+
+        localStorage.setItem(
+            "activeConversationId",
+            activeConversationId
+        );
+
+        localStorage.setItem(
+            "lastConversationActivity",
+            String(Date.now())
+        );
+
+        const chat = document.getElementById("chat");
+
+        if (!chat) {
+            throw new Error("No se encontró el contenedor del chat");
+        }
+
+        chat.innerHTML = "";
+
+        const selectedAgentName =
+            (localStorage.getItem("agentName") || "").trim() ||
+            "BEAM AI";
+
+        messages.forEach(message => {
+            if (
+                !message ||
+                !["user", "assistant"].includes(message.role)
+            ) {
+                return;
+            }
+
+            let content = String(message.content || "");
+
+            if (message.role === "user") {
+                content = content.replace(
+                    /^Reply entirely in the same language used by the user\. Do not mix languages\.\s*/i,
+                    ""
+                );
+            }
+
+            const renderedMessage = addChatMessage(
+                message.role === "user"
+                    ? t("you")
+                    : selectedAgentName,
+                content,
+                message.role === "user"
+                    ? "user-message"
+                    : "bot-message"
+            );
+
+            const createdAt = Number(message.created_at || 0);
+
+            if (createdAt && renderedMessage.timestamp) {
+                renderedMessage.timestamp.textContent =
+                    new Date(createdAt * 1000)
+                        .toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        });
+            }
+        });
+
+        closeMemoryHistory();
+
+        chat.scrollTop = chat.scrollHeight;
+
+    } catch (error) {
+        console.error(
+            "Error seleccionando la conversación:",
+            error
+        );
+
+        alert("No se ha podido abrir la conversación.");
+    }
+}
+
 function closeMemoryHistory() {
     const modal = document.getElementById("memoryHistoryModal");
 
