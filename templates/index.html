@@ -4993,6 +4993,36 @@ function showMain(profile) {
             );
         }
 
+        if (typeof profile.agent_detail === "string") {
+            localStorage.setItem(
+                "agentDetail",
+                profile.agent_detail
+            );
+        }
+
+        if (typeof profile.agent_initiative === "string") {
+            localStorage.setItem(
+                "agentInitiative",
+                profile.agent_initiative
+            );
+        }
+
+        if (Array.isArray(profile.agent_recommendation_priorities)) {
+            localStorage.setItem(
+                "agentRecommendationPriorities",
+                JSON.stringify(
+                    profile.agent_recommendation_priorities
+                )
+            );
+        }
+
+        if (typeof profile.agent_recommendation_style === "string") {
+            localStorage.setItem(
+                "agentRecommendationStyle",
+                profile.agent_recommendation_style
+            );
+        }
+
         if (typeof profile.agent_language === "string") {
             localStorage.setItem(
                 "agentLanguage",
@@ -5224,12 +5254,17 @@ function closeDetailModal() {
 
 }
 
-function setAgentDetail(detail) {
+async function setAgentDetail(detail) {
 
     localStorage.setItem(
         "agentDetail",
         detail
     );
+
+await saveAgentSetting(
+    "agent_detail",
+    detail
+);
 
     const detailLabel =
         document.getElementById(
@@ -6206,12 +6241,16 @@ function closeInitiativeModal() {
 
 }
 
-function setAgentInitiative(initiative) {
+async function setAgentInitiative(initiative) {
 
     localStorage.setItem(
         "agentInitiative",
         initiative
     );
+await saveAgentSetting(
+    "agent_initiative",
+    initiative
+);
 
     const initiativeLabel =
         document.getElementById(
@@ -6420,7 +6459,7 @@ function resetAgentRecommendation() {
     });
 }
 
-function saveAgentRecommendation() {
+async function saveAgentRecommendation() {
 
     if (
         recommendationPrioritiesTemp.length === 0 &&
@@ -6442,6 +6481,17 @@ function saveAgentRecommendation() {
 
     renderAgentPreferences();
     closeRecommendationModal();
+
+    await saveAgentSetting(
+        "agent_recommendation_priorities",
+        [...recommendationPrioritiesTemp]
+    );
+
+    await saveAgentSetting(
+        "agent_recommendation_style",
+        recommendationStyleTemp
+    );
+
 }
 function resetAgentSettings() {
 
@@ -6466,7 +6516,7 @@ function resetAgentSettings() {
     renderAgentPreferences();
 }
 
-function saveAgentSettings() {
+async function saveAgentSettings() {
 
     if (
         recommendationPrioritiesTemp.length === 0 &&
@@ -6491,6 +6541,15 @@ function saveAgentSettings() {
         }
     }
 
+    await saveAgentSetting(
+        "agent_recommendation_priorities",
+        [...recommendationPrioritiesTemp]
+    );
+
+    await saveAgentSetting(
+        "agent_recommendation_style",
+        recommendationStyleTemp
+    );
         renderAgentPreferences();
 }
 
