@@ -1800,7 +1800,7 @@ html[data-high-contrast="true"] .settings-close {
     <span class="memory-option-arrow">›</span>
 </button>
 
-<button class="memory-option" type="button">
+<button class="memory-option" type="button" onclick="resetPersonalization()">
     <span class="memory-option-text">
         <span class="memory-option-title">Reiniciar personalización</span>
         <span class="memory-option-description">Restablece lo aprendido y tus ajustes</span>
@@ -2553,6 +2553,14 @@ settingsMemory:"Memoria",
 memoryHistory:"Consultar y editar el historial de conversaciones",
 memoryToggle:"Activar o desactivar la memoria",
 memoryReset:"Reiniciar la personalización",
+memoryResetTitle:"Reiniciar personalización",
+memoryResetSubtitle:"Restablece lo aprendido y tus preferencias personales.",
+memoryResetDescription:"Se eliminarán tus intereses, actividades, preferencias de viaje, restricciones y la información de personalización proporcionada en “Sobre ti”.",
+memoryResetKeep:"Tu cuenta y tu historial de conversaciones se conservarán.",
+memoryResetCancel:"Cancelar",
+memoryResetConfirm:"Reiniciar",
+memoryResetSuccess:"Personalización reiniciada correctamente. Tu cuenta y tu historial de conversaciones se han conservado.",
+memoryResetError:"No se ha podido reiniciar la personalización.",
 manage:"Gestionar",
 restart:"Reiniciar",
 settingsNotifications:"Notificaciones",
@@ -3271,6 +3279,14 @@ settingsMemory:"Memory",
 memoryHistory:"View and edit conversation history",
 memoryToggle:"Turn memory on or off",
 memoryReset:"Reset personalization",
+memoryResetTitle:"Reset personalization",
+memoryResetSubtitle:"Reset what your agent has learned and your personal preferences.",
+memoryResetDescription:"Your interests, activities, travel preferences, restrictions, and the personalization information provided in “About you” will be removed.",
+memoryResetKeep:"Your account and conversation history will be preserved.",
+memoryResetCancel:"Cancel",
+memoryResetConfirm:"Reset",
+memoryResetSuccess:"Personalization reset successfully. Your account and conversation history have been preserved.",
+memoryResetError:"Personalization could not be reset.",
 manage:"Manage",
 restart:"Reset",
 settingsNotifications:"Notifications",
@@ -4188,6 +4204,14 @@ settingsMemory:"Mémoire",
 memoryHistory:"Consulter et modifier l’historique des conversations",
 memoryToggle:"Activer ou désactiver la mémoire",
 memoryReset:"Réinitialiser la personnalisation",
+memoryResetTitle:"Réinitialiser la personnalisation",
+memoryResetSubtitle:"Réinitialisez ce que votre agent a appris et vos préférences personnelles.",
+memoryResetDescription:"Vos centres d’intérêt, activités, préférences de voyage, restrictions et les informations de personnalisation fournies dans « À propos de vous » seront supprimés.",
+memoryResetKeep:"Votre compte et votre historique de conversations seront conservés.",
+memoryResetCancel:"Annuler",
+memoryResetConfirm:"Réinitialiser",
+memoryResetSuccess:"La personnalisation a été réinitialisée avec succès. Votre compte et votre historique de conversations ont été conservés.",
+memoryResetError:"Impossible de réinitialiser la personnalisation.",
 manage:"Gérer",
 restart:"Réinitialiser",
 settingsNotifications:"Notifications",
@@ -11307,7 +11331,121 @@ async function toggleMemory() {
     }
 }
 
-loadMemorySummary();
+function resetPersonalization() {
+    const modal =
+        document.getElementById("resetPersonalizationModal");
+
+    const status =
+        document.getElementById("resetPersonalizationStatus");
+
+    if (status) {
+        status.textContent = "";
+        status.style.display = "none";
+    }
+
+    if (modal) {
+        modal.style.display = "flex";
+    }
+}
+
+function closeResetPersonalizationModal() {
+    const modal =
+        document.getElementById("resetPersonalizationModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+async function confirmResetPersonalization() {
+    try {
+        const currentResponse = await fetch("/user", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!currentResponse.ok) {
+            throw new Error("No se pudo cargar el perfil");
+        }
+
+        const currentData = await currentResponse.json();
+
+        if (
+            currentData.exists !== true ||
+            !currentData.user ||
+            typeof currentData.user !== "object"
+        ) {
+            throw new Error("No se encontró el perfil");
+        }
+
+        const profile = {
+            ...currentData.user,
+
+            about: "",
+            age_range: "",
+            interests: [],
+
+            favorite_activities: [],
+            activities_companion: "",
+            activities_time: "",
+
+            travel_style: [],
+            travel_leisure: [],
+            travel_food: [],
+
+            restrictions_food: [],
+            restrictions_avoid: [],
+            restrictions_accessibility: {},
+
+            personalization_enabled: true
+        };
+
+        const response = await fetch("/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(profile)
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                "No se pudo reiniciar la personalización"
+            );
+        }
+
+showMain(profile);
+        
+const status =
+    document.getElementById("resetPersonalizationStatus");
+
+if (status) {
+    status.textContent = t("memoryResetSuccess");
+    status.style.display = "block";
+    status.style.background = "#10281d";
+    status.style.border = "1px solid #245c43";
+    status.style.color = "#8fe3b7";
+}
+
+    } catch (error) {
+        console.error(
+            "Error reiniciando la personalización:",
+            error
+        );
+
+const status =
+    document.getElementById("resetPersonalizationStatus");
+
+if (status) {
+    status.textContent = t("memoryResetError");
+    status.style.display = "block";
+    status.style.background = "#2b1719";
+    status.style.border = "1px solid #633238";
+    status.style.color = "#ff9ca5";
+}
+
+    }
+}
 
 </script>
 
@@ -11822,6 +11960,151 @@ loadMemorySummary();
     </div>
 </div>
 </div>
+
+<div id="resetPersonalizationModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(520px,92vw);
+        background:#181b22;
+        border:1px solid #30343d;
+        border-radius:16px;
+        padding:24px;
+        box-sizing:border-box;
+        color:#eeeeee;
+    ">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:20px;
+            margin-bottom:18px;
+        ">
+            <div>
+<h2
+    data-i18n="memoryResetTitle"
+    style="
+        margin:0 0 7px 0;
+        font-size:20px;
+    "
+>
+    Reiniciar personalización
+</h2>
+
+<div
+    data-i18n="memoryResetSubtitle"
+    style="
+        color:#8f96a3;
+        font-size:13px;
+        line-height:1.5;
+    "
+>
+    Restablece lo aprendido y tus preferencias personales.
+</div>
+            </div>
+
+            <button
+                type="button"
+                onclick="closeResetPersonalizationModal()"
+                aria-label="Cerrar"
+                style="
+                    background:transparent;
+                    border:none;
+                    color:#dddddd;
+                    font-size:26px;
+                    cursor:pointer;
+                    padding:0 4px;
+                "
+            >×</button>
+        </div>
+
+        <div style="
+            background:#1d2027;
+            border:1px solid #292c33;
+            border-radius:12px;
+            padding:16px;
+            color:#c7cbd3;
+            font-size:13px;
+            line-height:1.6;
+            margin-bottom:22px;
+        ">
+<span data-i18n="memoryResetDescription">
+    Se eliminarán tus intereses, actividades, preferencias de viaje,
+    restricciones y la información de personalización proporcionada
+    en “Sobre ti”.
+</span>
+            <br><br>
+<strong
+    data-i18n="memoryResetKeep"
+    style="color:#eeeeee;"
+>
+    Tu cuenta y tu historial de conversaciones se conservarán.
+</strong>
+        </div>
+
+<div
+    id="resetPersonalizationStatus"
+    style="
+        display:none;
+        border-radius:12px;
+        padding:14px 16px;
+        margin-bottom:18px;
+        font-size:13px;
+        line-height:1.5;
+    "
+></div>
+
+        <div style="
+            display:flex;
+            justify-content:flex-end;
+            gap:10px;
+        ">
+            <button
+                type="button"
+                onclick="closeResetPersonalizationModal()"
+                style="
+                    min-width:100px;
+                    padding:10px 16px;
+                    border-radius:10px;
+                    border:1px solid #30343d;
+                    background:#23262e;
+                    color:#eeeeee;
+                    cursor:pointer;
+                    font-size:14px;
+                "
+>
+    <span data-i18n="memoryResetCancel">Cancelar</span>
+</button>
+
+            <button
+                type="button"
+                onclick="confirmResetPersonalization()"
+                style="
+                    min-width:100px;
+                    padding:10px 16px;
+                    border-radius:10px;
+                    border:1px solid #2f81f7;
+                    background:#1677e8;
+                    color:white;
+                    cursor:pointer;
+                    font-size:14px;
+                    font-weight:600;
+                "
+>
+    <span data-i18n="memoryResetConfirm">Reiniciar</span>
+</button>
+        </div>
+
+    </div>
+</div>
+
 <div id="interestsModal" style="
     display:none;
     position:fixed;
