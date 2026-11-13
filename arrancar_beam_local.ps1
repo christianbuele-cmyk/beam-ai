@@ -35,6 +35,18 @@ foreach ($variableName in $requiredVariables) {
 
     Set-Item -Path "Env:$variableName" -Value $value
 }
+
+# Forzar Psycopg a usar la implementacion Python con libpq firmada
+$postgresBin = "C:\Program Files\PostgreSQL\17\bin"
+
+if (-not (Test-Path "$postgresBin\libpq.dll")) {
+    Write-Host "ERROR: No se encuentra libpq.dll de PostgreSQL 17" -ForegroundColor Red
+    exit 1
+}
+
+$env:PATH = "$postgresBin;" + $env:PATH
+$env:PSYCOPG_IMPL = "python"
+
 $existingServer = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue
 
 if ($existingServer) {
