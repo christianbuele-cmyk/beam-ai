@@ -382,6 +382,55 @@ html[data-theme="light"] .input-row {
 .settings-arrow {
     color: #888;
 }
+
+.settings-reset-options {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 0;
+    border: none;
+    border-bottom: 1px solid #2c2f36;
+    background: none;
+    color: #dddddd;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.settings-reset-options:hover {
+    color: #4da3ff;
+}
+
+.reset-option-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 15px 2px;
+    border-bottom: 1px solid #292c33;
+    color: #dddddd;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.reset-option-row:hover {
+    color: #ffffff;
+}
+
+.reset-option-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: #1677e8;
+    cursor: pointer;
+}
+
+.reset-option-row:last-child {
+    border-bottom: none;
+}
+
 .settings-section {
     border-bottom: 1px solid #2c2f36;
 }
@@ -1800,14 +1849,6 @@ html[data-high-contrast="true"] .settings-close {
     <span class="memory-option-arrow">›</span>
 </button>
 
-<button class="memory-option" type="button" onclick="resetPersonalization()">
-    <span class="memory-option-text">
-        <span class="memory-option-title">Reiniciar personalización</span>
-        <span class="memory-option-description">Restablece lo aprendido y tus ajustes</span>
-    </span>
-    <span class="memory-option-arrow">›</span>
-</button>
-
     </div>
 <div id="memoryHistoryPanel" class="memory-history-panel" hidden>
     <div class="memory-history-header">
@@ -2236,6 +2277,15 @@ html[data-high-contrast="true"] .settings-close {
     <span data-i18n="settingsLocation">Ubicación</span>
     <span class="settings-arrow"></span>
 </div>
+
+<button
+    class="settings-reset-options"
+    type="button"
+    onclick="openResetOptionsModal()"
+>
+    <span data-i18n="settingsResetOptions">Opciones de restablecimiento</span>
+    <span class="settings-arrow">›</span>
+</button>
 </div>
 
     <!-- MODAL PARA LOS ACCESOS RÁPIDOS -->
@@ -2991,6 +3041,16 @@ helpVersion:"Versión de la aplicación",
 contact:"Contactar",
 report:"Informar",
 settingsLocation:"Ubicación",
+settingsResetOptions:"Opciones de restablecimiento",
+resetConfirmTitle:"Confirmar restablecimiento",
+resetConfirmDescription:"Revisa los apartados seleccionados antes de continuar.",
+resetConfirmSelected:"Se restablecerán:",
+resetConfirmWarning:"Solo se restablecerán los apartados seleccionados.",
+resetConfirmButton:"Restablecer",
+resetOptionsNoneSelected:"Selecciona al menos un apartado para continuar.",
+resetOptionsTitle:"Opciones de restablecimiento",
+resetOptionsDescription:"Selecciona qué apartados quieres restablecer.",
+resetOptionsContinue:"Continuar",
                 welcomeDescription:"Quiero conocerte un poco mejor. Este regristo solo se mostrará la primera vez", languageLabel:"Idioma", nameLabel:"Nombre", emailLabel:"Correo electrónico", emailPlaceholder:"tu@email.com",passwordLabel:"Contraseña",
 passwordPlaceholder:"Crea una contraseña",
 passwordHelp:"Utiliza al menos 8 caracteres.",
@@ -3721,6 +3781,16 @@ helpVersion:"Application version",
 contact:"Contact",
 report:"Report",
 settingsLocation:"Location",
+settingsResetOptions:"Reset options",
+resetConfirmTitle:"Confirm reset",
+resetConfirmDescription:"Review the selected sections before continuing.",
+resetConfirmSelected:"The following will be reset:",
+resetConfirmWarning:"Only the selected sections will be reset.",
+resetConfirmButton:"Reset",
+resetOptionsNoneSelected:"Select at least one section to continue.",
+resetOptionsTitle:"Reset options",
+resetOptionsDescription:"Select which sections you want to reset.",
+resetOptionsContinue:"Continue",
                 welcomeDescription:"I'd like to get to know you a little better. This questionnaire will only appear the first time.", languageLabel:"Language", nameLabel:"Name", emailLabel:"Email", emailPlaceholder:"your@email.com", passwordLabel:"Password",
 passwordPlaceholder:"Create a password",
 passwordHelp:"Use at least 8 characters.",
@@ -4450,6 +4520,16 @@ helpVersion:"Version de l’application",
 contact:"Contacter",
 report:"Signaler",
 settingsLocation:"Localisation",
+settingsResetOptions:"Options de réinitialisation",
+resetConfirmTitle:"Confirmer la réinitialisation",
+resetConfirmDescription:"Vérifiez les sections sélectionnées avant de continuer.",
+resetConfirmSelected:"Seront réinitialisés :",
+resetConfirmWarning:"Seules les sections sélectionnées seront réinitialisées.",
+resetConfirmButton:"Réinitialiser",
+resetOptionsNoneSelected:"Sélectionnez au moins une section pour continuer.",
+resetOptionsTitle:"Options de réinitialisation",
+resetOptionsDescription:"Sélectionnez les sections que vous souhaitez réinitialiser.",
+resetOptionsContinue:"Continuer",
                 welcomeDescription:"J'aimerais apprendre à mieux te connaître. Ce questionnaire ne s'affichera que la première fois.", languageLabel:"Langue", nameLabel:"Nom et prénom", emailLabel:"Adresse e-mail", emailPlaceholder:"votre@email.com",passwordLabel:"Mot de passe",
 passwordPlaceholder:"Créez un mot de passe",
 passwordHelp:"Utilisez au moins 8 caractères.",
@@ -11357,6 +11437,88 @@ function closeResetPersonalizationModal() {
     }
 }
 
+function openResetOptionsModal() {
+    const modal =
+        document.getElementById("resetOptionsModal");
+
+    if (!modal) {
+        return;
+    }
+
+    const checkboxes =
+        modal.querySelectorAll('input[type="checkbox"]');
+
+    checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+    });
+
+    modal.style.display = "flex";
+}
+
+function closeResetOptionsModal() {
+    const modal =
+        document.getElementById("resetOptionsModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+function openResetOptionsConfirmation() {
+    const optionsModal =
+        document.getElementById("resetOptionsModal");
+
+    const confirmationModal =
+        document.getElementById("resetOptionsConfirmationModal");
+
+    const confirmationList =
+        document.getElementById("resetOptionsConfirmationList");
+
+    if (!optionsModal || !confirmationModal || !confirmationList) {
+        return;
+    }
+
+    const selectedCheckboxes = Array.from(
+        optionsModal.querySelectorAll(
+            '.reset-option-row input[type="checkbox"]:checked'
+        )
+    );
+
+    if (selectedCheckboxes.length === 0) {
+        alert(t("resetOptionsNoneSelected"));
+        return;
+    }
+
+    confirmationList.innerHTML = "";
+
+    selectedCheckboxes.forEach((checkbox) => {
+        const row = checkbox.closest(".reset-option-row");
+        const label = row ? row.querySelector("span") : null;
+
+        if (!label) {
+            return;
+        }
+
+        const item = document.createElement("div");
+        item.textContent = "• " + label.textContent.trim();
+        item.dataset.resetOption = checkbox.value;
+
+        confirmationList.appendChild(item);
+    });
+
+    optionsModal.style.display = "none";
+    confirmationModal.style.display = "flex";
+}
+
+function closeResetOptionsConfirmation() {
+    const modal =
+        document.getElementById("resetOptionsConfirmationModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
 async function confirmResetPersonalization() {
     try {
         const currentResponse = await fetch("/user", {
@@ -12100,6 +12262,297 @@ if (status) {
 >
     <span data-i18n="memoryResetConfirm">Reiniciar</span>
 </button>
+        </div>
+
+    </div>
+</div>
+
+<div id="resetOptionsModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(520px,92vw);
+        background:#181b22;
+        border:1px solid #30343d;
+        border-radius:16px;
+        padding:24px;
+        box-sizing:border-box;
+        color:#eeeeee;
+    ">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:20px;
+            margin-bottom:18px;
+        ">
+            <div>
+                <h2 style="
+                    margin:0 0 7px 0;
+                    font-size:20px;
+                " data-i18n="resetOptionsTitle">
+                    Opciones de restablecimiento
+                </h2>
+
+                <div style="
+                    color:#8f96a3;
+                    font-size:13px;
+                    line-height:1.5;
+                " data-i18n="resetOptionsDescription">
+                    Selecciona qué apartados quieres restablecer.
+                </div>
+            </div>
+
+            <button
+                type="button"
+                onclick="closeResetOptionsModal()"
+                aria-label="Cerrar"
+                style="
+                    background:transparent;
+                    border:none;
+                    color:#dddddd;
+                    font-size:26px;
+                    cursor:pointer;
+                    padding:0 4px;
+                "
+            >×</button>
+        </div>
+
+        <div style="
+            border-top:1px solid #292c33;
+            margin-bottom:22px;
+        ">
+
+            <label class="reset-option-row">
+                <span data-i18n="settingsAccount">Mi cuenta</span>
+                <input type="checkbox" value="account">
+            </label>
+
+            <label class="reset-option-row">
+                <span data-i18n="settingsAgent">Mi agente</span>
+                <input type="checkbox" value="agent">
+            </label>
+
+            <label class="reset-option-row">
+                <span data-i18n="settingsPreferences">Mis preferencias</span>
+                <input type="checkbox" value="preferences">
+            </label>
+
+            <label class="reset-option-row">
+                <span data-i18n="settingsMemory">Memoria</span>
+                <input type="checkbox" value="memory">
+            </label>
+
+            <label class="reset-option-row">
+                <span data-i18n="settingsNotifications">Notificaciones</span>
+                <input type="checkbox" value="notifications">
+            </label>
+
+            <label class="reset-option-row">
+                <span data-i18n="settingsLanguage">Idioma y apariencia</span>
+                <input type="checkbox" value="interface">
+            </label>
+
+            <label class="reset-option-row">
+                <span data-i18n="settingsLocation">Ubicación</span>
+                <input type="checkbox" value="location">
+            </label>
+
+        </div>
+
+        <div style="
+            display:flex;
+            justify-content:flex-end;
+            gap:10px;
+        ">
+            <button
+                type="button"
+                onclick="closeResetOptionsModal()"
+                style="
+                    min-width:100px;
+                    padding:10px 16px;
+                    border-radius:10px;
+                    border:1px solid #30343d;
+                    background:#23262e;
+                    color:#eeeeee;
+                    cursor:pointer;
+                    font-size:14px;
+                "
+                data-i18n="cancel"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                onclick="openResetOptionsConfirmation()"
+                style="
+                    min-width:100px;
+                    padding:10px 16px;
+                    border-radius:10px;
+                    border:1px solid #2f81f7;
+                    background:#1677e8;
+                    color:white;
+                    cursor:pointer;
+                    font-size:14px;
+                    font-weight:600;
+                "
+                data-i18n="resetOptionsContinue"
+            >
+                Continuar
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div id="resetOptionsConfirmationModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:100000;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(520px,92vw);
+        background:#181b22;
+        border:1px solid #30343d;
+        border-radius:16px;
+        padding:24px;
+        box-sizing:border-box;
+        color:#eeeeee;
+    ">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:20px;
+            margin-bottom:18px;
+        ">
+            <div>
+                <h2
+                    data-i18n="resetConfirmTitle"
+                    style="margin:0 0 7px 0;font-size:20px;"
+                >
+                    Confirmar restablecimiento
+                </h2>
+
+                <div
+                    data-i18n="resetConfirmDescription"
+                    style="color:#8f96a3;font-size:13px;line-height:1.5;"
+                >
+                    Revisa los apartados seleccionados antes de continuar.
+                </div>
+            </div>
+
+            <button
+                type="button"
+                onclick="closeResetOptionsConfirmation()"
+                aria-label="Cerrar"
+                style="
+                    background:transparent;
+                    border:none;
+                    color:#dddddd;
+                    font-size:26px;
+                    cursor:pointer;
+                    padding:0 4px;
+                "
+            >×</button>
+        </div>
+
+        <div style="
+            background:#1d2027;
+            border:1px solid #292c33;
+            border-radius:12px;
+            padding:16px;
+            margin-bottom:18px;
+        ">
+            <div
+                data-i18n="resetConfirmSelected"
+                style="
+                    color:#8f96a3;
+                    font-size:12px;
+                    margin-bottom:10px;
+                "
+            >
+                Se restablecerán:
+            </div>
+
+            <div
+                id="resetOptionsConfirmationList"
+                style="
+                    display:flex;
+                    flex-direction:column;
+                    gap:8px;
+                    color:#eeeeee;
+                    font-size:14px;
+                "
+            ></div>
+        </div>
+
+        <div
+            data-i18n="resetConfirmWarning"
+            style="
+                color:#aeb4bf;
+                font-size:13px;
+                line-height:1.5;
+                margin-bottom:22px;
+            "
+        >
+            Solo se restablecerán los apartados seleccionados.
+        </div>
+
+        <div style="
+            display:flex;
+            justify-content:flex-end;
+            gap:10px;
+        ">
+            <button
+                type="button"
+                onclick="closeResetOptionsConfirmation()"
+                style="
+                    min-width:100px;
+                    padding:10px 16px;
+                    border-radius:10px;
+                    border:1px solid #30343d;
+                    background:#23262e;
+                    color:#eeeeee;
+                    cursor:pointer;
+                    font-size:14px;
+                "
+                data-i18n="cancel"
+            >
+                Cancelar
+            </button>
+
+            <button
+                id="confirmSelectedResetButton"
+                type="button"
+                style="
+                    min-width:110px;
+                    padding:10px 16px;
+                    border-radius:10px;
+                    border:1px solid #2f81f7;
+                    background:#1677e8;
+                    color:white;
+                    cursor:pointer;
+                    font-size:14px;
+                    font-weight:600;
+                "
+                data-i18n="resetConfirmButton"
+            >
+                Restablecer
+            </button>
         </div>
 
     </div>
