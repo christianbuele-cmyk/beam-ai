@@ -50,12 +50,12 @@ $env:PSYCOPG_IMPL = "python"
 $existingServer = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue
 
 if ($existingServer) {
-    Write-Host "BEAM AI ya esta ejecutandose en el puerto 8000." -ForegroundColor Yellow
+    Write-Host "BRLOX AI ya esta ejecutandose en el puerto 8000." -ForegroundColor Yellow
     exit 0
 }
 
 Write-Host "================================"
-Write-Host "       ARRANCANDO BEAM AI"
+Write-Host "       ARRANCANDO BRLOX AI"
 Write-Host "================================"
 Write-Host ""
 Write-Host "Entorno virtual: OK"

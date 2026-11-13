@@ -417,11 +417,11 @@ def chat(
     request: Request,
     message: str,
     tone: str = "Profesional",
-    agent_name: str = "BEAM AI",
+    agent_name: str = "BRLOX AI",
     conversation_id: str = ""
 ):
     
-    clean_agent_name = agent_name.strip() or "BEAM AI"
+    clean_agent_name = agent_name.strip() or "BRLOX AI"
 
     session_id = request.state.session_id
     key = session_key(request)
@@ -791,7 +791,7 @@ async def forgot_password(request: Request):
         "localhost"
     }:
         response_data["development_reset_url"] = reset_url
-        print(f"[BEAM AI] Enlace local de recuperación: {reset_url}")
+        print(f"[BRLOX AI] Enlace local de recuperación: {reset_url}")
 
     return response_data
 
@@ -1051,7 +1051,7 @@ def export_user_data(request: Request):
         media_type="application/json",
         headers={
             "Content-Disposition":
-                'attachment; filename="beam-ai-data.json"'
+                'attachment; filename="brlox-ai-data.json"'
         }
     )
 

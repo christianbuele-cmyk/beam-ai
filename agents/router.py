@@ -15,7 +15,7 @@ class Router:
         message,
         session_key,
         tone="Profesional",
-        agent_name="BEAM AI",
+        agent_name="BRLOX AI",
         profile=None,
         conversation_id=""
     ):

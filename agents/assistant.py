@@ -11,7 +11,7 @@ class AssistantAgent:
         message: str,
         session_key: str,
         tone: str = "Profesional",
-        agent_name: str = "BEAM AI",
+        agent_name: str = "BRLOX AI",
         profile=None,
         conversation_id: str = ""
     ):
