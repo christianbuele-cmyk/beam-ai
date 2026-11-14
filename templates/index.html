@@ -859,6 +859,17 @@ html[data-theme="light"] .settings-option {
     border-color: #e5e7eb;
 }
 
+html[data-theme="light"] .settings-item,
+html[data-theme="light"] .settings-reset-options {
+    color: #111827;
+    border-color: #e5e7eb;
+}
+
+html[data-theme="light"] .settings-item .settings-arrow,
+html[data-theme="light"] .settings-reset-options .settings-arrow {
+    color: #6b7280;
+}
+
 html[data-theme="light"] .settings-close {
     color: #111827;
 }
@@ -878,14 +889,25 @@ html[data-high-contrast="true"] .settings-panel {
 }
 
 html[data-high-contrast="true"] .settings-section,
-html[data-high-contrast="true"] .settings-option {
+html[data-high-contrast="true"] .settings-option,
+html[data-high-contrast="true"] .settings-item,
+html[data-high-contrast="true"] .settings-reset-options {
     border-color: #ffffff;
 }
 
 html[data-high-contrast="true"] .settings-section summary,
-html[data-high-contrast="true"] .settings-close {
+html[data-high-contrast="true"] .settings-close,
+html[data-high-contrast="true"] .settings-item,
+html[data-high-contrast="true"] .settings-reset-options {
     color: #ffffff;
 }
+
+html[data-high-contrast="true"] .settings-item .settings-arrow,
+html[data-high-contrast="true"] .settings-reset-options .settings-arrow,
+html[data-high-contrast="true"] .settings-section summary::after {
+    color: #ffffff;
+}
+
 </style>
 </head>
 
@@ -3003,6 +3025,10 @@ helpVersion:"Versión de la aplicación",
 contact:"Contactar",
 report:"Informar",
 settingsLocation:"Ubicación",
+locationSavedTitle:"Ubicación guardada",
+locationSavedDescription:"BRLOX AI utilizará esta ubicación para ofrecer respuestas y recomendaciones más relevantes cuando sea útil.",
+locationCurrentLocation:"Ubicación actual",
+accept:"Aceptar",
 settingsResetOptions:"Opciones de restablecimiento",
 resetConfirmTitle:"Confirmar restablecimiento",
 resetConfirmDescription:"Revisa los apartados seleccionados antes de continuar.",
@@ -3743,6 +3769,10 @@ helpVersion:"Application version",
 contact:"Contact",
 report:"Report",
 settingsLocation:"Location",
+locationSavedTitle:"Location saved",
+locationSavedDescription:"BRLOX AI will use this location to provide more relevant answers and recommendations when useful.",
+locationCurrentLocation:"Current location",
+accept:"OK",
 settingsResetOptions:"Reset options",
 resetConfirmTitle:"Confirm reset",
 resetConfirmDescription:"Review the selected sections before continuing.",
@@ -4482,6 +4512,10 @@ helpVersion:"Version de l’application",
 contact:"Contacter",
 report:"Signaler",
 settingsLocation:"Localisation",
+locationSavedTitle:"Localisation enregistrée",
+locationSavedDescription:"BRLOX AI utilisera cette localisation pour fournir des réponses et des recommandations plus pertinentes lorsque cela sera utile.",
+locationCurrentLocation:"Localisation actuelle",
+accept:"Accepter",
 settingsResetOptions:"Options de réinitialisation",
 resetConfirmTitle:"Confirmer la réinitialisation",
 resetConfirmDescription:"Vérifiez les sections sélectionnées avant de continuer.",
@@ -5174,6 +5208,12 @@ function showMain(profile) {
     updateWelcomeUser(profile);
 
     renderAgentPreferences();
+
+    renderNotificationsRemindersSummary();
+    renderNotificationsRecommendationsSummary();
+    renderNotificationsPlansSummary();
+    renderNotificationsSummariesSummary();
+    renderNotificationsQuietHoursSummary();
 
     loadShortcuts();
 }
@@ -6580,6 +6620,354 @@ function resetAgentSettings() {
     }
 
     renderAgentPreferences();
+}
+
+async function resetAgentSettingsPersistent() {
+    try {
+        const currentResponse = await fetch("/user", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!currentResponse.ok) {
+            throw new Error("No se pudo cargar el perfil");
+        }
+
+        const currentData = await currentResponse.json();
+
+        if (
+            currentData.exists !== true ||
+            !currentData.user ||
+            typeof currentData.user !== "object"
+        ) {
+            throw new Error("No se encontró el perfil");
+        }
+
+        const profile = {
+            ...currentData.user
+        };
+
+        delete profile.agent_name;
+        delete profile.agent_tone;
+        delete profile.agent_detail;
+        delete profile.agent_language;
+        delete profile.agent_initiative;
+        delete profile.agent_recommendation_priorities;
+        delete profile.agent_recommendation_style;
+
+        const response = await fetch("/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(profile)
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                "No se pudo restablecer la configuración del agente"
+            );
+        }
+
+        resetAgentSettings();
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "Error restableciendo configuración del agente:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+
+        return false;
+    }
+}
+
+async function resetPreferencesPersistent() {
+    try {
+        const currentResponse = await fetch("/user", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!currentResponse.ok) {
+            throw new Error("No se pudo cargar el perfil");
+        }
+
+        const currentData = await currentResponse.json();
+
+        if (
+            currentData.exists !== true ||
+            !currentData.user ||
+            typeof currentData.user !== "object"
+        ) {
+            throw new Error("No se encontró el perfil");
+        }
+
+        const profile = {
+            ...currentData.user,
+
+            about: "",
+            age_range: "",
+            personalization_enabled: true,
+
+            interests: [],
+            favorite_activities: [],
+            activities_companion: "",
+            activities_time: "",
+
+            travel_style: [],
+            travel_leisure: [],
+            travel_food: [],
+
+            restrictions_food: [],
+            restrictions_avoid: [],
+            restrictions_accessibility: {}
+        };
+
+        const response = await fetch("/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(profile)
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                "No se pudieron restablecer las preferencias"
+            );
+        }
+
+        localStorage.removeItem("userInterests");
+        localStorage.removeItem("userFavoriteActivities");
+        localStorage.removeItem("userActivitiesCompanion");
+        localStorage.removeItem("userActivitiesTime");
+        localStorage.removeItem("userTravelStyle");
+        localStorage.removeItem("userTravelLeisure");
+        localStorage.removeItem("userTravelFood");
+        localStorage.removeItem("userRestrictionsFood");
+        localStorage.removeItem("userRestrictionsAvoid");
+        localStorage.removeItem("userRestrictionsAccessibility");
+
+        renderAgentPreferences();
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "Error restableciendo preferencias:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+
+        return false;
+    }
+}
+
+async function resetMemoryPersistent() {
+    try {
+        const response = await fetch("/memory", {
+            method: "DELETE"
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                "No se pudo restablecer la memoria"
+            );
+        }
+
+        await loadMemorySettings();
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "Error restableciendo memoria:",
+            error
+        );
+
+        alert(t("memoryResetError"));
+
+        return false;
+    }
+}
+
+async function resetAccountPersistent() {
+    try {
+        const currentResponse = await fetch("/user", {
+            method: "GET",
+            cache: "no-store"
+        });
+
+        if (!currentResponse.ok) {
+            throw new Error("No se pudo cargar el perfil");
+        }
+
+        const currentData = await currentResponse.json();
+
+        if (
+            currentData.exists !== true ||
+            !currentData.user ||
+            typeof currentData.user !== "object"
+        ) {
+            throw new Error("No se encontró el perfil");
+        }
+
+        const profile = {
+            ...currentData.user
+        };
+
+        delete profile.birthdate;
+        delete profile.avatar;
+
+        const response = await fetch("/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(profile)
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                "No se pudo restablecer la cuenta"
+            );
+        }
+
+        updateAccountDetails(profile);
+        updateAccountAvatar(profile);
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "Error restableciendo cuenta:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+
+        return false;
+    }
+}
+
+async function resetNotificationsPersistent() {
+    try {
+        const notificationKeys = [
+            "notificationsRemindersEnabled",
+            "notificationReminderTime",
+            "notificationsLastMinute",
+
+            "notificationsRecommendationsEnabled",
+            "notificationsRecommendationFrequency",
+            "recommendationPlansToday",
+            "recommendationGetaways",
+            "recommendationFood",
+            "recommendationNearbyEvents",
+            "notificationsRecommendationsLocation",
+
+            "notificationsPlansEnabled",
+            "notificationsPlansSchedule",
+            "notificationsPlansClosure",
+            "notificationsPlansWeather",
+            "notificationsPlansAvailability",
+
+            "notificationsSummariesEnabled",
+            "notificationSummaryFrequency",
+            "notificationsSummariesPlans",
+            "notificationsSummariesRecommendations",
+            "notificationsSummariesAlerts",
+
+            "notificationsQuietHoursEnabled",
+            "notificationsQuietHoursStart",
+            "notificationsQuietHoursEnd"
+        ];
+
+        notificationKeys.forEach((key) => {
+            localStorage.removeItem(key);
+        });
+
+        renderNotificationsRemindersSummary();
+        renderNotificationsRecommendationsSummary();
+        renderNotificationsPlansSummary();
+        renderNotificationsSummariesSummary();
+        renderNotificationsQuietHoursSummary();
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "Error restableciendo notificaciones:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+
+        return false;
+    }
+}
+
+async function resetInterfacePersistent() {
+    try {
+        localStorage.removeItem("beam_language");
+        localStorage.removeItem("beam_theme");
+        localStorage.removeItem("beam_text_size");
+
+        localStorage.removeItem("accessibilityHighContrast");
+        localStorage.removeItem("accessibilityReduceAnimations");
+        localStorage.removeItem("accessibilityBoldText");
+        localStorage.removeItem("accessibilityScreenReader");
+
+        localStorage.removeItem("interfaceDateFormat");
+        localStorage.removeItem("interfaceTimeFormat");
+        localStorage.removeItem("interfaceFirstDay");
+        localStorage.removeItem("interfaceNumberFormat");
+
+        applyLanguage("es");
+        applyInterfaceTheme();
+        applyInterfaceTextSize();
+        applyInterfaceAccessibility();
+
+        renderInterfaceLanguageSummary();
+        renderInterfaceThemeSummary();
+        renderInterfaceTextSizeSummary();
+        renderInterfaceAccessibilitySummary();
+        renderInterfaceFormatsSummary();
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "Error restableciendo idioma y apariencia:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+
+        return false;
+    }
+}
+
+async function resetLocationPersistent() {
+    try {
+        localStorage.removeItem("beam_location");
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "Error restableciendo ubicación:",
+            error
+        );
+
+        alert(t("profileSaveError"));
+
+        return false;
+    }
 }
 
 async function saveAgentSettings() {
@@ -10832,6 +11220,33 @@ botMessage.timestamp.textContent = new Date().toLocaleTimeString([], {
             }
             messageInput.focus();
         }
+
+function openLocationSavedModal(label) {
+    const modal =
+        document.getElementById("locationSavedModal");
+
+    const locationLabel =
+        document.getElementById("locationSavedLabel");
+
+    if (!modal || !locationLabel) {
+        return;
+    }
+
+    locationLabel.textContent =
+        label || t("locationCurrentLocation");
+
+    modal.style.display = "flex";
+}
+
+function closeLocationSavedModal() {
+    const modal =
+        document.getElementById("locationSavedModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
 function getLocation() {
 
     if (!navigator.geolocation) {
@@ -10845,34 +11260,67 @@ function getLocation() {
 
     navigator.geolocation.getCurrentPosition(
 
-        function(position) {
+        async function(position) {
 
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
 
+            let locationData = {
+                lat,
+                lon
+            };
+
             localStorage.setItem(
                 "beam_location",
-                JSON.stringify({
-                    lat,
-                    lon
-                })
+                JSON.stringify(locationData)
             );
 
-            alert(
-                `Ubicación guardada:
+            let locationLabel =
+                t("locationCurrentLocation");
 
-Latitud: ${lat}
+            try {
+                const response = await fetch(
+                    `/reverse-geocode?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`,
+                    {
+                        method: "GET",
+                        cache: "no-store"
+                    }
+                );
 
-Longitud: ${lon}`
-            );
+                if (response.ok) {
+                    const data = await response.json();
+
+                    locationLabel =
+                        data.label ||
+                        t("locationCurrentLocation");
+
+                    locationData = {
+                        ...locationData,
+                        city: data.city || "",
+                        region: data.region || "",
+                        label: locationLabel
+                    };
+
+                    localStorage.setItem(
+                        "beam_location",
+                        JSON.stringify(locationData)
+                    );
+                }
+
+            } catch (error) {
+                console.error(
+                    "Error resolviendo nombre de ubicación:",
+                    error
+                );
+            }
+
+            openLocationSavedModal(locationLabel);
 
             console.log(
                 "Ubicación:",
-                lat,
-                lon
+                locationData
             );
         },
-
         function(error) {
 
             alert(
@@ -11479,6 +11927,96 @@ function closeResetOptionsConfirmation() {
     if (modal) {
         modal.style.display = "none";
     }
+}
+
+async function confirmSelectedReset() {
+    const confirmationList =
+        document.getElementById("resetOptionsConfirmationList");
+
+    if (!confirmationList) {
+        return;
+    }
+
+    const selectedOptions = Array.from(
+        confirmationList.querySelectorAll("[data-reset-option]")
+    ).map((item) => item.dataset.resetOption);
+
+    if (
+        !selectedOptions.includes("account") &&
+        !selectedOptions.includes("agent") &&
+        !selectedOptions.includes("preferences") &&
+        !selectedOptions.includes("memory") &&
+        !selectedOptions.includes("notifications") &&
+        !selectedOptions.includes("interface") &&
+        !selectedOptions.includes("location")
+    ) {
+        return;
+    }
+
+    if (selectedOptions.includes("account")) {
+        const resetAccountOk =
+            await resetAccountPersistent();
+
+        if (!resetAccountOk) {
+            return;
+        }
+    }
+
+    if (selectedOptions.includes("agent")) {
+        const resetAgentOk =
+            await resetAgentSettingsPersistent();
+
+        if (!resetAgentOk) {
+            return;
+        }
+    }
+
+    if (selectedOptions.includes("preferences")) {
+        const resetPreferencesOk =
+            await resetPreferencesPersistent();
+
+        if (!resetPreferencesOk) {
+            return;
+        }
+    }
+
+    if (selectedOptions.includes("memory")) {
+        const resetMemoryOk =
+            await resetMemoryPersistent();
+
+        if (!resetMemoryOk) {
+            return;
+        }
+    }
+
+    if (selectedOptions.includes("notifications")) {
+        const resetNotificationsOk =
+            await resetNotificationsPersistent();
+
+        if (!resetNotificationsOk) {
+            return;
+        }
+    }
+
+    if (selectedOptions.includes("interface")) {
+        const resetInterfaceOk =
+            await resetInterfacePersistent();
+
+        if (!resetInterfaceOk) {
+            return;
+        }
+    }
+
+    if (selectedOptions.includes("location")) {
+        const resetLocationOk =
+            await resetLocationPersistent();
+
+        if (!resetLocationOk) {
+            return;
+        }
+    }
+
+    closeResetOptionsConfirmation();
 }
 
 async function confirmResetPersonalization() {
@@ -12497,10 +13035,11 @@ if (status) {
                 Cancelar
             </button>
 
-            <button
-                id="confirmSelectedResetButton"
-                type="button"
-                style="
+<button
+    id="confirmSelectedResetButton"
+    type="button"
+    onclick="confirmSelectedReset()"
+    style="
                     min-width:110px;
                     padding:10px 16px;
                     border-radius:10px;
@@ -13451,6 +13990,141 @@ if (status) {
 
     </div>
 </div>
+
+<!-- MODAL: Ubicación guardada -->
+<div id="locationSavedModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:90%;
+        max-width:520px;
+        background:#111827;
+        border:1px solid #30343d;
+        border-radius:20px;
+        padding:24px;
+        box-sizing:border-box;
+        color:white;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:14px;
+        ">
+            <h3
+                style="margin:0;"
+                data-i18n="locationSavedTitle"
+            >
+                Ubicación guardada
+            </h3>
+
+            <button
+                type="button"
+                class="settings-close"
+                onclick="closeLocationSavedModal()"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <p
+            style="
+                color:#9ca3af;
+                margin:0 0 20px 0;
+                line-height:1.5;
+            "
+            data-i18n="locationSavedDescription"
+        >
+            BRLOX AI utilizará esta ubicación para ofrecer respuestas y recomendaciones más relevantes cuando sea útil.
+        </p>
+
+        <div style="
+            display:flex;
+            align-items:center;
+            gap:12px;
+            background:#1f2937;
+            border:1px solid #374151;
+            border-radius:12px;
+            padding:16px;
+            margin-bottom:22px;
+        ">
+            <div style="
+                width:38px;
+                height:38px;
+                flex:0 0 38px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                border-radius:50%;
+                background:#162b4d;
+                color:#60a5fa;
+                font-size:19px;
+            ">
+                ●
+            </div>
+
+            <div style="
+                min-width:0;
+                flex:1;
+            ">
+                <div
+                    style="
+                        color:#9ca3af;
+                        font-size:12px;
+                        margin-bottom:4px;
+                    "
+                    data-i18n="locationCurrentLocation"
+                >
+                    Ubicación actual
+                </div>
+
+                <div
+                    id="locationSavedLabel"
+                    style="
+                        color:#ffffff;
+                        font-size:16px;
+                        font-weight:600;
+                        line-height:1.4;
+                    "
+                >
+                    Ubicación actual
+                </div>
+            </div>
+        </div>
+        <div style="
+            display:flex;
+            justify-content:flex-end;
+        ">
+            <button
+                type="button"
+                onclick="closeLocationSavedModal()"
+                style="
+                    min-width:100px;
+                    padding:10px 18px;
+                    border:none;
+                    border-radius:10px;
+                    background:#1677e8;
+                    color:white;
+                    cursor:pointer;
+                    font-size:14px;
+                    font-weight:600;
+                "
+                data-i18n="accept"
+            >
+                Aceptar
+            </button>
+        </div>
+
+    </div>
+</div>
+
 <!-- MODAL: Nombre de usuario -->
 <div id="accountNameModal" style="
     display:none;

@@ -8,6 +8,7 @@ import re
 import sqlite3
 import secrets
 import time
+import requests
 import psycopg
 from psycopg.rows import dict_row
 from pathlib import Path
@@ -20,7 +21,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from agents.router import Router
-from memory.memory_store import load_memory, save_memory
+from memory.memory_store import load_memory, save_memory, delete_memory
 from database import get_db_connection
 
 
@@ -1139,16 +1140,91 @@ async def update_memory(request: Request):
 @app.delete("/memory")
 def reset_memory(request: Request):
     key = session_key(request)
-    path = session_file(MEMORY_DIR, key)
 
     try:
-        path.unlink()
-    except FileNotFoundError:
-        pass
-    except OSError:
-        raise HTTPException(status_code=500, detail="No se ha podido reiniciar la memoria.")
+        delete_memory(key)
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="No se ha podido reiniciar la memoria."
+        )
 
     return {"reset": True}
+@app.get("/reverse-geocode")
+def reverse_geocode(lat: float, lon: float):
+    if not -90 <= lat <= 90:
+        raise HTTPException(
+            status_code=400,
+            detail="La latitud no es válida."
+        )
+
+    if not -180 <= lon <= 180:
+        raise HTTPException(
+            status_code=400,
+            detail="La longitud no es válida."
+        )
+
+    try:
+        response = requests.get(
+            "https://nominatim.openstreetmap.org/reverse",
+            params={
+                "lat": lat,
+                "lon": lon,
+                "format": "jsonv2",
+                "addressdetails": 1,
+                "accept-language": "es"
+            },
+            headers={
+                "User-Agent": "BRLOX-AI/1.0"
+            },
+            timeout=5
+        )
+
+        response.raise_for_status()
+        data = response.json()
+
+        address = data.get("address", {})
+
+        city = (
+            address.get("city")
+            or address.get("town")
+            or address.get("village")
+            or address.get("municipality")
+            or ""
+        )
+
+        region = (
+            address.get("province")
+            or address.get("state_district")
+            or address.get("state")
+            or ""
+        )
+
+        parts = []
+
+        if city:
+            parts.append(city)
+
+        if region and region != city:
+            parts.append(region)
+
+        label = ", ".join(parts)
+
+        if not label:
+            label = "Ubicación actual"
+
+        return {
+            "city": city,
+            "region": region,
+            "label": label
+        }
+
+    except requests.RequestException:
+        return {
+            "city": "",
+            "region": "",
+            "label": "Ubicación actual"
+        }
 @app.post("/support-request")
 async def create_support_request(request: Request):
     try:

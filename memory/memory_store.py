@@ -104,3 +104,20 @@ def save_memory(data: dict, session_key: str) -> None:
             )
 
         connection.commit()
+
+def delete_memory(session_key: str) -> None:
+    _validate_session_key(session_key)
+
+    placeholder = "%s" if os.getenv("DATABASE_URL") else "?"
+
+    with get_db_connection() as connection:
+        connection.execute(
+            f"""
+            DELETE FROM memories
+            WHERE session_key = {placeholder}
+            """,
+            (session_key,)
+        )
+
+        connection.commit()
+
