@@ -2254,12 +2254,40 @@ html[data-high-contrast="true"] .settings-section summary::after {
 
     </div>
 </details>
-<div
-    class="settings-item"
-    onclick="getLocation()"
->
+<div class="settings-item">
     <span data-i18n="settingsLocation">Ubicación</span>
-    <span class="settings-arrow"></span>
+
+    <button
+        id="locationToggle"
+        type="button"
+        onclick="toggleLocation()"
+        aria-pressed="false"
+        style="
+            width:38px;
+            height:22px;
+            padding:2px;
+            border:0;
+            border-radius:999px;
+            background:#4b5563;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:flex-start;
+            transition:background 0.2s ease;
+        "
+    >
+        <span
+            id="locationToggleKnob"
+            style="
+                width:18px;
+                height:18px;
+                border-radius:50%;
+                background:#ffffff;
+                display:block;
+                transition:transform 0.2s ease;
+            "
+        ></span>
+    </button>
 </div>
 
 <button
@@ -2585,6 +2613,8 @@ restrictionAccessibility_travellingWithPet:"Viajo con mascota",
 restrictionAccessibility_warnIfUnsuitable:"Avisarme si un plan puede no encajar",
 settingsMemory:"Memoria",
 memoryHistory:"Consultar y editar el historial de conversaciones",
+memoryHistorySearchPlaceholder:"Buscar conversaciones...",
+memoryHistorySearchEmpty:"No se encontraron conversaciones.",
 memoryToggle:"Activar o desactivar la memoria",
 memoryReset:"Reiniciar la personalización",
 memoryResetTitle:"Reiniciar personalización",
@@ -3028,12 +3058,16 @@ settingsLocation:"Ubicación",
 locationSavedTitle:"Ubicación guardada",
 locationSavedDescription:"BRLOX AI utilizará esta ubicación para ofrecer respuestas y recomendaciones más relevantes cuando sea útil.",
 locationCurrentLocation:"Ubicación actual",
+locationCurrentLocation:"Ubicación actual",
+locationUnavailable:"La geolocalización no está disponible.",
+locationError:"No se pudo obtener la ubicación.",
 accept:"Aceptar",
 settingsResetOptions:"Opciones de restablecimiento",
 resetConfirmTitle:"Confirmar restablecimiento",
 resetConfirmDescription:"Revisa los apartados seleccionados antes de continuar.",
 resetConfirmSelected:"Se restablecerán:",
 resetConfirmWarning:"Solo se restablecerán los apartados seleccionados.",
+resetConfirmIrreversible:"Advertencia: esta acción es irreversible. Los datos restablecidos no podrán recuperarse.",
 resetConfirmButton:"Restablecer",
 resetOptionsNoneSelected:"Selecciona al menos un apartado para continuar.",
 resetOptionsTitle:"Opciones de restablecimiento",
@@ -3325,6 +3359,8 @@ restrictionAccessibility_travellingWithPet:"I travel with a pet",
 restrictionAccessibility_warnIfUnsuitable:"Warn me if a plan may not be suitable",
 settingsMemory:"Memory",
 memoryHistory:"View and edit conversation history",
+memoryHistorySearchPlaceholder:"Search conversations...",
+memoryHistorySearchEmpty:"No conversations found.",
 memoryToggle:"Turn memory on or off",
 memoryReset:"Reset personalization",
 memoryResetTitle:"Reset personalization",
@@ -3772,12 +3808,16 @@ settingsLocation:"Location",
 locationSavedTitle:"Location saved",
 locationSavedDescription:"BRLOX AI will use this location to provide more relevant answers and recommendations when useful.",
 locationCurrentLocation:"Current location",
+locationCurrentLocation:"Current location",
+locationUnavailable:"Geolocation is not available.",
+locationError:"Could not get your location.",
 accept:"OK",
 settingsResetOptions:"Reset options",
 resetConfirmTitle:"Confirm reset",
 resetConfirmDescription:"Review the selected sections before continuing.",
 resetConfirmSelected:"The following will be reset:",
 resetConfirmWarning:"Only the selected sections will be reset.",
+resetConfirmIrreversible:"Warning: this action cannot be undone. Reset data cannot be recovered.",
 resetConfirmButton:"Reset",
 resetOptionsNoneSelected:"Select at least one section to continue.",
 resetOptionsTitle:"Reset options",
@@ -4264,6 +4304,8 @@ restrictionAccessibility_travellingWithPet:"Je voyage avec un animal",
 restrictionAccessibility_warnIfUnsuitable:"M’avertir si une activité risque de ne pas convenir",
 settingsMemory:"Mémoire",
 memoryHistory:"Consulter et modifier l’historique des conversations",
+memoryHistorySearchPlaceholder:"Rechercher des conversations...",
+memoryHistorySearchEmpty:"Aucune conversation trouvée.",
 memoryToggle:"Activer ou désactiver la mémoire",
 memoryReset:"Réinitialiser la personnalisation",
 memoryResetTitle:"Réinitialiser la personnalisation",
@@ -4515,12 +4557,16 @@ settingsLocation:"Localisation",
 locationSavedTitle:"Localisation enregistrée",
 locationSavedDescription:"BRLOX AI utilisera cette localisation pour fournir des réponses et des recommandations plus pertinentes lorsque cela sera utile.",
 locationCurrentLocation:"Localisation actuelle",
+locationCurrentLocation:"Localisation actuelle",
+locationUnavailable:"La géolocalisation n'est pas disponible.",
+locationError:"Impossible d'obtenir votre localisation.",
 accept:"Accepter",
 settingsResetOptions:"Options de réinitialisation",
 resetConfirmTitle:"Confirmer la réinitialisation",
 resetConfirmDescription:"Vérifiez les sections sélectionnées avant de continuer.",
 resetConfirmSelected:"Seront réinitialisés :",
 resetConfirmWarning:"Seules les sections sélectionnées seront réinitialisées.",
+resetConfirmIrreversible:"Attention : cette action est irréversible. Les données réinitialisées ne pourront pas être récupérées.",
 resetConfirmButton:"Réinitialiser",
 resetOptionsNoneSelected:"Sélectionnez au moins une section pour continuer.",
 resetOptionsTitle:"Options de réinitialisation",
@@ -6821,7 +6867,6 @@ async function resetAccountPersistent() {
             ...currentData.user
         };
 
-        delete profile.birthdate;
         delete profile.avatar;
 
         const response = await fetch("/user", {
@@ -11247,13 +11292,68 @@ function closeLocationSavedModal() {
     }
 }
 
+function updateLocationToggle() {
+    const toggle =
+        document.getElementById("locationToggle");
+
+    const knob =
+        document.getElementById("locationToggleKnob");
+
+    if (!toggle || !knob) {
+        return;
+    }
+
+    const enabled =
+        localStorage.getItem("locationEnabled") === "true";
+
+    toggle.setAttribute(
+        "aria-pressed",
+        enabled ? "true" : "false"
+    );
+
+    toggle.style.background =
+        enabled ? "#3b82f6" : "#4b5563";
+
+    knob.style.transform =
+        enabled ? "translateX(16px)" : "translateX(0)";
+}
+
+
+function toggleLocation() {
+    const enabled =
+        localStorage.getItem("locationEnabled") === "true";
+
+    if (enabled) {
+        localStorage.setItem(
+            "locationEnabled",
+            "false"
+        );
+
+        localStorage.removeItem("beam_location");
+
+        updateLocationToggle();
+
+        return;
+    }
+
+    localStorage.setItem(
+        "locationEnabled",
+        "true"
+    );
+
+    updateLocationToggle();
+
+    getLocation();
+}
+
 function getLocation() {
 
     if (!navigator.geolocation) {
 
-        alert(
-            "La geolocalización no está disponible."
-        );
+alert(
+    t("locationUnavailable")
+);
+
 
         return;
     }
@@ -11280,7 +11380,7 @@ function getLocation() {
 
             try {
                 const response = await fetch(
-                    `/reverse-geocode?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`,
+                    `/reverse-geocode?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&language=${encodeURIComponent(currentLanguage)}`,
                     {
                         method: "GET",
                         cache: "no-store"
@@ -11323,10 +11423,9 @@ function getLocation() {
         },
         function(error) {
 
-            alert(
-                "No se pudo obtener la ubicación."
-            );
-
+alert(
+    t("locationError")
+);
             console.error(error);
         }
 
@@ -11389,6 +11488,7 @@ renderInterfaceTextSizeSummary();
 applyInterfaceAccessibility();
 renderInterfaceAccessibilitySummary();
 renderInterfaceFormatsSummary();
+updateLocationToggle();
 checkUser();
 
 const resetPasswordParams = new URLSearchParams(window.location.search);
@@ -11493,6 +11593,165 @@ if (historyCount) {
     }
 }
 
+let memoryHistoryConversations = [];
+
+function renderMemoryHistory(conversations) {
+    const list = document.getElementById("memoryHistoryList");
+
+    if (!list) {
+        return;
+    }
+
+    if (!Array.isArray(conversations) || conversations.length === 0) {
+        list.innerHTML = `
+            <div style="
+                color:#8f96a3;
+                font-size:13px;
+                padding:20px 0;
+                text-align:center;
+            ">
+                ${t("memoryHistorySearchEmpty")}
+            </div>
+        `;
+        return;
+    }
+
+    list.innerHTML = conversations.map(conversation => {
+        const messages =
+            Array.isArray(conversation.messages)
+                ? conversation.messages
+                : [];
+
+        const firstUserMessage = messages.find(
+            item => item.role === "user"
+        );
+
+        let title =
+            firstUserMessage && firstUserMessage.content
+                ? String(firstUserMessage.content)
+                : String(
+                    conversation.title ||
+                    "Conversación"
+                );
+
+        title = title.replace(
+            /^Reply entirely in the same language used by the user\. Do not mix languages\.\s*/i,
+            ""
+        );
+
+const questionMarker = title.match(
+    /(?:Pregunta|Question)\s*:\s*/i
+);
+
+if (questionMarker) {
+    title = title
+        .substring(
+            questionMarker.index +
+            questionMarker[0].length
+        )
+        .trim();
+}
+
+        if (title.length > 70) {
+            title = title.substring(0, 67) + "...";
+        }
+
+        const updatedAt =
+            Number(conversation.updated_at || 0);
+
+        const dateText = updatedAt
+            ? new Date(updatedAt * 1000)
+                .toLocaleString([], {
+                    day: "2-digit",
+                    month: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                })
+            : "";
+
+        const messageCount = messages.length;
+
+        return `
+            <div
+                onclick="selectMemoryConversation('${conversation.id}')"
+                style="
+                    padding:16px;
+                    margin-bottom:10px;
+                    background:#1d2027;
+                    border:1px solid #292c33;
+                    border-radius:12px;
+                    cursor:pointer;
+                "
+            >
+                <div style="
+                    color:#eeeeee;
+                    font-size:14px;
+                    font-weight:600;
+                    line-height:1.4;
+                    margin-bottom:8px;
+                ">
+                    ${title}
+                </div>
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:12px;
+                    color:#8f96a3;
+                    font-size:12px;
+                ">
+                    <span>
+                        ${messageCount === 1
+                            ? "1 mensaje"
+                            : `${messageCount} mensajes`}
+                    </span>
+
+                    <span>${dateText}</span>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+function filterMemoryHistory() {
+    const searchInput =
+        document.getElementById("memoryHistorySearch");
+
+    if (!searchInput) {
+        return;
+    }
+
+    const query =
+        searchInput.value.trim().toLowerCase();
+
+    if (!query) {
+        renderMemoryHistory(memoryHistoryConversations);
+        return;
+    }
+
+    const filteredConversations =
+        memoryHistoryConversations.filter(conversation => {
+            const title =
+                String(conversation.title || "");
+
+            const messages =
+                Array.isArray(conversation.messages)
+                    ? conversation.messages
+                    : [];
+
+            const messageText = messages
+                .map(message => String(message.content || ""))
+                .join(" ");
+
+            const searchableText =
+                `${title} ${messageText}`.toLowerCase();
+
+            return searchableText.includes(query);
+        });
+
+    renderMemoryHistory(filteredConversations);
+}
+
 async function openMemoryHistory() {
     const modal = document.getElementById("memoryHistoryModal");
     const list = document.getElementById("memoryHistoryList");
@@ -11545,96 +11804,13 @@ async function openMemoryHistory() {
             return;
         }
 
-        const sortedConversations = [...conversations].sort(
-            (a, b) =>
-                Number(b.updated_at || 0) -
-                Number(a.updated_at || 0)
-        );
+memoryHistoryConversations = [...conversations].sort(
+    (a, b) =>
+        Number(b.updated_at || 0) -
+        Number(a.updated_at || 0)
+);
 
-        list.innerHTML = sortedConversations.map(conversation => {
-
-            const messages =
-                Array.isArray(conversation.messages)
-                    ? conversation.messages
-                    : [];
-
-            const firstUserMessage = messages.find(
-                item => item.role === "user"
-            );
-
-            let title =
-                firstUserMessage &&
-                firstUserMessage.content
-                    ? String(firstUserMessage.content)
-                    : String(
-                        conversation.title ||
-                        "Conversación"
-                    );
-
-            title = title.replace(
-                /^Reply entirely in the same language used by the user\. Do not mix languages\.\s*/i,
-                ""
-            );
-
-            if (title.length > 70) {
-                title = title.substring(0, 67) + "...";
-            }
-
-            const updatedAt =
-                Number(conversation.updated_at || 0);
-
-            const dateText = updatedAt
-                ? new Date(updatedAt * 1000)
-                    .toLocaleString([], {
-                        day: "2-digit",
-                        month: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    })
-                : "";
-
-            const messageCount = messages.length;
-
-            return `
-<div
-    onclick="selectMemoryConversation('${conversation.id}')"
-    style="
-        padding:16px;
-        margin-bottom:10px;
-        background:#1d2027;
-        border:1px solid #292c33;
-        border-radius:12px;
-        cursor:pointer;
-    "
->
-                    <div style="
-                        color:#eeeeee;
-                        font-size:14px;
-                        font-weight:600;
-                        line-height:1.4;
-                        margin-bottom:8px;
-                    ">
-                        ${title}
-                    </div>
-
-                    <div style="
-                        display:flex;
-                        justify-content:space-between;
-                        gap:12px;
-                        color:#8f96a3;
-                        font-size:12px;
-                    ">
-                        <span>
-                            ${messageCount === 1
-                                ? "1 mensaje"
-                                : `${messageCount} mensajes`}
-                        </span>
-
-                        <span>${dateText}</span>
-                    </div>
-                </div>
-            `;
-        }).join("");
+renderMemoryHistory(memoryHistoryConversations);
 
     } catch (error) {
         console.error(
@@ -11720,14 +11896,27 @@ async function selectMemoryConversation(conversationId) {
                 return;
             }
 
-            let content = String(message.content || "");
+let content = String(message.content || "");
 
-            if (message.role === "user") {
-                content = content.replace(
-                    /^Reply entirely in the same language used by the user\. Do not mix languages\.\s*/i,
-                    ""
-                );
-            }
+if (message.role === "user") {
+    content = content.replace(
+        /^Reply entirely in the same language used by the user\. Do not mix languages\.\s*/i,
+        ""
+    );
+
+    const questionMarker = content.match(
+        /(?:Pregunta|Question|Question)\s*:\s*/i
+    );
+
+    if (questionMarker) {
+        content = content
+            .substring(
+                questionMarker.index +
+                questionMarker[0].length
+            )
+            .trim();
+    }
+}
 
             const renderedMessage = addChatMessage(
                 message.role === "user"
@@ -12608,6 +12797,46 @@ if (status) {
             >×</button>
         </div>
 
+        <div style="
+            position:relative;
+            margin-bottom:16px;
+        ">
+            <input
+                id="memoryHistorySearch"
+                type="search"
+      oninput="filterMemoryHistory()"
+                data-i18n-placeholder="memoryHistorySearchPlaceholder"
+                placeholder="Buscar conversaciones..."
+                autocomplete="off"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:11px 42px 11px 14px;
+                    background:#1d2027;
+                    border:1px solid #292c33;
+                    border-radius:10px;
+                    color:#eeeeee;
+                    font-size:13px;
+                    outline:none;
+                "
+            >
+
+            <span
+                aria-hidden="true"
+                style="
+                    position:absolute;
+                    right:14px;
+                    top:50%;
+                    transform:translateY(-50%);
+                    color:#8f96a3;
+                    font-size:16px;
+                    pointer-events:none;
+                "
+            >⌕</span>
+        </div>
+
+        <div id="memoryHistoryList">
+
         <div id="memoryHistoryList">
             <div style="
                 color:#8f96a3;
@@ -13010,6 +13239,20 @@ if (status) {
             "
         >
             Solo se restablecerán los apartados seleccionados.
+        </div>
+
+        <div
+            data-i18n="resetConfirmIrreversible"
+            style="
+                color:#ff4d4f;
+                font-size:13px;
+                font-weight:600;
+                line-height:1.5;
+                margin-top:-10px;
+                margin-bottom:22px;
+            "
+        >
+            Advertencia: esta acción es irreversible. Los datos restablecidos no podrán recuperarse.
         </div>
 
         <div style="

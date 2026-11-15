@@ -1151,7 +1151,8 @@ def reset_memory(request: Request):
 
     return {"reset": True}
 @app.get("/reverse-geocode")
-def reverse_geocode(lat: float, lon: float):
+def reverse_geocode(lat: float, lon: float, language: str = "es"):
+    language = language if language in {"es", "en", "fr"} else "es"
     if not -90 <= lat <= 90:
         raise HTTPException(
             status_code=400,
@@ -1172,7 +1173,7 @@ def reverse_geocode(lat: float, lon: float):
                 "lon": lon,
                 "format": "jsonv2",
                 "addressdetails": 1,
-                "accept-language": "es"
+                "accept-language": language
             },
             headers={
                 "User-Agent": "BRLOX-AI/1.0"
@@ -1211,7 +1212,7 @@ def reverse_geocode(lat: float, lon: float):
         label = ", ".join(parts)
 
         if not label:
-            label = "Ubicación actual"
+            label = ""
 
         return {
             "city": city,
@@ -1223,7 +1224,7 @@ def reverse_geocode(lat: float, lon: float):
         return {
             "city": "",
             "region": "",
-            "label": "Ubicación actual"
+            "label": ""
         }
 @app.post("/support-request")
 async def create_support_request(request: Request):
