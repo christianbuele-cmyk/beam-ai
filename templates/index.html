@@ -1186,6 +1186,18 @@ html[data-high-contrast="true"] .settings-section summary::after {
     </button>
 
 </div>
+<div style="
+    display:flex;
+    align-items:flex-start;
+    gap:32px;
+    width:100%;
+    flex-wrap:wrap;
+">
+
+    <div style="
+        flex:1 1 280px;
+        min-width:0;
+    ">
         <div class="shortcuts-header">
 
             <h2 data-i18n="shortcuts">Accesos rápidos</h2>
@@ -1201,10 +1213,46 @@ html[data-high-contrast="true"] .settings-section summary::after {
         </div>
 
         <div id="shortcuts"></div>
+    </div>
 
-        <div id="chat"></div>
+    <div style="
+        flex:1 1 280px;
+        min-width:0;
+    ">
+        <div class="shortcuts-header">
 
-        <div class="input-row">
+            <h2>Chats fijados</h2>
+
+            <button
+                class="add-button"
+                type="button"
+                disabled
+                aria-label="Chats fijados"
+                style="
+                    opacity:.55;
+                    cursor:default;
+                "
+            >
+                📌
+            </button>
+
+        </div>
+
+        <div
+            id="pinnedChatsPreview"
+            style="
+                color:#8f96a3;
+                font-size:13px;
+            "
+        >
+            Sin chats fijados
+        </div>
+    </div>
+
+</div>
+<div id="chat"></div>
+
+<div class="input-row">
 
 <textarea
     id="message"
@@ -2615,6 +2663,10 @@ settingsMemory:"Memoria",
 memoryHistory:"Consultar y editar el historial de conversaciones",
 memoryHistorySearchPlaceholder:"Buscar conversaciones...",
 memoryHistorySearchEmpty:"No se encontraron conversaciones.",
+conversationPin:"Fijar conversación",
+conversationUnpin:"Desfijar conversación",
+conversationDelete:"Eliminar conversación",
+conversationDeleteConfirm:"¿Seguro que quieres eliminar esta conversación? Esta acción es irreversible.",
 memoryToggle:"Activar o desactivar la memoria",
 memoryReset:"Reiniciar la personalización",
 memoryResetTitle:"Reiniciar personalización",
@@ -3361,6 +3413,10 @@ settingsMemory:"Memory",
 memoryHistory:"View and edit conversation history",
 memoryHistorySearchPlaceholder:"Search conversations...",
 memoryHistorySearchEmpty:"No conversations found.",
+conversationPin:"Pin conversation",
+conversationUnpin:"Unpin conversation",
+conversationDelete:"Delete conversation",
+conversationDeleteConfirm:"Are you sure you want to delete this conversation? This action cannot be undone.",
 memoryToggle:"Turn memory on or off",
 memoryReset:"Reset personalization",
 memoryResetTitle:"Reset personalization",
@@ -4306,6 +4362,10 @@ settingsMemory:"Mémoire",
 memoryHistory:"Consulter et modifier l’historique des conversations",
 memoryHistorySearchPlaceholder:"Rechercher des conversations...",
 memoryHistorySearchEmpty:"Aucune conversation trouvée.",
+conversationPin:"Épingler la conversation",
+conversationUnpin:"Désépingler la conversation",
+conversationDelete:"Supprimer la conversation",
+conversationDeleteConfirm:"Voulez-vous vraiment supprimer cette conversation ? Cette action est irréversible.",
 memoryToggle:"Activer ou désactiver la mémoire",
 memoryReset:"Réinitialiser la personnalisation",
 memoryResetTitle:"Réinitialiser la personnalisation",
@@ -11529,6 +11589,27 @@ async function loadMemorySettings() {
         ? data.conversations
         : [];
 
+const pinnedConversations =
+    conversations.filter(
+        conversation =>
+            conversation &&
+            conversation.pinned === true
+    );
+
+const pinnedChatsPreview =
+    document.getElementById("pinnedChatsPreview");
+
+if (pinnedChatsPreview) {
+    const pinnedTotal = pinnedConversations.length;
+
+    pinnedChatsPreview.textContent =
+        pinnedTotal === 0
+            ? "Sin chats fijados"
+            : pinnedTotal === 1
+                ? "1 chat fijado"
+                : `${pinnedTotal} chats fijados`;
+}
+
         const historyCount = document.getElementById("memoryHistoryCount");
    const memoryStatusText = document.getElementById("memoryStatusText");
 if (memoryStatusText) {
@@ -11594,6 +11675,136 @@ if (historyCount) {
 }
 
 let memoryHistoryConversations = [];
+
+function toggleConversationMenu(event, conversationId) {
+    event.stopPropagation();
+
+    const targetMenu =
+        document.getElementById(
+            `conversationMenu-${conversationId}`
+        );
+
+    if (!targetMenu) {
+        return;
+    }
+
+    const shouldOpen =
+        targetMenu.style.display !== "block";
+
+    document
+        .querySelectorAll('[id^="conversationMenu-"]')
+        .forEach(menu => {
+            menu.style.display = "none";
+        });
+
+    targetMenu.style.display =
+        shouldOpen ? "block" : "none";
+}
+
+async function togglePinnedConversation(
+    event,
+    conversationId,
+    currentlyPinned
+) {
+    event.stopPropagation();
+
+const confirmed = window.confirm(
+    t("conversationDeleteConfirm")
+);
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/memory/conversation/${encodeURIComponent(conversationId)}/pinned`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    pinned: !currentlyPinned
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "No se pudo actualizar la conversación"
+            );
+        }
+
+        const conversation =
+            memoryHistoryConversations.find(
+                item =>
+                    item &&
+                    item.id === conversationId
+            );
+
+        if (conversation) {
+            conversation.pinned = !currentlyPinned;
+        }
+
+        renderMemoryHistory(
+            memoryHistoryConversations
+        );
+
+    } catch (error) {
+        console.error(
+            "Error actualizando conversación fijada:",
+            error
+        );
+    }
+}
+
+async function deleteMemoryConversation(
+    event,
+    conversationId
+) {
+    event.stopPropagation();
+
+    const confirmed = window.confirm(
+        "¿Seguro que quieres eliminar esta conversación? Esta acción es irreversible."
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/memory/conversation/${encodeURIComponent(conversationId)}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "No se pudo eliminar la conversación"
+            );
+        }
+
+        memoryHistoryConversations =
+            memoryHistoryConversations.filter(
+                conversation =>
+                    conversation &&
+                    conversation.id !== conversationId
+            );
+
+        renderMemoryHistory(
+            memoryHistoryConversations
+        );
+
+    } catch (error) {
+        console.error(
+            "Error eliminando conversación:",
+            error
+        );
+    }
+}
 
 function renderMemoryHistory(conversations) {
     const list = document.getElementById("memoryHistoryList");
@@ -11675,7 +11886,9 @@ if (questionMarker) {
             <div
                 onclick="selectMemoryConversation('${conversation.id}')"
                 style="
+                    position:relative;
                     padding:16px;
+                    padding-right:48px;
                     margin-bottom:10px;
                     background:#1d2027;
                     border:1px solid #292c33;
@@ -11683,6 +11896,95 @@ if (questionMarker) {
                     cursor:pointer;
                 "
             >
+                <button
+                    type="button"
+                    onclick="toggleConversationMenu(event, '${conversation.id}')"
+                    aria-label="Opciones"
+                    style="
+                        position:absolute;
+                        top:10px;
+                        right:10px;
+                        width:30px;
+                        height:30px;
+                        padding:0;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:transparent;
+                        border:none;
+                        border-radius:8px;
+                        color:#8f96a3;
+                        font-size:20px;
+                        line-height:1;
+                        cursor:pointer;
+                    "
+                >⋯</button>
+
+                <div
+                    id="conversationMenu-${conversation.id}"
+                    onclick="event.stopPropagation()"
+                    style="
+                        display:none;
+                        position:absolute;
+                        top:42px;
+                        right:10px;
+                        z-index:20;
+                        min-width:190px;
+                        padding:6px;
+                        background:#24272f;
+                        border:1px solid #353943;
+                        border-radius:10px;
+                        box-shadow:0 10px 25px rgba(0,0,0,0.35);
+                    "
+                >
+                    <button
+                        type="button"
+                        onclick="togglePinnedConversation(event, '${conversation.id}', ${conversation.pinned === true})"
+                        style="
+                            width:100%;
+                            padding:10px 12px;
+                            display:flex;
+                            align-items:center;
+                            gap:9px;
+                            background:transparent;
+                            border:none;
+                            border-radius:7px;
+                            color:#eeeeee;
+                            font-size:13px;
+                            text-align:left;
+                            cursor:pointer;
+                        "
+                    >
+                        <span>📌</span>
+                        <span>
+                            ${conversation.pinned === true
+                                ? t("conversationUnpin")
+                                : t("conversationPin")}
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="deleteMemoryConversation(event, '${conversation.id}')"
+                        style="
+                            width:100%;
+                            padding:10px 12px;
+                            display:flex;
+                            align-items:center;
+                            gap:9px;
+                            background:transparent;
+                            border:none;
+                            border-radius:7px;
+                            color:#ff6b6b;
+                            font-size:13px;
+                            text-align:left;
+                            cursor:pointer;
+                        "
+                    >
+                        <span>🗑</span>
+                        <span>${t("conversationDelete")}</span>
+                    </button>
+                </div>
                 <div style="
                     color:#eeeeee;
                     font-size:14px;
@@ -11709,8 +12011,7 @@ if (questionMarker) {
                     <span>${dateText}</span>
                 </div>
             </div>
-        `;
-    }).join("");
+        `;    }).join("");
 }
 
 function filterMemoryHistory() {
@@ -12751,15 +13052,17 @@ if (status) {
     justify-content:center;
 ">
     <div style="
-        width:min(560px,92vw);
-        max-height:80vh;
-        overflow-y:auto;
+        width:min(720px,94vw);
+        max-height:85vh;
         background:#181b22;
         border:1px solid #30343d;
         border-radius:16px;
         padding:24px;
         box-sizing:border-box;
         color:#eeeeee;
+        display:flex;
+        flex-direction:column;
+        overflow:visible;
     ">
 
         <div style="
@@ -12834,16 +13137,17 @@ if (status) {
                 "
             >⌕</span>
         </div>
-
-        <div id="memoryHistoryList">
-
-        <div id="memoryHistoryList">
-            <div style="
-                color:#8f96a3;
-                font-size:13px;
-                padding:20px 0;
-                text-align:center;
-            ">
+     
+<div
+    id="memoryHistoryList"
+    style="
+        max-height:55vh;
+        overflow-y:auto;
+        overflow-x:visible;
+        padding-right:4px;
+        padding-bottom:80px;
+    "
+>
                 Cargando historial...
             </div>
         </div>

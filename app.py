@@ -1137,6 +1137,108 @@ async def update_memory(request: Request):
 
     return {"saved": True, "enabled": enabled}
 
+@app.put("/memory/conversation/{conversation_id}/pinned")
+async def update_conversation_pinned(
+    conversation_id: str,
+    request: Request
+):
+    try:
+        data = await request.json()
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise HTTPException(
+            status_code=400,
+            detail="El estado de la conversación debe ser JSON válido."
+        )
+
+    pinned = data.get("pinned")
+
+    if not isinstance(pinned, bool):
+        raise HTTPException(
+            status_code=400,
+            detail="El estado pinned debe ser true o false."
+        )
+
+    key = session_key(request)
+    memory = load_memory(key)
+
+    if not isinstance(memory, dict):
+        memory = {}
+
+    conversations = memory.get("conversations", [])
+
+    if not isinstance(conversations, list):
+        conversations = []
+
+    conversation = next(
+        (
+            item
+            for item in conversations
+            if isinstance(item, dict)
+            and item.get("id") == conversation_id
+        ),
+        None
+    )
+
+    if conversation is None:
+        raise HTTPException(
+            status_code=404,
+            detail="No se ha encontrado la conversación."
+        )
+
+    conversation["pinned"] = pinned
+
+    memory["conversations"] = conversations
+
+    save_memory(memory, key)
+
+    return {
+        "saved": True,
+        "conversation_id": conversation_id,
+        "pinned": pinned
+    }
+
+@app.delete("/memory/conversation/{conversation_id}")
+def delete_memory_conversation(
+    conversation_id: str,
+    request: Request
+):
+    key = session_key(request)
+    memory = load_memory(key)
+
+    if not isinstance(memory, dict):
+        memory = {}
+
+    conversations = memory.get("conversations", [])
+
+    if not isinstance(conversations, list):
+        conversations = []
+
+    original_length = len(conversations)
+
+    conversations = [
+        item
+        for item in conversations
+        if not (
+            isinstance(item, dict)
+            and item.get("id") == conversation_id
+        )
+    ]
+
+    if len(conversations) == original_length:
+        raise HTTPException(
+            status_code=404,
+            detail="No se ha encontrado la conversación."
+        )
+
+    memory["conversations"] = conversations
+
+    save_memory(memory, key)
+
+    return {
+        "deleted": True,
+        "conversation_id": conversation_id
+    }
+
 @app.delete("/memory")
 def reset_memory(request: Request):
     key = session_key(request)

@@ -57,6 +57,7 @@ class AssistantAgent:
                 "title": message[:60].strip() or "Nueva conversación",
                 "created_at": now,
                 "updated_at": now,
+                "pinned": False,
                 "messages": []
             }
 
