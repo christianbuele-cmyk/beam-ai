@@ -1215,40 +1215,6 @@ html[data-high-contrast="true"] .settings-section summary::after {
         <div id="shortcuts"></div>
     </div>
 
-    <div style="
-        flex:1 1 280px;
-        min-width:0;
-    ">
-        <div class="shortcuts-header">
-
-            <h2>Chats fijados</h2>
-
-            <button
-                class="add-button"
-                type="button"
-                disabled
-                aria-label="Chats fijados"
-                style="
-                    opacity:.55;
-                    cursor:default;
-                "
-            >
-                📌
-            </button>
-
-        </div>
-
-        <div
-            id="pinnedChatsPreview"
-            style="
-                color:#8f96a3;
-                font-size:13px;
-            "
-        >
-            Sin chats fijados
-        </div>
-    </div>
-
 </div>
 <div id="chat"></div>
 
@@ -1861,13 +1827,13 @@ html[data-high-contrast="true"] .settings-section summary::after {
 
         <div class="memory-status">
             <span class="memory-status-dot"></span>
-            <strong>Memoria activada</strong>
-            <span class="memory-status-description">· tu agente aprende de ti</span>
+            <strong data-i18n="memoryEnabled">Memoria activada</strong>
+            <span class="memory-status-description" data-i18n="memoryStatusDescription">· tu agente aprende de ti</span>
         </div>
 
   <button class="memory-option" type="button" onclick="openMemoryHistory()">
     <span class="memory-option-text">
-        <span class="memory-option-title">Historial de conversaciones</span>
+        <span class="memory-option-title" data-i18n="memoryHistory">Historial de conversaciones</span>
         <span class="memory-option-description" id="memoryHistoryCount">Cargando conversaciones...</span>
     </span>
     <span class="memory-option-arrow">›</span>
@@ -1875,7 +1841,7 @@ html[data-high-contrast="true"] .settings-section summary::after {
 
 <button class="memory-option" type="button" onclick="toggleMemory()">
     <span class="memory-option-text">
-        <span class="memory-option-title">Activar o desactivar la memoria</span>
+        <span class="memory-option-title" data-i18n="memoryToggle">Activar o desactivar la memoria</span>
         <span class="memory-option-description" id="memoryStatusText">Activada</span>
     </span>
     <span class="memory-option-arrow">›</span>
@@ -2662,6 +2628,16 @@ restrictionAccessibility_warnIfUnsuitable:"Avisarme si un plan puede no encajar"
 settingsMemory:"Memoria",
 memoryHistory:"Consultar y editar el historial de conversaciones",
 memoryHistorySearchPlaceholder:"Buscar conversaciones...",
+memoryPinnedFilter:"Conversaciones fijadas",
+memoryEnabled:"Memoria activada",
+memoryStatusDescription:"· tu agente aprende de ti",
+memoryHistoryTitle:"Historial de conversaciones",
+memoryHistorySubtitle:"Conversaciones recordadas por tu agente",
+memoryEnabledState:"Activada",
+memoryDisabledState:"Desactivada",
+memoryConversationSingular:"1 conversación",
+memoryConversationPlural:"{count} conversaciones",
+memoryUnavailable:"No disponible",
 memoryHistorySearchEmpty:"No se encontraron conversaciones.",
 conversationPin:"Fijar conversación",
 conversationUnpin:"Desfijar conversación",
@@ -3387,7 +3363,6 @@ restrictionsAccessibilityTitle:"Accessibility and travel",
 restrictionsSave:"Save changes",
 restrictionsSelectedCount:"{count} selected",
 restrictionsNoneSelected:"None selected",
-
 restrictionFood_vegetarian:"Vegetarian",
 restrictionFood_vegan:"Vegan",
 restrictionFood_glutenFree:"Gluten-free",
@@ -3396,7 +3371,6 @@ restrictionFood_nutsAllergy:"Nut allergy",
 restrictionFood_noSeafood:"No seafood",
 restrictionFood_halal:"Halal",
 restrictionFood_kosher:"Kosher",
-
 restrictionAvoid_crowds:"Crowds",
 restrictionAvoid_noise:"Noise",
 restrictionAvoid_longHills:"Long hills",
@@ -3404,7 +3378,6 @@ restrictionAvoid_earlyMornings:"Early mornings",
 restrictionAvoid_flying:"Flying",
 restrictionAvoid_expensivePlaces:"Very expensive places",
 restrictionAvoid_queues:"Queues",
-
 restrictionAccessibility_stepFree:"I need step-free access",
 restrictionAccessibility_travellingWithChildren:"I travel with children",
 restrictionAccessibility_travellingWithPet:"I travel with a pet",
@@ -3412,6 +3385,16 @@ restrictionAccessibility_warnIfUnsuitable:"Warn me if a plan may not be suitable
 settingsMemory:"Memory",
 memoryHistory:"View and edit conversation history",
 memoryHistorySearchPlaceholder:"Search conversations...",
+memoryPinnedFilter:"Pinned conversations",
+memoryEnabled:"Memory enabled",
+memoryStatusDescription:"· your agent learns from you",
+memoryHistoryTitle:"Conversation history",
+memoryHistorySubtitle:"Conversations remembered by your agent",
+memoryEnabledState:"Enabled",
+memoryDisabledState:"Disabled",
+memoryConversationSingular:"1 conversation",
+memoryConversationPlural:"{count} conversations",
+memoryUnavailable:"Unavailable",
 memoryHistorySearchEmpty:"No conversations found.",
 conversationPin:"Pin conversation",
 conversationUnpin:"Unpin conversation",
@@ -4336,7 +4319,6 @@ restrictionsAccessibilityTitle:"Accessibilité et voyage",
 restrictionsSave:"Enregistrer les modifications",
 restrictionsSelectedCount:"{count} sélectionnés",
 restrictionsNoneSelected:"Aucun élément sélectionné",
-
 restrictionFood_vegetarian:"Végétarien",
 restrictionFood_vegan:"Végane",
 restrictionFood_glutenFree:"Sans gluten",
@@ -4345,7 +4327,6 @@ restrictionFood_nutsAllergy:"Allergie aux fruits à coque",
 restrictionFood_noSeafood:"Sans fruits de mer",
 restrictionFood_halal:"Halal",
 restrictionFood_kosher:"Casher",
-
 restrictionAvoid_crowds:"Foules",
 restrictionAvoid_noise:"Bruit",
 restrictionAvoid_longHills:"Longues montées",
@@ -4353,7 +4334,6 @@ restrictionAvoid_earlyMornings:"Se lever tôt",
 restrictionAvoid_flying:"Prendre l’avion",
 restrictionAvoid_expensivePlaces:"Endroits très chers",
 restrictionAvoid_queues:"Files d’attente",
-
 restrictionAccessibility_stepFree:"J’ai besoin d’un accès sans escaliers",
 restrictionAccessibility_travellingWithChildren:"Je voyage avec des enfants",
 restrictionAccessibility_travellingWithPet:"Je voyage avec un animal",
@@ -4361,6 +4341,16 @@ restrictionAccessibility_warnIfUnsuitable:"M’avertir si une activité risque d
 settingsMemory:"Mémoire",
 memoryHistory:"Consulter et modifier l’historique des conversations",
 memoryHistorySearchPlaceholder:"Rechercher des conversations...",
+memoryPinnedFilter:"Conversations épinglées",
+memoryEnabled:"Mémoire activée",
+memoryStatusDescription:"· votre agent apprend de vous",
+memoryHistoryTitle:"Historique des conversations",
+memoryHistorySubtitle:"Conversations mémorisées par votre agent",
+memoryEnabledState:"Activée",
+memoryDisabledState:"Désactivée",
+memoryConversationSingular:"1 conversation",
+memoryConversationPlural:"{count} conversations",
+memoryUnavailable:"Indisponible",
 memoryHistorySearchEmpty:"Aucune conversation trouvée.",
 conversationPin:"Épingler la conversation",
 conversationUnpin:"Désépingler la conversation",
@@ -11589,38 +11579,23 @@ async function loadMemorySettings() {
         ? data.conversations
         : [];
 
-const pinnedConversations =
-    conversations.filter(
-        conversation =>
-            conversation &&
-            conversation.pinned === true
-    );
-
-const pinnedChatsPreview =
-    document.getElementById("pinnedChatsPreview");
-
-if (pinnedChatsPreview) {
-    const pinnedTotal = pinnedConversations.length;
-
-    pinnedChatsPreview.textContent =
-        pinnedTotal === 0
-            ? "Sin chats fijados"
-            : pinnedTotal === 1
-                ? "1 chat fijado"
-                : `${pinnedTotal} chats fijados`;
-}
-
         const historyCount = document.getElementById("memoryHistoryCount");
    const memoryStatusText = document.getElementById("memoryStatusText");
 if (memoryStatusText) {
-    memoryStatusText.textContent = data.enabled !== false ? "Activada" : "Desactivada";
+    memoryStatusText.textContent =
+    data.enabled !== false
+        ? t("memoryEnabledState")
+        : t("memoryDisabledState");
 }
 
 if (historyCount) {
-    historyCount.textContent =
-        conversations.length === 1
-            ? "1 conversación"
-            : `${conversations.length} conversaciones`;
+historyCount.textContent =
+    conversations.length === 1
+        ? t("memoryConversationSingular")
+        : t("memoryConversationPlural").replace(
+            "{count}",
+            conversations.length
+        );
 }
     } catch (error) {
         console.error("Error cargando la memoria:", error);
@@ -11628,7 +11603,7 @@ if (historyCount) {
         const historyCount = document.getElementById("memoryHistoryCount");
 
         if (historyCount) {
-            historyCount.textContent = "No disponible";
+            historyCount.textContent = t("memoryUnavailable");
         }
     }
 }
@@ -11658,10 +11633,13 @@ const historyCount = document.getElementById("memoryHistoryCount");
 if (historyCount) {
     const total = conversations.length;
 
-    historyCount.textContent =
-        total === 1
-            ? "1 conversación"
-            : `${total} conversaciones`;
+historyCount.textContent =
+    total === 1
+        ? t("memoryConversationSingular")
+        : t("memoryConversationPlural").replace(
+            "{count}",
+            total
+        );
 }
     } catch (error) {
         console.error("Error cargando el resumen de memoria:", error);
@@ -11669,7 +11647,7 @@ if (historyCount) {
         const historyCount = document.getElementById("memoryHistoryCount");
 
         if (historyCount) {
-            historyCount.textContent = "Historial no disponible";
+            historyCount.textContent = t("memoryUnavailable");
         }
     }
 }
@@ -11707,14 +11685,6 @@ async function togglePinnedConversation(
     currentlyPinned
 ) {
     event.stopPropagation();
-
-const confirmed = window.confirm(
-    t("conversationDeleteConfirm")
-);
-
-    if (!confirmed) {
-        return;
-    }
 
     try {
         const response = await fetch(
@@ -11765,9 +11735,32 @@ async function deleteMemoryConversation(
 ) {
     event.stopPropagation();
 
-    const confirmed = window.confirm(
-        "¿Seguro que quieres eliminar esta conversación? Esta acción es irreversible."
-    );
+    const modal =
+        document.getElementById("deleteConversationConfirmModal");
+    const cancelButton =
+        document.getElementById("cancelDeleteConversationButton");
+    const confirmButton =
+        document.getElementById("confirmDeleteConversationButton");
+
+    if (!modal || !cancelButton || !confirmButton) {
+        return;
+    }
+
+    modal.style.display = "flex";
+
+    const confirmed = await new Promise(resolve => {
+        const closeModal = result => {
+            modal.style.display = "none";
+
+            cancelButton.onclick = null;
+            confirmButton.onclick = null;
+
+            resolve(result);
+        };
+
+        cancelButton.onclick = () => closeModal(false);
+        confirmButton.onclick = () => closeModal(true);
+    });
 
     if (!confirmed) {
         return;
@@ -11805,7 +11798,6 @@ async function deleteMemoryConversation(
         );
     }
 }
-
 function renderMemoryHistory(conversations) {
     const list = document.getElementById("memoryHistoryList");
 
@@ -11891,7 +11883,7 @@ if (questionMarker) {
                     padding-right:48px;
                     margin-bottom:10px;
                     background:#1d2027;
-                    border:1px solid #292c33;
+                    border:1px solid ${conversation.pinned === true ? "#2f80ed" : "#292c33"};
                     border-radius:12px;
                     cursor:pointer;
                 "
@@ -12014,6 +12006,44 @@ if (questionMarker) {
         `;    }).join("");
 }
 
+let memoryPinnedFilterActive = false;
+
+function toggleMemoryPinnedFilter() {
+    memoryPinnedFilterActive = !memoryPinnedFilterActive;
+
+    const button =
+        document.getElementById("memoryPinnedFilterButton");
+
+    const check =
+        document.getElementById("memoryPinnedFilterCheck");
+
+    if (button) {
+        button.setAttribute(
+            "aria-pressed",
+            memoryPinnedFilterActive ? "true" : "false"
+        );
+
+        button.style.borderColor =
+            memoryPinnedFilterActive ? "#2f80ed" : "#30343d";
+
+        button.style.background =
+            memoryPinnedFilterActive ? "#192536" : "#1d2027";
+    }
+
+    if (check) {
+        check.textContent =
+            memoryPinnedFilterActive ? "✓" : "";
+
+        check.style.background =
+            memoryPinnedFilterActive ? "#2f80ed" : "#15181e";
+
+        check.style.borderColor =
+            memoryPinnedFilterActive ? "#2f80ed" : "#59616e";
+    }
+
+    filterMemoryHistory();
+}
+
 function filterMemoryHistory() {
     const searchInput =
         document.getElementById("memoryHistorySearch");
@@ -12025,13 +12055,23 @@ function filterMemoryHistory() {
     const query =
         searchInput.value.trim().toLowerCase();
 
-    if (!query) {
-        renderMemoryHistory(memoryHistoryConversations);
-        return;
-    }
-
     const filteredConversations =
         memoryHistoryConversations.filter(conversation => {
+            if (!conversation) {
+                return false;
+            }
+
+            if (
+                memoryPinnedFilterActive &&
+                conversation.pinned !== true
+            ) {
+                return false;
+            }
+
+            if (!query) {
+                return true;
+            }
+
             const title =
                 String(conversation.title || "");
 
@@ -12052,7 +12092,6 @@ function filterMemoryHistory() {
 
     renderMemoryHistory(filteredConversations);
 }
-
 async function openMemoryHistory() {
     const modal = document.getElementById("memoryHistoryModal");
     const list = document.getElementById("memoryHistoryList");
@@ -13073,17 +13112,62 @@ if (status) {
             margin-bottom:20px;
         ">
             <div>
-                <h2 id="memoryHistoryTitle" style="margin:0 0 5px 0;">
+                <h2 id="memoryHistoryTitle" data-i18n="memoryHistoryTitle" style="margin:0 0 5px 0;">
                     Historial de conversaciones
                 </h2>
 
-                <div id="memoryHistorySubtitle" style="
+                <div id="memoryHistorySubtitle" data-i18n="memoryHistorySubtitle" style="
                     color:#8f96a3;
                     font-size:13px;
                 ">
                     Conversaciones recordadas por tu agente
                 </div>
             </div>
+
+            <button
+                id="memoryPinnedFilterButton"
+                type="button"
+                onclick="toggleMemoryPinnedFilter()"
+                aria-pressed="false"
+                style="
+                    margin-left:auto;
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:14px;
+                    min-width:220px;
+                    padding:8px 10px;
+                    background:#1d2027;
+                    border:1px solid #30343d;
+                    border-radius:9px;
+                    color:#eeeeee;
+                    font-size:13px;
+                    cursor:pointer;
+                    transition:background .18s ease, border-color .18s ease;
+                "
+            >
+                <span data-i18n="memoryPinnedFilter">Conversaciones fijadas</span>
+
+                <span
+                    id="memoryPinnedFilterCheck"
+                    aria-hidden="true"
+                    style="
+                        width:14px;
+                        height:14px;
+                        flex:0 0 14px;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:#15181e;
+                        border:1px solid #59616e;
+                        border-radius:2px;
+                        color:#ffffff;
+                        font-size:10px;
+                        line-height:1;
+                    "
+                ></span>
+            </button>
+
 
             <button
                 type="button"
@@ -13137,7 +13221,6 @@ if (status) {
                 "
             >⌕</span>
         </div>
-     
 <div
     id="memoryHistoryList"
     style="
@@ -13154,6 +13237,83 @@ if (status) {
 
     </div>
 </div>
+</div>
+
+<div id="deleteConversationConfirmModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    z-index:100000;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(440px,90vw);
+        background:#181b22;
+        border:1px solid #30343d;
+        border-radius:16px;
+        padding:24px;
+        box-sizing:border-box;
+        color:#eeeeee;
+        box-shadow:0 18px 50px rgba(0,0,0,.45);
+    ">
+        <div style="
+            font-size:20px;
+            font-weight:600;
+            margin-bottom:10px;
+        ">
+            <span data-i18n="conversationDelete">Eliminar conversación</span>
+        </div>
+
+        <div style="
+            color:#aeb4bf;
+            font-size:14px;
+            line-height:1.55;
+            margin-bottom:24px;
+        ">
+<span data-i18n="conversationDeleteConfirm">¿Seguro que quieres eliminar esta conversación? Esta acción no se puede deshacer.</span>
+        </div>
+
+        <div style="
+            display:flex;
+            justify-content:flex-end;
+            gap:10px;
+        ">
+            <button
+                type="button"
+                id="cancelDeleteConversationButton"
+                style="
+                    padding:10px 16px;
+                    background:#232730;
+                    border:1px solid #343945;
+                    border-radius:9px;
+                    color:#eeeeee;
+                    font-size:13px;
+                    cursor:pointer;
+                "
+            >
+                <span data-i18n="cancel">Cancelar</span>
+            </button>
+
+            <button
+                type="button"
+                id="confirmDeleteConversationButton"
+                style="
+                    padding:10px 16px;
+                    background:#c83b46;
+                    border:1px solid #d34a55;
+                    border-radius:9px;
+                    color:#ffffff;
+                    font-size:13px;
+                    font-weight:600;
+                    cursor:pointer;
+                "
+            >
+                <span data-i18n="delete">Eliminar</span>
+            </button>
+        </div>
+    </div>
 </div>
 
 <div id="resetPersonalizationModal" style="
