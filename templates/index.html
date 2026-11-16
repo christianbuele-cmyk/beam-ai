@@ -816,12 +816,27 @@ box-sizing: border-box;
     }
 }
 .settings-title-bar {
+    position: relative;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    width: 100%;
+    min-height: 44px;
+    margin-bottom: 25px;
 }
 
-.settings-close {
+.settings-title-bar .settings-title {
+    margin-bottom: 0;
+}
+
+.settings-title-bar .settings-new-chat {
+    position: absolute;
+    left: 62%;
+    transform: translateX(-50%);
+}
+
+.settings-title-bar .settings-close {
+    margin-left: auto;
+}.settings-close {
     background: none;
     border: none;
     color: white;
@@ -1245,6 +1260,30 @@ html[data-high-contrast="true"] .settings-section summary::after {
     <div class="settings-title" data-i18n="settingsTitle">
     AJUSTES
 </div>
+
+<button
+    type="button"
+    class="settings-new-chat"
+    onclick="startNewConversation()"
+    style="
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:6px;
+        padding:7px 14px;
+        background:#1d2027;
+        border:1px solid #2f80ed;
+        border-radius:999px;
+        color:#2f80ed;
+        font-size:13px;
+        font-weight:500;
+        cursor:pointer;
+        white-space:nowrap;
+    "
+>
+    <span style="font-size:16px; line-height:1;">+</span>
+    <span data-i18n="settingsNewChat">Nuevo chat</span>
+</button>
 
     <button
         class="settings-close"
@@ -2428,6 +2467,7 @@ deletePending:
 todayPlan:"Plan para hoy",
 todayPlanInstruction:"Recomiéndame planes interesantes para hacer hoy cerca de mí.",
 settingsTitle:"AJUSTES",
+settingsNewChat:"Nuevo chat",
 settingsAccount:"Mi cuenta",
 settingsAgent:"Mi agente",
 agentDescription:"Personaliza cómo quieres que BRLOX AI interactúe contigo.",
@@ -3187,6 +3227,7 @@ deleteAccountModalWarning:"This action cannot be undone.",
 deleteAccountCancel:"Cancel",
 deleteAccountConfirm:"Delete",
 todayPlan:"Today’s Plan",
+settingsNewChat:"New chat",
 todayPlanInstruction:"Recommend interesting things to do near me today.",settingsTitle:"SETTINGS",
 settingsAccount:"My account",
 settingsAgent:"My agent",
@@ -4144,6 +4185,7 @@ deleteAccountConfirm:"Supprimer",
 todayPlan:"Programme du jour",
 todayPlanInstruction:"Recommande-moi des activités intéressantes à faire près de chez moi aujourd'hui.",
 settingsTitle:"PARAMÈTRES",
+settingsNewChat:"Nouveau chat",
 settingsAccount:"Mon compte",
 settingsAgent:"Mon agent",
 agentDescription:"Personnalisez la façon dont BRLOX AI interagit avec vous.",
@@ -11196,6 +11238,36 @@ if (!activeConversationId || conversationExpired) {
         "lastConversationActivity",
         String(Date.now())
     );
+}
+
+function startNewConversation() {
+    activeConversationId = crypto.randomUUID();
+
+    localStorage.setItem(
+        "activeConversationId",
+        activeConversationId
+    );
+
+    localStorage.setItem(
+        "lastConversationActivity",
+        String(Date.now())
+    );
+
+    const chat = document.getElementById("chat");
+
+    if (chat) {
+        chat.innerHTML = "";
+    }
+
+    const messageInput =
+        document.getElementById("message");
+
+    if (messageInput) {
+        messageInput.value = "";
+        messageInput.focus();
+    }
+
+    toggleSettings();
 }
 
          function addChatMessage(role, text, className) {
