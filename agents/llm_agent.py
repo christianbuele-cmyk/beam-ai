@@ -1,8 +1,34 @@
 import os
+import time
 from datetime import datetime
 
 import google.generativeai as genai
 from openai import OpenAI
+from opentelemetry import metrics
+
+meter = metrics.get_meter("brlox-ai.llm")
+
+ai_requests = meter.create_counter(
+    "brlox_ai_requests",
+    description="Numero de llamadas realizadas a proveedores de IA",
+)
+
+ai_errors = meter.create_counter(
+    "brlox_ai_errors",
+    description="Numero de errores producidos por proveedores de IA",
+)
+
+ai_fallbacks = meter.create_counter(
+    "brlox_ai_fallbacks",
+    description="Numero de activaciones del fallback entre proveedores de IA",
+)
+
+ai_duration_ms = meter.create_histogram(
+    "brlox_ai_duration_ms",
+    unit="ms",
+    description="Duracion de las llamadas a proveedores de IA en milisegundos",
+)
+
 
 genai.configure(
     api_key=os.getenv("GEMINI_API_KEY")
@@ -18,12 +44,35 @@ grok_client = OpenAI(
 )
 
 def ask_grok(prompt: str) -> str:
-    response = grok_client.responses.create(
-        model="grok-4.7",
-        input=prompt
-    )
+    grok_attributes = {
+        "provider": "grok",
+        "model": "grok-4.7",
+    }
 
-    return response.output_text
+    ai_requests.add(1, grok_attributes)
+    grok_started = time.perf_counter()
+
+    try:
+        response = grok_client.responses.create(
+            model="grok-4.7",
+            input=prompt
+        )
+
+        ai_duration_ms.record(
+            (time.perf_counter() - grok_started) * 1000,
+            {**grok_attributes, "status": "success"},
+        )
+
+        return response.output_text
+
+    except Exception:
+        ai_duration_ms.record(
+            (time.perf_counter() - grok_started) * 1000,
+            {**grok_attributes, "status": "error"},
+        )
+
+        ai_errors.add(1, grok_attributes)
+        raise
 
 def ask_llm(prompt, tone="profesional", agent_name="BRLOX AI"):
     tone_key = str(tone or "profesional").strip().lower()
@@ -118,11 +167,23 @@ Pregunta:
 {prompt}
 """
 
-    try:
+    gemini_attributes = {
+        "provider": "gemini",
+        "model": "gemini-3.8-flash",
+    }
 
+    ai_requests.add(1, gemini_attributes)
+    gemini_started = time.perf_counter()
+
+    try:
         response = model.generate_content(
             system_prompt,
             request_options={"timeout": 15}
+        )
+
+        ai_duration_ms.record(
+            (time.perf_counter() - gemini_started) * 1000,
+            {**gemini_attributes, "status": "success"},
         )
 
         return response.text
@@ -130,8 +191,23 @@ Pregunta:
     except Exception as e:
         error_text = str(e)
 
+        ai_duration_ms.record(
+            (time.perf_counter() - gemini_started) * 1000,
+            {**gemini_attributes, "status": "error"},
+        )
+
+        ai_errors.add(1, gemini_attributes)
+
         print("ERROR REAL DE GEMINI:", repr(error_text))
         print("GEMINI NO DISPONIBLE - INTENTANDO GROK")
+
+        ai_fallbacks.add(
+            1,
+            {
+                "from_provider": "gemini",
+                "to_provider": "grok",
+            },
+        )
 
         try:
             grok_response = ask_grok(system_prompt)
