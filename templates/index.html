@@ -296,7 +296,7 @@
 }
 
 .settings-toggle.open {
-    right: 530px;
+    margin-left: auto;
 }
 
 /* Modo claro - menu y accesos rapidos */
@@ -814,9 +814,38 @@ box-sizing: border-box;
         font-size: 16px;
         padding: 18px 0;
     }
-}
-.settings-title-bar {
-    position: relative;
+
+    .memory-history-header {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 14px !important;
+    }
+
+    #memoryPinnedFilterButton {
+        width: 100%;
+        min-width: 0 !important;
+        margin-left: 0 !important;
+        box-sizing: border-box;
+    }
+    .memory-history-header {
+        position: relative;
+        padding-right: 36px;
+    }
+
+    .memory-history-close {
+        position: absolute;
+        top: -4px;
+        right: 0;
+        margin: 0 !important;
+        z-index: 2;
+    }
+
+    #memoryPinnedFilterButton {
+        width: calc(100% + 36px);
+    }
+
+}.settings-title-bar {
+    position: relative;	
     display: flex;
     align-items: center;
     width: 100%;
@@ -3175,7 +3204,7 @@ loginCancel:"Cancelar",
 loginSubmit:"Iniciar sesión",loginFieldsRequired:"Introduce el correo electrónico y la contraseña.",
 loginInvalid:"Correo electrónico o contraseña incorrectos.",
 loginError:"No se ha podido iniciar sesión. Inténtalo de nuevo.", subtitle:"Tu agente personal inteligente", shortcuts:"Accesos rápidos", createShortcut:"+", messagePlaceholder:"¿Qué te apetece hacer hoy?", send:"Enviar", instructionLabel:"Instrucción", shortcutNamePlaceholder:"Por ejemplo: Escapada", shortcutInstructionPlaceholder:"Por ejemplo: Propón una escapada de fin de semana cerca de mi ubicación", cancel:"Cancelar", save:"Guardar", edit:"Editar", delete:"Eliminar", createShortcutTitle:"Crear acceso rápido", editShortcutTitle:"Editar acceso rápido", profileCheckError:"No se pudo comprobar el perfil de usuario.", nameRequired:"Escribe tu nombre.",emailRequired:"Introduce un correo electrónico.",
-passwordRequired:"La contraseña debe tener al menos 8 caracteres.", passwordMismatch:"Las contraseñas no coinciden.", cityRequired:"Escribe tu ciudad.", birthdateRequired:"Introduce una fecha de nacimiento válida.", birthdateInvalid:"La fecha de nacimiento no es válida.", companionsRequired:"Selecciona con quién haces más planes.", interestRequired:"Selecciona al menos un interés.", budgetRequired:"Selecciona un presupuesto habitual.", profileSaveError:"No se pudo guardar el perfil. Comprueba que BRLOX AI está funcionando.", shortcutRequired:"Escribe un nombre y una instrucción.", shortcutSaveError:"No se pudo guardar.", deleteConfirm:"¿Quieres eliminar este acceso rápido?", deleteError:"No se pudo eliminar el acceso rápido.", chatThinking:"Pensando...", you:"Tú", chatError:"No he podido procesar la consulta. Comprueba que el servidor de BRLOX AI está funcionando.", localChatError:"El perfil y los accesos se han guardado en este dispositivo. Para usar el chat, abre BRLOX AI desde su servidor.", age:"Edad calculada: {age} años.", ageMinor:"Edad calculada: {age} años. BRLOX AI adaptará los planes y recomendaciones para que sean adecuados para menores de edad.", fileProtocolError:"Para guardar el perfil en BRLOX AI, abre la aplicación desde su servidor; no desde un archivo local. Puedes continuar en este dispositivo, pero los datos solo se guardarán aquí."
+passwordRequired:"La contraseña debe tener al menos 8 caracteres.", passwordMismatch:"Las contraseñas no coinciden.", cityRequired:"Escribe tu ciudad.", birthdateRequired:"Introduce una fecha de nacimiento válida.", birthdateInvalid:"La fecha de nacimiento no es válida.", companionsRequired:"Selecciona con quién haces más planes.", interestRequired:"Selecciona al menos un interés.", budgetRequired:"Selecciona un presupuesto habitual.", profileSaveError:"No se pudo guardar el perfil. Comprueba que BRLOX AI está funcionando.", shortcutRequired:"Escribe un nombre y una instrucción.", shortcutSaveError:"No se pudo guardar.", shortcutDeleteTitle:"Eliminar acceso rápido", shortcutDeleteConfirm:"¿Quieres eliminar este acceso rápido? Esta acción no se puede deshacer.", deleteError:"No se pudo eliminar el acceso rápido.", chatThinking:"Pensando...", you:"Tú", chatError:"No he podido procesar la consulta. Comprueba que el servidor de BRLOX AI está funcionando.", localChatError:"El perfil y los accesos se han guardado en este dispositivo. Para usar el chat, abre BRLOX AI desde su servidor.", age:"Edad calculada: {age} años.", ageMinor:"Edad calculada: {age} años. BRLOX AI adaptará los planes y recomendaciones para que sean adecuados para menores de edad.", fileProtocolError:"Para guardar el perfil en BRLOX AI, abre la aplicación desde su servidor; no desde un archivo local. Puedes continuar en este dispositivo, pero los datos solo se guardarán aquí."
             },
             en: {
 accountDescription:"Your identity within the platform.",
@@ -3937,7 +3966,7 @@ loginSubmit:"Sign in",loginFieldsRequired:"Enter your email address and password
 loginInvalid:"Incorrect email address or password.",
 loginError:"Unable to sign in. Please try again.",
  subtitle:"Your intelligent personal agent", shortcuts:"Quick shortcuts", createShortcut:"+", messagePlaceholder:"What would you like to do today?", send:"Send", instructionLabel:"Instruction", shortcutNamePlaceholder:"For example: Weekend getaway", shortcutInstructionPlaceholder:"For example: Suggest a weekend getaway near my location", cancel:"Cancel", save:"Save", edit:"Edit", delete:"Delete", createShortcutTitle:"Create shortcut", editShortcutTitle:"Edit shortcut", profileCheckError:"Could not check the user profile.", nameRequired:"Enter your name.",emailRequired:"Enter an email address.",
-passwordRequired:"The password must be at least 8 characters long.", passwordMismatch:"Passwords do not match.", cityRequired:"Enter your city.", birthdateRequired:"Enter a valid date of birth.", birthdateInvalid:"The date of birth is not valid.", companionsRequired:"Choose who you usually make plans with.", interestRequired:"Choose at least one interest.", budgetRequired:"Choose your usual budget.", profileSaveError:"Could not save the profile. Check that BRLOX AI is running.", shortcutRequired:"Enter a name and an instruction.", shortcutSaveError:"Could not save.", shortcutDeleteConfirm:"Do you want to delete this shortcut?",
+passwordRequired:"The password must be at least 8 characters long.", passwordMismatch:"Passwords do not match.", cityRequired:"Enter your city.", birthdateRequired:"Enter a valid date of birth.", birthdateInvalid:"The date of birth is not valid.", companionsRequired:"Choose who you usually make plans with.", interestRequired:"Choose at least one interest.", budgetRequired:"Choose your usual budget.", profileSaveError:"Could not save the profile. Check that BRLOX AI is running.", shortcutRequired:"Enter a name and an instruction.", shortcutSaveError:"Could not save.", shortcutDeleteTitle:"Delete shortcut", shortcutDeleteConfirm:"Do you want to delete this shortcut? This action cannot be undone.",
  deleteError:"Could not delete the shortcut.", chatThinking:"Thinking...", you:"You", chatError:"I couldn't process that request. Check that the BRLOX AI server is running.", localChatError:"Your profile and shortcuts are saved on this device. To use chat, open BRLOX AI from its server.", age:"Calculated age: {age}.", ageMinor:"Calculated age: {age}. BRLOX AI will adapt plans and recommendations for minors.", fileProtocolError:"To save your profile to BRLOX AI, open the app from its server, not from a local file. You can continue on this device, but your data will only be saved here."
             },
             fr: {
@@ -4697,7 +4726,7 @@ loginCancel:"Annuler",
 loginSubmit:"Se connecter",loginFieldsRequired:"Saisissez votre adresse e-mail et votre mot de passe.",
 loginInvalid:"Adresse e-mail ou mot de passe incorrect.",
 loginError:"Impossible de se connecter. Veuillez réessayer.", subtitle:"Ton agent personnel intelligen", shortcuts:"Raccourcis", createShortcut:"+", messagePlaceholder:"Qu’avez-vous envie de faire aujourd’hui ?", send:"Envoyer", instructionLabel:"Instruction", shortcutNamePlaceholder:"Par exemple : Escapade", shortcutInstructionPlaceholder:"Par exemple : Proposez une escapade le week-end près de chez moi", cancel:"Annuler", save:"Enregistrer", edit:"Modifier", delete:"Supprimer", createShortcutTitle:"Créer un raccourci", editShortcutTitle:"Modifier le raccourci", profileCheckError:"Impossible de vérifier le profil utilisateur.", nameRequired:"Saisissez votre nom.",emailRequired:"Saisissez une adresse e-mail.",
-passwordRequired:"Le mot de passe doit contenir au moins 8 caractères.", passwordMismatch:"Les mots de passe ne correspondent pas.", cityRequired:"Saisissez votre ville.", birthdateRequired:"Saisissez une date de naissance valide.", birthdateInvalid:"La date de naissance n’est pas valide.", companionsRequired:"Choisissez avec qui vous sortez le plus souvent.", interestRequired:"Choisissez au moins un centre d’intérêt.", budgetRequired:"Choisissez votre budget habituel.", profileSaveError:"Impossible d’enregistrer le profil. Vérifiez que BRLOX AI fonctionne.", shortcutRequired:"Saisissez un nom et une instruction.", shortcutSaveError:"Impossible d’enregistrer.", shortcutDeleteConfirm:"Voulez-vous supprimer ce raccourci ?", deleteError:"Impossible de supprimer le raccourci.", chatThinking:"Réflexion en cours…", you:"Vous", chatError:"Impossible de traiter la demande. Vérifiez que le serveur BRLOX AI fonctionne.", localChatError:"Votre profil et vos raccourcis sont enregistrés sur cet appareil. Pour utiliser le chat, ouvrez BRLOX AI depuis son serveur.", age:"Âge calculé : {age} ans.", ageMinor:"Âge calculé : {age} ans. BRLOX AI adaptera les recommandations aux mineurs.", fileProtocolError:"Pour enregistrer votre profil dans BRLOX AI, ouvrez l’application depuis son serveur et non depuis un fichier local. Vous pouvez continuer sur cet appareil, mais les données y resteront enregistrées."
+passwordRequired:"Le mot de passe doit contenir au moins 8 caractères.", passwordMismatch:"Les mots de passe ne correspondent pas.", cityRequired:"Saisissez votre ville.", birthdateRequired:"Saisissez une date de naissance valide.", birthdateInvalid:"La date de naissance n’est pas valide.", companionsRequired:"Choisissez avec qui vous sortez le plus souvent.", interestRequired:"Choisissez au moins un centre d’intérêt.", budgetRequired:"Choisissez votre budget habituel.", profileSaveError:"Impossible d’enregistrer le profil. Vérifiez que BRLOX AI fonctionne.", shortcutRequired:"Saisissez un nom et une instruction.", shortcutSaveError:"Impossible d’enregistrer.", shortcutDeleteTitle:"Supprimer le raccourci", shortcutDeleteConfirm:"Voulez-vous supprimer ce raccourci ? Cette action est irréversible.", deleteError:"Impossible de supprimer le raccourci.", chatThinking:"Réflexion en cours…", you:"Vous", chatError:"Impossible de traiter la demande. Vérifiez que le serveur BRLOX AI fonctionne.", localChatError:"Votre profil et vos raccourcis sont enregistrés sur cet appareil. Pour utiliser le chat, ouvrez BRLOX AI depuis son serveur.", age:"Âge calculé : {age} ans.", ageMinor:"Âge calculé : {age} ans. BRLOX AI adaptera les recommandations aux mineurs.", fileProtocolError:"Pour enregistrer votre profil dans BRLOX AI, ouvrez l’application depuis son serveur et non depuis un fichier local. Vous pouvez continuer sur cet appareil, mais les données y resteront enregistrées."
             }
         };
 
@@ -5188,7 +5217,8 @@ function updateAccountAvatar(profile) {
     }
 
     updateAccountAvatar(profile);
-updateAccountDetails(profile);
+    updateAccountDetails(profile);
+    renderAboutProfileSummary(profile);
 }
 
 function showMain(profile) {
@@ -10612,8 +10642,21 @@ function renderAboutProfileSummary(profile) {
         parts.push(profile.city);
     }
 
-    label.textContent =
-        parts.join(" · ");
+    if (profile && profile.about) {
+        const aboutPreview = profile.about
+            .replace(/\s+/g, " ")
+            .trim();
+
+        if (aboutPreview) {
+            parts.push(
+                aboutPreview.length > 60
+                    ? aboutPreview.slice(0, 60) + "…"
+                    : aboutPreview
+            );
+        }
+    }
+
+    label.textContent = parts.join(" · ");
 }
 function openBirthdateDialog(currentValue = "") {
     return new Promise((resolve) => {
@@ -11065,57 +11108,60 @@ if (birthdateValue) {
         }
 
         function renderShortcuts() {
-    const container = document.getElementById("shortcuts");
-    if (!container) return;
+            const container = document.getElementById("shortcuts");
+            if (!container) return;
 
-    container.replaceChildren();
+            container.replaceChildren();
 
-    if (!shortcuts.length) return;
+            if (!shortcuts.length) return;
 
-    const shortcut =
-        shortcuts.find(item =>
-            ["Plan para hoy", "Plan for today", "Programme pour aujourd’hui"]
-                .includes(item.name)
-        ) || shortcuts[0];
+            shortcuts.forEach(shortcut => {
+                const isTodayPlan = [
+                    "Plan para hoy",
+                    "Plan for today",
+                    "Programme pour aujourd’hui"
+                ].includes(shortcut.name);
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "shortcut-wrapper";
+                const wrapper = document.createElement("div");
+                wrapper.className = "shortcut-wrapper";
 
-    const runButton = document.createElement("button");
-    runButton.className = "shortcut-button";
-    runButton.type = "button";
-    runButton.textContent = t("todayPlan");
-    runButton.onclick = () => useShortcut(shortcut);
+                const runButton = document.createElement("button");
+                runButton.className = "shortcut-button";
+                runButton.type = "button";
+                runButton.textContent = isTodayPlan
+                    ? t("todayPlan")
+                    : shortcut.name;
+                runButton.onclick = () => useShortcut(shortcut);
 
-    const editButton = document.createElement("button");
-    editButton.className = "edit-button";
-    editButton.type = "button";
-    editButton.textContent = "⋯";
-    editButton.setAttribute("aria-label", t("edit"));
-    editButton.onclick = () => openEditModal(shortcut);
+                const editButton = document.createElement("button");
+                editButton.className = "edit-button";
+                editButton.type = "button";
+                editButton.textContent = "⋯";
+                editButton.setAttribute("aria-label", t("edit"));
+                editButton.onclick = () => openEditModal(shortcut);
 
-    const deleteButton = document.createElement("button");
-    deleteButton.className = "delete-button";
-    deleteButton.type = "button";
-    deleteButton.setAttribute("aria-label", t("delete"));
-    deleteButton.innerHTML = `
-        <svg viewBox="0 0 24 24" width="15" height="15"
-             fill="none" stroke="currentColor" stroke-width="1.8"
-             stroke-linecap="round" stroke-linejoin="round"
-             aria-hidden="true">
-            <path d="M3 6h18"></path>
-            <path d="M8 6V4h8v2"></path>
-            <path d="M19 6l-1 14H6L5 6"></path>
-            <path d="M10 10v6"></path>
-            <path d="M14 10v6"></path>
-        </svg>
-    `;
-    deleteButton.onclick = () => deleteShortcut(shortcut.id);
+                const deleteButton = document.createElement("button");
+                deleteButton.className = "delete-button";
+                deleteButton.type = "button";
+                deleteButton.setAttribute("aria-label", t("delete"));
+                deleteButton.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="15" height="15"
+                         fill="none" stroke="currentColor" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true">
+                        <path d="M3 6h18"></path>
+                        <path d="M8 6V4h8v2"></path>
+                        <path d="M19 6l-1 14H6L5 6"></path>
+                        <path d="M10 10v6"></path>
+                        <path d="M14 10v6"></path>
+                    </svg>
+                `;
+                deleteButton.onclick = () => deleteShortcut(shortcut.id);
 
-    wrapper.append(runButton, editButton, deleteButton);
-    container.appendChild(wrapper);
-}
-
+                wrapper.append(runButton, editButton, deleteButton);
+                container.appendChild(wrapper);
+            });
+        }
         function useShortcut(shortcut) {
             const input = document.getElementById("message");
             input.value = shortcut.instruction;
@@ -11198,23 +11244,56 @@ function openEditModal(shortcut) {
         }
 
         async function deleteShortcut(shortcutId) {
-            if (!confirm(t("shortcutDeleteConfirm"))) return;
+            const modal = document.getElementById("deleteShortcutConfirmModal");
+            const cancelButton = document.getElementById("cancelDeleteShortcutButton");
+            const confirmButton = document.getElementById("confirmDeleteShortcutButton");
+
+            if (!modal || !cancelButton || !confirmButton) {
+                return;
+            }
+
+            modal.style.display = "flex";
+
+            const confirmed = await new Promise(resolve => {
+                const closeModal = result => {
+                    modal.style.display = "none";
+
+                    cancelButton.onclick = null;
+                    confirmButton.onclick = null;
+
+                    resolve(result);
+                };
+
+                cancelButton.onclick = () => closeModal(false);
+                confirmButton.onclick = () => closeModal(true);
+            });
+
+            if (!confirmed) {
+                return;
+            }
+
             if (location.protocol === "file:") {
                 shortcuts = shortcuts.filter(item => item.id !== shortcutId);
                 localStorage.setItem("beam_shortcuts", JSON.stringify(shortcuts));
                 renderShortcuts();
                 return;
             }
+
             try {
-                const response = await fetch(`/shortcuts/${shortcutId}`, {method:"DELETE"});
-                if (!response.ok) throw new Error(t("deleteError"));
+                const response = await fetch(`/shortcuts/${shortcutId}`, {
+                    method: "DELETE"
+                });
+
+                if (!response.ok) {
+                    throw new Error(t("deleteError"));
+                }
+
                 await loadShortcuts();
             } catch (error) {
                 console.error(error);
                 alert(t("deleteError"));
             }
         }
-
 const CONVERSATION_TIMEOUT_MS = 30 * 60 * 1000;
 
 let activeConversationId =
@@ -13180,7 +13259,7 @@ if (status) {
         overflow:visible;
     ">
 
-        <div style="
+        <div class="memory-history-header" style="
             display:flex;
             justify-content:space-between;
             align-items:center;
@@ -13246,6 +13325,7 @@ if (status) {
 
 
             <button
+                class="memory-history-close"
                 type="button"
                 onclick="closeMemoryHistory()"
                 aria-label="Cerrar"
@@ -13375,6 +13455,85 @@ if (status) {
             <button
                 type="button"
                 id="confirmDeleteConversationButton"
+                style="
+                    padding:10px 16px;
+                    background:#c83b46;
+                    border:1px solid #d34a55;
+                    border-radius:9px;
+                    color:#ffffff;
+                    font-size:13px;
+                    font-weight:600;
+                    cursor:pointer;
+                "
+            >
+                <span data-i18n="delete">Eliminar</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="deleteShortcutConfirmModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    z-index:100000;
+    align-items:center;
+    justify-content:center;
+">
+    <div style="
+        width:min(440px,90vw);
+        background:#181b22;
+        border:1px solid #30343d;
+        border-radius:16px;
+        padding:24px;
+        box-sizing:border-box;
+        color:#eeeeee;
+        box-shadow:0 18px 50px rgba(0,0,0,.45);
+    ">
+        <div style="
+            font-size:20px;
+            font-weight:600;
+            margin-bottom:10px;
+        ">
+            <span data-i18n="shortcutDeleteTitle">Eliminar acceso rápido</span>
+        </div>
+
+        <div style="
+            color:#aeb4bf;
+            font-size:14px;
+            line-height:1.55;
+            margin-bottom:24px;
+        ">
+            <span data-i18n="shortcutDeleteConfirm">
+                ¿Quieres eliminar este acceso rápido? Esta acción no se puede deshacer.
+            </span>
+        </div>
+
+        <div style="
+            display:flex;
+            justify-content:flex-end;
+            gap:10px;
+        ">
+            <button
+                type="button"
+                id="cancelDeleteShortcutButton"
+                style="
+                    padding:10px 16px;
+                    background:#232730;
+                    border:1px solid #343945;
+                    border-radius:9px;
+                    color:#eeeeee;
+                    font-size:13px;
+                    cursor:pointer;
+                "
+            >
+                <span data-i18n="cancel">Cancelar</span>
+            </button>
+
+            <button
+                type="button"
+                id="confirmDeleteShortcutButton"
                 style="
                     padding:10px 16px;
                     background:#c83b46;
@@ -20825,6 +20984,27 @@ if (status) {
 <script>
 setupRecommendationSelectors();
 applyLanguage(currentLanguage);
+
+const aboutModalEnter = document.getElementById("aboutModal");
+
+if (aboutModalEnter) {
+    aboutModalEnter.addEventListener("keydown", event => {
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        if (
+            event.target.id === "aboutTextInput" &&
+            event.shiftKey
+        ) {
+            return;
+        }
+
+        event.preventDefault();
+        saveAboutProfile();
+    });
+}
+
 </script>
 </body>
 </html>
