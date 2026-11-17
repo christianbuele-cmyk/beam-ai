@@ -24,8 +24,25 @@ class Router:
         if "calcula" in message_lower:
             return self.calculator.process(message)
 
+        if "noticias" in message_lower:
+            return self.web_agent.process(message)
+
+        if any(word in message_lower for word in [
+            "deportes",
+            "deportivo",
+            "deportiva",
+            "deportivos",
+            "deportivas",
+            "fútbol",
+            "futbol"
+        ]):
+            return self.web_agent.process(
+                f"noticias deportivas {message}"
+            )
+
         if "busca" in message_lower:
             return self.web_agent.process(message)
+
 
         return self.assistant.process(
             message,

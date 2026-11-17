@@ -3,7 +3,7 @@ uvicorn[standard]
 requests
 jinja2
 python-multipart
-duckduckgo-search
+ddgs==9.16.1
 lxml
 primp
 click
