@@ -1,3 +1,5 @@
+import html
+import re
 from ddgs import DDGS
 import requests
 from lxml import etree
@@ -29,6 +31,27 @@ def search_news(query="España"):
 
     results = []
 
+    query_lower = query.lower().strip()
+
+    relevance_terms = [query_lower]
+
+    if query_lower in [
+        "inteligencia artificial",
+        "ia",
+        "artificial intelligence"
+    ]:
+        relevance_terms = [
+            "inteligencia artificial",
+            "artificial intelligence",
+            " ia ",
+            " ai ",
+            "openai",
+            "chatgpt",
+            "gemini",
+            "copilot",
+            "nvidia"
+        ]
+
     with DDGS() as ddgs:
         news_results = list(
             ddgs.news(
@@ -53,15 +76,65 @@ def search_news(query="España"):
         except (ValueError, TypeError):
             continue
 
-        if published >= limit and published <= now:
-            recent_news.append((published, r))
+        if not (limit <= published <= now):
+            continue
+
+        title = str(r.get("title", "")).lower()
+        body = str(r.get("body", "")).lower()
+
+        searchable_text = f" {title} {body} "
+
+        if not any(
+            term in searchable_text
+            for term in relevance_terms
+        ):
+            continue
+
+        recent_news.append((published, r))
 
     recent_news.sort(
         key=lambda item: item[0],
         reverse=True
     )
 
+    unique_news = []
+    seen_signatures = []
+
     for published, r in recent_news:
+
+        title = str(r.get("title", "")).lower()
+
+        title_words = set(
+            re.findall(r"[a-záéíóúüñ0-9]+", title)
+        )
+
+        is_duplicate = False
+
+        for seen_words in seen_signatures:
+
+            if not title_words or not seen_words:
+                continue
+
+            common_words = title_words & seen_words
+
+            similarity = len(common_words) / min(
+                len(title_words),
+                len(seen_words)
+            )
+
+            if similarity >= 0.55:
+                is_duplicate = True
+                break
+
+        if is_duplicate:
+            continue
+
+        seen_signatures.append(title_words)
+        unique_news.append((published, r))
+
+        if len(unique_news) >= 8:
+            break
+    for published, r in unique_news:
 
         results.append(
             f"""
@@ -72,7 +145,6 @@ Resumen: {r.get('body', '')}
 URL: {r.get('url', '')}
 """
         )
-
     return "\n".join(results)
 
 
@@ -80,66 +152,117 @@ URL: {r.get('url', '')}
 def search_news_rss(category="general"):
 
     feeds = {
-        "espana": "https://www.rtve.es/api/tematicas/1420/noticias.rss",
-        "internacional": "https://www.rtve.es/api/tematicas/1021/noticias.rss",
-        "deportes": "https://www.rtve.es/api/tematicas/817/noticias.rss"
+        "espana": [
+            ("RTVE", "https://www.rtve.es/api/tematicas/1420/noticias.rss")
+        ],
+        "internacional": [
+            ("RTVE", "https://www.rtve.es/api/tematicas/1021/noticias.rss")
+        ],
+        "deportes": [
+            ("RTVE", "https://www.rtve.es/api/tematicas/817/noticias.rss")
+        ],
+        "tecnologia": [
+            ("Xataka", "https://www.xataka.com/index.xml"),
+            ("Computer Hoy", "https://computerhoy.20minutos.es/rss")
+        ],
+        "economia": [
+            ("Expansion", "https://e00-expansion.uecdn.es/rss/economia.xml"),
+            ("Cinco Días", "https://feeds.elpais.com/mrss-s/pages/ep/site/cincodias.elpais.com/portada")
+        ]
+    }
+
+    category_labels = {
+        "espana": "España",
+        "internacional": "Internacional",
+        "deportes": "Deportes",
+        "tecnologia": "Tecnología",
+        "economia": "Economía"
     }
 
     if category == "general":
-        selected_feeds = [
-            ("España", feeds["espana"]),
-            ("Internacional", feeds["internacional"])
+        selected_categories = [
+            "espana",
+            "internacional",
+            "deportes",
+            "tecnologia",
+            "economia"
         ]
-
-    elif category == "internacional":
-        selected_feeds = [
-            ("Internacional", feeds["internacional"])
-        ]
-
-    elif category == "deportes":
-        selected_feeds = [
-            ("Deportes", feeds["deportes"])
-        ]
-
+    elif category in feeds:
+        selected_categories = [category]
     else:
-        selected_feeds = [
-            ("España", feeds["espana"])
-        ]
+        selected_categories = ["espana"]
 
     results = []
 
-    for section, rss_url in selected_feeds:
+    for category_key in selected_categories:
 
-        response = requests.get(
-            rss_url,
-            timeout=10,
-            headers={
-                "User-Agent": "BRLOX-AI/1.0"
-            }
+        section = category_labels.get(
+            category_key,
+            category_key.capitalize()
         )
 
-        response.raise_for_status()
+        for source_name, rss_url in feeds[category_key]:
 
-        root = etree.fromstring(response.content)
+            try:
+                response = requests.get(
+                    rss_url,
+                    timeout=10,
+                    headers={
+                        "User-Agent": "BRLOX-AI/1.0"
+                    }
+                )
 
-        items = root.xpath("//item")[:5]
+                response.raise_for_status()
 
-        for item in items:
+                root = etree.fromstring(response.content)
 
-            title = (item.findtext("title") or "").strip()
-            description = (item.findtext("description") or "").strip()
-            pub_date = (item.findtext("pubDate") or "").strip()
-            link = (item.findtext("link") or "").strip()
+                items = root.xpath("//item")[:5]
 
-            results.append(
-                f"""
+                for item in items:
+
+                    title = (item.findtext("title") or "").strip()
+
+                    raw_description = (
+                        item.findtext("description") or ""
+                    ).strip()
+
+                    description = html.unescape(raw_description)
+                    description = re.sub(
+                        r"<[^>]+>",
+                        " ",
+                        description
+                    )
+                    description = re.sub(
+                        r"\s+",
+                        " ",
+                        description
+                    ).strip()
+
+                    if len(description) > 600:
+                        description = description[:600].rsplit(
+                            " ",
+                            1
+                        )[0] + "..."
+                    pub_date = (
+                        item.findtext("pubDate") or ""
+                    ).strip()
+                    link = (item.findtext("link") or "").strip()
+
+                    results.append(
+                        f"""
 Categoria: {section}
 Fecha: {pub_date}
-Fuente: RTVE
+Fuente: {source_name}
 Titulo: {title}
 Resumen: {description}
 URL: {link}
 """
-            )
+                    )
+
+            except Exception as error:
+                print(
+                    f"RSS ERROR [{source_name}] "
+                    f"{category_key}: {error}"
+                )
 
     return "\n".join(results)
